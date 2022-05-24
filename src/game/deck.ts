@@ -1,5 +1,7 @@
 import { CardSuit, Face, ICard } from './card';
 
+import { generateRandom } from './random';
+
 export const DECKS_AMOUNT = 6;
 
 function generateSuit(suit: CardSuit): ICard[] {
@@ -23,10 +25,10 @@ export class Deck {
 
   constructor() {
     this.cards = Array.from({ length: DECKS_AMOUNT }, () => [...CARDS]).flat();
-    this.shuffleCards();
+    this.shuffle();
   }
 
-  shuffleCards(): ICard[] {
+  shuffle(): ICard[] {
     const cards = [...this.cards];
     let currentIndex = cards.length,
       randomIndex;
@@ -41,6 +43,19 @@ export class Deck {
       ];
     }
 
+    return cards;
+  }
+
+  randomCards(amount: number): ICard[] {
+    const exclude = [];
+    const cards = [];
+    while (amount > 0 && this.cards.length > 0) {
+      const num = generateRandom(0, this.cards.length);
+      cards.push(this.cards[num]);
+      this.cards = [...this.cards.slice(0, num), ...this.cards.slice(num + 1)];
+      exclude.push(num);
+      amount--;
+    }
     return cards;
   }
 }

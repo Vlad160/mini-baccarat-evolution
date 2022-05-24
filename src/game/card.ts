@@ -6,9 +6,9 @@ export interface ICard {
 
 export enum CardSuit {
   // ♥
-  Heart = 'Hearts',
+  Heart = 'Heart',
   // ♦
-  Diamond = 'Diamonds',
+  Diamond = 'Diamond',
   // ♣
   Clover = 'Clover',
   // ♠
@@ -20,4 +20,15 @@ export enum Face {
   Jack = 'Jack',
   Queen = 'Queen',
   King = 'King',
+}
+
+export const SuitToSymbol: Record<CardSuit, string> = {
+  [CardSuit.Heart]: '♥',
+  [CardSuit.Diamond]: '♦',
+  [CardSuit.Clover]: '♣',
+  [CardSuit.Spade]: '♠',
+}
+
+export class Card {
+  
 }

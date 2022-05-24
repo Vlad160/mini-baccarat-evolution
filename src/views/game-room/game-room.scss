@@ -1,0 +1,28 @@
+.game-room {
+  width: 50%;
+  border: 1px solid orangered;
+  padding: 1rem;
+
+  &__card {
+    min-height: 120px;
+    display: flex;
+  }
+
+  &__main {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  &__history {
+    width: 15rem;
+  }
+
+  &__history-list {
+    max-height: 12rem;
+    overflow: auto;
+    padding: 0;
+    list-style: none;
+    text-align: left;
+  }
+}
