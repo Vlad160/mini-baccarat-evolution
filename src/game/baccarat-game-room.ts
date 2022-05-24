@@ -2,10 +2,10 @@ import { CasinoActor, CasinoPlayerType } from './casino-actor';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { BetWinner } from './model';
+import { Card } from './card';
 import { Deck } from './deck';
-import { ICard } from './card';
-import { Player } from './player';
 import { Timer } from './timer';
+import { User } from './player';
 import { wait } from './wait';
 
 export enum GameStatus {
@@ -26,24 +26,29 @@ export class BaccaratGameRoom {
   deck: Deck;
   status: GameStatus = GameStatus.GAME_NOT_STARTED;
   history: BetWinner[] = [];
+  stop = false;
 
   readonly bettingTimer = new Timer(10000);
   winner: BetWinner = null;
 
-  constructor(public readonly me: Player) {
+  constructor(public readonly user: User) {
     this.deck = new Deck();
     this.banker = new CasinoActor(CasinoPlayerType.Banker);
     this.player = new CasinoActor(CasinoPlayerType.Player);
 
     makeObservable(this, {
       status: observable,
+      stop: observable,
       setStatus: action,
       acceptBet: action,
       appendHistory: action,
-      gameStarted: computed,
+      setStop: action,
+      stopGame: action,
+      isGameInProgress: computed,
+      isGameStopping: computed,
       isBettingOpened: computed,
       startGame: action,
-      history: observable.shallow,
+      history: observable.ref,
     });
   }
 
@@ -51,7 +56,7 @@ export class BaccaratGameRoom {
     return this.status === GameStatus.BETTING_OPENED;
   }
 
-  get gameStarted(): boolean {
+  get isGameInProgress(): boolean {
     return (
       this.status !== GameStatus.GAME_NOT_STARTED &&
       this.status !== GameStatus.GAME_ENDED
@@ -59,32 +64,42 @@ export class BaccaratGameRoom {
   }
 
   acceptBet(amount: number, winner: BetWinner): void {
-    if (this.status !== GameStatus.BETTING_OPENED || amount > this.me.money) {
+    if (this.status !== GameStatus.BETTING_OPENED || amount > this.user.money) {
       return;
     }
 
-    const totalBet = this.me.bet.amount;
+    const totalBet = this.user.bet.amount;
 
     if (amount < 0 && amount + totalBet < 0) {
       amount = -totalBet;
     }
 
-    this.me.bet.adjustBet(amount, winner);
-    this.me.alterMoney(-amount);
+    this.user.bet.adjustBet(amount, winner);
+    this.user.alterMoney(-amount);
   }
 
   async startGame(): Promise<BetWinner> {
-    if (this.gameStarted) {
+    if (this.isGameInProgress) {
       return;
     }
-
+    this.setStop(false);
     this.resetRound();
     const result = await this.playRound();
     this.winner = result;
     this.draftMoney(result);
     this.appendHistory(result);
     await wait(5000);
-    this.startGame();
+    if (!this.stop) {
+      this.startGame();
+    }
+  }
+
+  stopGame(): void {
+    this.setStop(true);
+  }
+
+  setStop(stop: boolean): void {
+    this.stop = stop;
   }
 
   setStatus(status: GameStatus): void {
@@ -93,6 +108,10 @@ export class BaccaratGameRoom {
 
   appendHistory(item: BetWinner) {
     this.history = [item, ...this.history];
+  }
+
+  get isGameStopping(): boolean {
+    return this.isGameInProgress && this.stop;
   }
 
   private async playRound(): Promise<BetWinner> {
@@ -118,7 +137,11 @@ export class BaccaratGameRoom {
     this.bettingTimer.stop();
     this.banker.resetCards();
     this.player.resetCards();
-    this.me.bet.reset();
+    this.user.bet.reset();
+
+    if (this.deck.cards.length < 250) {
+      this.deck.resetCards();
+    }
   }
 
   private draftCards(): void {
@@ -132,7 +155,7 @@ export class BaccaratGameRoom {
     }
     const playerScoreBefore = this.player.score;
     const playerRequiresThirdCard = this.player.score <= 5;
-    let card: ICard = null;
+    let card: Card = null;
     if (playerRequiresThirdCard) {
       card = this.deck.randomCards(1)[0];
       this.player.acceptCards([card]);
@@ -177,17 +200,17 @@ export class BaccaratGameRoom {
   }
 
   private draftMoney(result: BetWinner): void {
-    const bet = this.me.bet;
+    const bet = this.user.bet;
     if (bet.winner !== result) {
       return;
     }
 
     if (result === BetWinner.Player) {
-      this.me.alterMoney(bet.amount * 2);
+      this.user.alterMoney(bet.amount * 2);
     } else if (result == BetWinner.Banker) {
-      this.me.alterMoney(bet.amount * 1.95);
+      this.user.alterMoney(bet.amount * 1.95);
     } else if (result === BetWinner.Tie) {
-      this.me.alterMoney(bet.amount * 8);
+      this.user.alterMoney(bet.amount * 8);
     } else {
       throw new Error(`Unknown winner result ${bet.winner}`);
     }

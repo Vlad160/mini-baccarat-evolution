@@ -1,40 +1,8 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { BetWinner } from './model';
+import { Bet } from './bet';
 
-export class Bet {
-  amount: number = 0;
-  winner: BetWinner = BetWinner.Player;
-
-  constructor() {
-    makeObservable(this, {
-      amount: observable,
-      winner: observable,
-      alterAmount: action,
-      alterWinner: action,
-      adjustBet: action,
-      reset: action,
-    });
-  }
-
-  alterAmount(delta: number): void {
-    this.amount += delta;
-  }
-
-  alterWinner(winner: BetWinner): void {
-    this.winner = winner;
-  }
-  adjustBet(value: number, winner: BetWinner): void {
-    this.amount += value;
-    this.winner = winner;
-  }
-
-  reset(): void {
-    this.amount = 0;
-    this.winner = BetWinner.Player;
-  }
-}
-export class Player {
+export class User {
   bet = new Bet();
 
   constructor(

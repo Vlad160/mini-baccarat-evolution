@@ -1,5 +1,6 @@
-import { Face, ICard } from './card';
 import { action, computed, makeObservable, observable } from 'mobx';
+
+import { Card } from './card';
 
 export enum CasinoPlayerType {
   Banker = 'Banker',
@@ -7,31 +8,21 @@ export enum CasinoPlayerType {
 }
 
 export class CasinoActor {
-  cards: ICard[] = [];
+  cards: Card[] = [];
 
   constructor(private type: CasinoPlayerType) {
     makeObservable(this, {
       score: computed,
-      cards: observable.shallow,
+      cards: observable.ref,
       addCard: action,
       resetCards: action,
       acceptCards: action,
-      hasNatural: computed
+      hasNatural: computed,
     });
   }
 
   get score(): number {
-    return (
-      this.cards.reduce((acc, card) => {
-        if (card.value !== null && card.value !== 10) {
-          return card.value + acc;
-        }
-        if (card.face === Face.Ace) {
-          return acc + 1;
-        }
-        return acc;
-      }, 0) % 10
-    );
+    return this.cards.reduce((acc, card) => acc + card.score, 0) % 10;
   }
 
   get isBanker() {
@@ -42,7 +33,7 @@ export class CasinoActor {
     return this.type === CasinoPlayerType.Player;
   }
 
-  addCard(card: ICard): void {
+  addCard(card: Card): void {
     this.cards = [...this.cards, card];
   }
 
@@ -50,7 +41,7 @@ export class CasinoActor {
     this.cards = [];
   }
 
-  acceptCards(cards: ICard[]): void {
+  acceptCards(cards: Card[]): void {
     this.cards = this.cards.concat(cards);
   }
 

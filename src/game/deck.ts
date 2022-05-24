@@ -1,34 +1,45 @@
-import { CardSuit, Face, ICard } from './card';
+import { Card, CardSuit, Face } from './card';
 
 import { generateRandom } from './random';
 
 export const DECKS_AMOUNT = 6;
 
-function generateSuit(suit: CardSuit): ICard[] {
-  const numbers: ICard[] = Array.from({ length: 9 }, (_, i) => ({
-    face: null,
-    suit,
-    value: i + 2,
-  }));
-  const faces: ICard[] = Object.values(Face).map((face) => ({
-    face,
-    suit,
-    value: null,
-  }));
+function generateSuit(suit: CardSuit): Card[] {
+  const numbers: Card[] = Array.from(
+    { length: 9 },
+    (_, i) =>
+      new Card({
+        face: null,
+        suit,
+        value: i + 2,
+      })
+  );
+  const faces: Card[] = Object.values(Face).map(
+    (face) =>
+      new Card({
+        face,
+        suit,
+        value: null,
+      })
+  );
   return numbers.concat(faces);
 }
 
-const CARDS: ICard[] = Object.keys(CardSuit).map(generateSuit).flat();
+const CARDS: Card[] = Object.keys(CardSuit).map(generateSuit).flat();
 
 export class Deck {
-  cards: ICard[];
+  cards: Card[];
 
   constructor() {
+    this.resetCards();
+  }
+
+  resetCards(): void {
     this.cards = Array.from({ length: DECKS_AMOUNT }, () => [...CARDS]).flat();
     this.shuffle();
   }
 
-  shuffle(): ICard[] {
+  shuffle(): Card[] {
     const cards = [...this.cards];
     let currentIndex = cards.length,
       randomIndex;
@@ -46,7 +57,7 @@ export class Deck {
     return cards;
   }
 
-  randomCards(amount: number): ICard[] {
+  randomCards(amount: number): Card[] {
     const exclude = [];
     const cards = [];
     while (amount > 0 && this.cards.length > 0) {

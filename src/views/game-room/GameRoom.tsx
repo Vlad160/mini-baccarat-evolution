@@ -1,12 +1,10 @@
 import './game-room.scss';
 
-import { useCallback, useState } from 'react';
-
 import { BaccaratGameRoom } from '../../game/baccarat-game-room';
 import { BetControl } from '../../components/bet-control/BetControl';
-import { BetWinner } from '../../game/model';
 import { Card } from '../../components/card/card';
 import { observer } from 'mobx-react-lite';
+import { useCallback } from 'react';
 
 export interface IGameRoomProps {
   room: BaccaratGameRoom;
@@ -21,10 +19,17 @@ export const GameRoom: React.FC<IGameRoomProps> = observer(({ room }) => {
     await room.startGame();
   }, [room]);
 
+  const handleStopGameClick = useCallback(async () => {
+    await room.stopGame();
+  }, [room]);
+
   return (
     <div className="game-room">
-      <h1>Game status {room.status}</h1>
-      <div>Accepting bets: {formatTimer(room.bettingTimer.timeLeft)}s</div>
+      <div className="game-room__header">
+        <h1>Game status {room.status}</h1>
+        {room.isGameStopping && <h3>Game is being stopped...</h3>}
+        <div>Accepting bets: {formatTimer(room.bettingTimer.timeLeft)}s</div>
+      </div>
 
       <div className="game-room__main">
         <div className="game-room__cards">
@@ -61,8 +66,13 @@ export const GameRoom: React.FC<IGameRoomProps> = observer(({ room }) => {
         <BetControl game={room} />
       </div>
 
-      <div>Winner: {room.winner}</div>
-      <button onClick={handleStartGameClick}>Start game</button>
+      <div className="game-room__actions">
+        <div>Winner: {room.winner}</div>
+        <div>
+          <button onClick={handleStartGameClick}>Start game</button>
+          <button onClick={handleStopGameClick}>Stop game</button>
+        </div>
+      </div>
     </div>
   );
 });

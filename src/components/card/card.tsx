@@ -33,7 +33,6 @@ export const Card: React.FC<ICardProps> = ({ card }) => {
           <Suit suit={card.suit} />
         </div>
       </div>
-      <div></div>
     </div>
   );
 };

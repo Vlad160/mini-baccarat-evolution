@@ -3,6 +3,12 @@
   border: 1px solid orangered;
   padding: 1rem;
 
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
   &__card {
     min-height: 120px;
     display: flex;
@@ -24,5 +30,11 @@
     padding: 0;
     list-style: none;
     text-align: left;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
