@@ -1,0 +1,23 @@
+.card {
+  height: 120px;
+  width: 80px;
+  border: 1px solid #000;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0 0.25rem;
+
+  &__header,
+  &__footer {
+    display: flex;
+    flex-direction: column;
+  }
+  &__header {
+    align-items: flex-start;
+  }
+
+  &__footer {
+    align-items: flex-end;
+  }
+}
