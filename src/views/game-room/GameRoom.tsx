@@ -1,8 +1,8 @@
 import './game-room.scss';
 
+import { BetControl, Card } from '@components';
+
 import { BaccaratGameRoom } from '../../game/baccarat-game-room';
-import { BetControl } from '../../components/bet-control/BetControl';
-import { Card } from '../../components/card/card';
 import { observer } from 'mobx-react-lite';
 import { useCallback } from 'react';
 

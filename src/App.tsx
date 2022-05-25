@@ -2,7 +2,7 @@ import './app.scss';
 
 import { BaccaratGameRoom } from './game/baccarat-game-room';
 import { GameRoom } from './views/game-room/GameRoom';
-import { Login } from './components/login/Login';
+import { Header } from '@components';
 import { User } from './game/player';
 import { useState } from 'react';
 
@@ -11,10 +11,13 @@ function App() {
   const [baccaratGame, setBaccaratGame] = useState(new BaccaratGameRoom(me));
 
   return (
-    <main className="app">
-      <GameRoom room={baccaratGame} />
-      {/* <Login /> */}
-    </main>
+    <div className="app">
+      <Header></Header>
+      <main className="app__wrapper">
+        <GameRoom room={baccaratGame} />
+        {/* <Login /> */}
+      </main>
+    </div>
   );
 }
 

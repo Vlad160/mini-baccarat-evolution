@@ -1,17 +1,19 @@
 .game-room {
-  width: 50%;
-  border: 1px solid orangered;
+  width: 60rem;
   padding: 1rem;
+  background-color: #334b49;
+  border-radius: 2px;
 
   &__header {
     display: flex;
     flex-direction: column;
     align-items: center;
   }
-  
+
   &__card {
-    min-height: 120px;
+    min-height: 8rem;
     display: flex;
+    gap: 0.5rem;
   }
 
   &__main {
