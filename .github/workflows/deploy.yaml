@@ -1,8 +1,10 @@
 name: Deploy
 
-on:
-  push:
-    branches: [main, ci-setup]
+on: [push]
+
+# on:
+#   push:
+#     branches: [main, ci-setup]
 
 jobs:
   deploy:
