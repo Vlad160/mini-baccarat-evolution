@@ -5,28 +5,29 @@ on:
     branches: [main, ci-setup]
 
 jobs:
-  runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-  steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
-    # Install node version 12
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 14
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      # Install node version 12
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
 
-    # Install npm packages
-    - name: Install packages
-      run: yarn install
+      # Install npm packages
+      - name: Install packages
+        run: yarn install
 
-    # Build react app
-    - name: Build the app
-      run: yarn run build
+      # Build react app
+      - name: Build the app
+        run: yarn run build
 
-    # # Install Surge
-    # - name: Install Surge
-    #   run: npm install -g surge
+      # # Install Surge
+      # - name: Install Surge
+      #   run: npm install -g surge
 
-    # # Deploy to the defined URL using the token
-    # - name: Deploy to surge
-    #   run: surge ./build URL_TO_DEPLOY_TO --token ${{secrets.TOKEN}}
+      # # Deploy to the defined URL using the token
+      # - name: Deploy to surge
+      #   run: surge ./build URL_TO_DEPLOY_TO --token ${{secrets.TOKEN}}
