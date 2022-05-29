@@ -18,10 +18,11 @@ jobs:
         with:
           name: dist
 
-      - name: Install Surge
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 14
+
+      - name: Install Surge
         run: npm i surge -g
 
       - name: Deploy to surge
