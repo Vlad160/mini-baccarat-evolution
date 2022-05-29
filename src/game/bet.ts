@@ -6,19 +6,19 @@ export class Bet {
   @observable
   private _amount: number = 0;
   @computed
-  public get amount(): number {
+  get amount(): number {
     return this._amount;
   }
-  public set amount(value: number) {
+  set amount(value: number) {
     this._amount = value;
   }
   @observable
   private _winner: BetWinner = BetWinner.Player;
   @computed
-  public get winner(): BetWinner {
+  get winner(): BetWinner {
     return this._winner;
   }
-  public set winner(value: BetWinner) {
+  set winner(value: BetWinner) {
     this._winner = value;
   }
 
