@@ -20,7 +20,9 @@
     "jsx": "react-jsx",
     "paths": {
       "@components/*": ["components/*"],
-      "@components": ["components/index.ts"]
+      "@components": ["components/index.ts"],
+      "@game": ["game/index.ts"],
+      "@game/*": ["game/*"]
     }
   },
   "include": ["src"],

@@ -1,5 +1,4 @@
 import { action, computed, makeObservable, observable } from 'mobx';
-
 import { BetWinner } from './model';
 
 export class Bet {
@@ -12,6 +11,7 @@ export class Bet {
   set amount(value: number) {
     this._amount = value;
   }
+
   @observable
   private _winner: BetWinner = BetWinner.Player;
   @computed
