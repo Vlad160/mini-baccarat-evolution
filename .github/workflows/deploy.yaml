@@ -26,7 +26,7 @@ jobs:
 
       # Install Surge
       - name: Install Surge
-        run: yarn add -g surge
+        run: yarn global add -g surge
 
       # Deploy to the defined URL using the token
       - name: Deploy to surge
