@@ -12,7 +12,7 @@ export interface IBetControlProps {
 }
 
 export const BetControl: React.FC<IBetControlProps> = observer(({ game }) => {
-  const control = game.currentBet; 
+  const control = game.currentBet;
 
   const handlePlusClick = useCallback(() => {
     control.increseBet();

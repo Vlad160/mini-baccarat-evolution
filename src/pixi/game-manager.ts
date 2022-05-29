@@ -27,7 +27,10 @@ export class GameManager {
       (money) => view.userStatus.setMoney(money)
     );
 
-    reaction(() => this.room.stop, () => view.setStop(true))
+    reaction(
+      () => this.room.stop,
+      () => view.setStop(true)
+    );
 
     reaction(
       () => [

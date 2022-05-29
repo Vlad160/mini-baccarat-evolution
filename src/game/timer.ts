@@ -40,10 +40,9 @@ export class Timer {
 
   pause() {
     clearTimeout(this.timeoutId);
-    this.setTimeLeft(Math.max(
-      this.timeLeft - Date.now() - this.lastStartTime,
-      0
-    ));
+    this.setTimeLeft(
+      Math.max(this.timeLeft - Date.now() - this.lastStartTime, 0)
+    );
     this.timeoutId = null;
   }
 
@@ -59,10 +58,9 @@ export class Timer {
     this.lastStartTime = Date.now();
     this.timeoutId = window.setTimeout(
       () => {
-        this.setTimeLeft(Math.max(
-          this.timeLeft - (Date.now() - this.lastStartTime),
-          0
-        ));
+        this.setTimeLeft(
+          Math.max(this.timeLeft - (Date.now() - this.lastStartTime), 0)
+        );
         if (this.timeLeft !== 0) {
           this.scheduleTick();
         } else {
