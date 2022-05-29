@@ -1,0 +1,26 @@
+name: Build
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install packages
+        run: yarn install
+
+      - name: Build the app
+        run: yarn run build
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist

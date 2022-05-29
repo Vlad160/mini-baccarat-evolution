@@ -6,28 +6,23 @@ on:
 
 jobs:
   deploy:
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      # Install node version 12
+      - name: 'Checkout repository'
+        uses: actions/checkout@v3
+
+      - name: Download production artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+
+      - name: Install Surge
       - uses: actions/setup-node@v3
         with:
           node-version: 14
-
-      # Install npm packages
-      - name: Install packages
-        run: yarn install
-
-      # Build react app
-      - name: Build the app
-        run: yarn run build
-
-      # Install Surge
-      - name: Install Surge
         run: npm i surge -g
 
-      # Deploy to the defined URL using the token
       - name: Deploy to surge
         run: surge ./dist ${{secrets.SURGE_DOMAIN}} --token ${{secrets.SURGE_TOKEN}}
