@@ -1,8 +1,8 @@
 import { Bet } from './bet';
-import { User } from './player';
+import { User } from './user';
 
 export class BetControl {
-  constructor(private user: User, public readonly betSize: number) {}
+  constructor(private user: User, public betSize: number) {}
 
   bet = new Bet();
 

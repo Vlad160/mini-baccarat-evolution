@@ -10,7 +10,7 @@ export enum CardSuit {
   // ♦
   Diamond = 'Diamond',
   // ♣
-  Clover = 'Clover',
+  Club = 'Club',
   // ♠
   Spade = 'Spade',
 }
@@ -25,11 +25,12 @@ export enum Face {
 export const SuitToSymbol: Record<CardSuit, string> = {
   [CardSuit.Heart]: '♥',
   [CardSuit.Diamond]: '♦',
-  [CardSuit.Clover]: '♣',
+  [CardSuit.Club]: '♣',
   [CardSuit.Spade]: '♠',
 };
 
 export class Card implements ICard {
+  id = crypto.randomUUID();
   value: number;
   face: Face;
   suit: CardSuit;

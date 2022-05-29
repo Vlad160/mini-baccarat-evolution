@@ -2,8 +2,9 @@ import './app.scss';
 
 import { BaccaratGameRoom } from './game/baccarat-game-room';
 import { GameRoom } from './views/game-room/GameRoom';
+import { GameRoomPixi } from 'views/game-room-pixi/GameRoomPixi';
 import { Header } from '@components';
-import { User } from './game/player';
+import { User } from './game/user';
 import { useState } from 'react';
 
 function App() {
@@ -14,8 +15,9 @@ function App() {
     <div className="app">
       <Header></Header>
       <main className="app__wrapper">
-        <GameRoom room={baccaratGame} />
+        {/* <GameRoom room={baccaratGame} /> */}
         {/* <Login /> */}
+        <GameRoomPixi room={baccaratGame} />
       </main>
     </div>
   );

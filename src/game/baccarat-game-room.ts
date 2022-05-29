@@ -1,11 +1,12 @@
 import { CasinoActor, CasinoPlayerType } from './casino-actor';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { BetControl } from './bet-control';
 import { BetWinner } from './model';
 import { Card } from './card';
 import { Deck } from './deck';
 import { Timer } from './timer';
-import { User } from './player';
+import { User } from './user';
 import { wait } from './wait';
 
 export enum GameStatus {
@@ -27,6 +28,7 @@ export class BaccaratGameRoom {
   status: GameStatus = GameStatus.GAME_NOT_STARTED;
   history: BetWinner[] = [];
   stop = false;
+  currentBet: BetControl;
 
   readonly bettingTimer = new Timer(10000);
   winner: BetWinner = null;
@@ -35,6 +37,7 @@ export class BaccaratGameRoom {
     this.deck = new Deck();
     this.banker = new CasinoActor(CasinoPlayerType.Banker);
     this.player = new CasinoActor(CasinoPlayerType.Player);
+    this.currentBet = new BetControl(this.user, 10);
 
     makeObservable(this, {
       status: observable,
@@ -63,6 +66,15 @@ export class BaccaratGameRoom {
     );
   }
 
+  clearBet(): void {
+    if (this.status !== GameStatus.BETTING_OPENED) {
+      return;
+    }
+    this.user.money += this.user.bet.amount;
+    this.user.bet.reset();
+    this.currentBet.reset();
+  }
+
   acceptBet(amount: number, winner: BetWinner): void {
     if (this.status !== GameStatus.BETTING_OPENED || amount > this.user.money) {
       return;
@@ -76,6 +88,7 @@ export class BaccaratGameRoom {
 
     this.user.bet.adjustBet(amount, winner);
     this.user.alterMoney(-amount);
+    this.currentBet.reset();
   }
 
   async startGame(): Promise<BetWinner> {
@@ -138,6 +151,7 @@ export class BaccaratGameRoom {
     this.banker.resetCards();
     this.player.resetCards();
     this.user.bet.reset();
+    this.currentBet.reset();
 
     if (this.deck.cards.length < 250) {
       this.deck.resetCards();
