@@ -24,10 +24,10 @@ jobs:
       - name: Build the app
         run: yarn run build
 
-      # # Install Surge
-      # - name: Install Surge
-      #   run: npm install -g surge
+      # Install Surge
+      - name: Install Surge
+        run: yarn add -g surge
 
-      # # Deploy to the defined URL using the token
-      # - name: Deploy to surge
-      #   run: surge ./build URL_TO_DEPLOY_TO --token ${{secrets.TOKEN}}
+      # Deploy to the defined URL using the token
+      - name: Deploy to surge
+        run: surge ./dist ${{secrets.SURGE_DOMAIN}} --token ${{secrets.SURGE_TOKEN}}
