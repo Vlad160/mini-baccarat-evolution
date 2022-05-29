@@ -26,8 +26,8 @@ jobs:
 
       # Install Surge
       - name: Install Surge
-        run: yarn global add -g surge
+        run: npm i surge -g
 
       # Deploy to the defined URL using the token
       - name: Deploy to surge
-        run: yarn global bin surge ./dist ${{secrets.SURGE_DOMAIN}} --token ${{secrets.SURGE_TOKEN}}
+        run: surge ./dist ${{secrets.SURGE_DOMAIN}} --token ${{secrets.SURGE_TOKEN}}
