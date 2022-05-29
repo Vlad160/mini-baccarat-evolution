@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy:
-    needs: build
+    needs: [build]
     runs-on: ubuntu-latest
 
     steps:
