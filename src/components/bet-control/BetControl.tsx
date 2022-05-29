@@ -1,18 +1,16 @@
 import './bet-control.scss';
 
-import { useCallback, useState } from 'react';
-
-import { BaccaratGameRoom } from '../../game/baccarat-game-room';
-import { BetControl as BetControlStore } from '../../game/bet-control';
 import { BetWinner } from '../../game/model';
+import { GameRoom } from '../../game/game-room';
 import { observer } from 'mobx-react-lite';
+import { useCallback } from 'react';
 
 export interface IBetControlProps {
-  game: BaccaratGameRoom;
+  game: GameRoom;
 }
 
 export const BetControl: React.FC<IBetControlProps> = observer(({ game }) => {
-  const control = game.currentBet; 
+  const control = game.draftBet;
 
   const handlePlusClick = useCallback(() => {
     control.increseBet();
@@ -24,13 +22,13 @@ export const BetControl: React.FC<IBetControlProps> = observer(({ game }) => {
 
   const handleSelectChange = useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      control.bet.alterWinner(event.target.value as BetWinner);
+      control.alterWinner(event.target.value as BetWinner);
     },
     []
   );
 
   const handleBetClick = useCallback(() => {
-    game.acceptBet(control.bet.amount, control.bet.winner);
+    game.acceptBet(control.amount, control.winner);
     control.reset();
   }, [control, game]);
 
@@ -38,7 +36,7 @@ export const BetControl: React.FC<IBetControlProps> = observer(({ game }) => {
     <div className="bet-control">
       <div>Money: {game.user.money}</div>
       <div>
-        <select onChange={handleSelectChange} value={control.bet.winner}>
+        <select onChange={handleSelectChange} value={control.winner}>
           <option value={BetWinner.Player}>Player</option>
           <option value={BetWinner.Banker}>Banker</option>
           <option value={BetWinner.Tie}>Tie</option>
@@ -49,7 +47,7 @@ export const BetControl: React.FC<IBetControlProps> = observer(({ game }) => {
           Total bet: {game.user.bet.amount} Outcome: {game.user.bet.winner}
         </div>
         <div className="bet-control__amount">
-          <div>To bet: {control.bet.amount}</div>
+          <div>To bet: {control.amount}</div>
           <div>
             <button onClick={handleMinusClick}>-</button>
             <button onClick={handlePlusClick}>+</button>

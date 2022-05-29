@@ -1,5 +1,4 @@
 import { Application, Container } from 'pixi.js';
-
 import { ActionButton } from './action-button';
 import { GameManager } from './game-manager';
 

@@ -1,6 +1,5 @@
 import { Application, Container, Text } from 'pixi.js';
-
-import { Card } from 'game/card';
+import { Card } from '@game';
 import { CardSprite } from './card-sprite';
 import { IPoint } from './models';
 

@@ -8,9 +8,7 @@ export class UserStatus extends Container {
     super();
     this.money = new Text('CASH $ 0.00', { fill: 0xffffff });
     this.bet = new Text('BET $ 0.00', { fill: 0xffffff });
-
     this.height = 50;
-
     this.money.y = this.app.view.height - 50 + this.money.height / 2;
     this.bet.y = this.app.view.height - 50 + this.bet.height / 2;
     this.money.x = 0;

@@ -1,5 +1,4 @@
 import { action, computed, makeObservable, observable } from 'mobx';
-
 import { Card } from './card';
 
 export enum CasinoPlayerType {
@@ -8,21 +7,21 @@ export enum CasinoPlayerType {
 }
 
 export class CasinoActor {
+  @observable.ref
   cards: Card[] = [];
 
   constructor(private type: CasinoPlayerType) {
-    makeObservable(this, {
-      score: computed,
-      cards: observable.ref,
-      addCard: action,
-      resetCards: action,
-      acceptCards: action,
-      hasNatural: computed,
-    });
+    makeObservable(this);
   }
 
+  @computed
   get score(): number {
     return this.cards.reduce((acc, card) => acc + card.score, 0) % 10;
+  }
+
+  @computed
+  get hasNatural(): boolean {
+    return this.score === 8 || this.score === 9;
   }
 
   get isBanker() {
@@ -33,19 +32,13 @@ export class CasinoActor {
     return this.type === CasinoPlayerType.Player;
   }
 
-  addCard(card: Card): void {
-    this.cards = [...this.cards, card];
-  }
-
+  @action
   resetCards(): void {
     this.cards = [];
   }
 
+  @action
   acceptCards(cards: Card[]): void {
     this.cards = this.cards.concat(cards);
-  }
-
-  get hasNatural(): boolean {
-    return this.score === 8 || this.score === 9;
   }
 }

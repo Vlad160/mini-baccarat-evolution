@@ -1,60 +1,99 @@
-import { BaccaratGameRoom } from 'game/baccarat-game-room';
-import { BetWinner } from 'game/model';
+import { BetWinner } from '@game';
 import { GameApplication } from './game-application';
+import { GameRoom } from 'game/game-room';
 import { reaction } from 'mobx';
 
 export class GameManager {
-  constructor(private room: BaccaratGameRoom, private view: GameApplication) {
+  private view: GameApplication;
+  private clearReactions = [];
+
+  private onViewLoad = () => {
     this.view.manager = this;
     this.view.init();
-    reaction(
-      () => this.room.status,
-      (status) => view.setStatus(status)
+
+    this.clearReactions.push(
+      reaction(
+        () => this.room.status,
+        (status) => this.view.setStatus(status),
+        { fireImmediately: true }
+      )
     );
 
-    reaction(
-      () => this.room.banker.cards,
-      (cards) => view.bankerCards.setCards(cards)
+    this.clearReactions.push(
+      reaction(
+        () => this.room.banker.cards,
+        (cards) => this.view.bankerCards.setCards(cards),
+        { fireImmediately: true }
+      )
     );
 
-    reaction(
-      () => this.room.player.cards,
-      (cards) => view.playerCards.setCards(cards)
+    this.clearReactions.push(
+      reaction(
+        () => this.room.player.cards,
+        (cards) => this.view.playerCards.setCards(cards),
+        { fireImmediately: true }
+      )
     );
 
-    reaction(
-      () => this.room.user.money,
-      (money) => view.userStatus.setMoney(money)
+    this.clearReactions.push(
+      reaction(
+        () => this.room.user.money,
+        (money) => this.view.userStatus.setMoney(money),
+        { fireImmediately: true }
+      )
     );
 
-    reaction(() => this.room.stop, () => view.setStop(true))
-
-    reaction(
-      () => [
-        this.room.user.bet.amount,
-        this.room.user.bet.winner,
-        this.room.currentBet.bet.amount,
-      ],
-      ([amount, winner, draftAmount]: [number, BetWinner, number]) => {
-        const total = amount + draftAmount;
-        this.view.userStatus.setBet(amount);
-        this.view.slots.forEach((slot) =>
-          winner === slot.config.text && total > 0
-            ? slot.setActive(total)
-            : slot.setActive(0)
-        );
-      }
+    this.clearReactions.push(
+      reaction(
+        () => this.room.stop,
+        (stop) => this.view.setStop(stop),
+        { fireImmediately: true }
+      )
     );
+
+    this.clearReactions.push(
+      reaction(
+        () => [
+          this.room.user.bet.amount,
+          this.room.user.bet.winner,
+          this.room.draftBet.amount,
+        ],
+        ([amount, winner, draftAmount]: [number, BetWinner, number]) => {
+          const total = amount + draftAmount;
+          this.view.userStatus.setBet(amount);
+          this.view.slots.forEach((slot) =>
+            winner === slot.config.text && total > 0
+              ? slot.setAmount(total)
+              : slot.setAmount(0)
+          );
+        },
+        { fireImmediately: true }
+      )
+    );
+
+    this.clearReactions.push(
+      reaction(
+        () => this.room.user.money,
+        (money) => {
+          this.view.userStatus.setMoney(money);
+        },
+        { fireImmediately: true }
+      )
+    );
+  };
+
+  constructor(private room: GameRoom, private container: HTMLElement) {
+    this.view = new GameApplication(this.container, this.onViewLoad);
   }
 
   adjustBet(winner: BetWinner): void {
     if (this.room.user.bet.winner !== winner) {
       this.room.user.bet.alterWinner(winner);
     }
-    if (this.room.currentBet.bet.winner === winner) {
-      this.room.currentBet.increseBet();
+    if (this.room.draftBet.winner === winner) {
+      this.room.draftBet.increseBet();
     } else {
-      this.room.currentBet.bet.alterWinner(winner);
+      this.room.draftBet.alterWinner(winner);
     }
   }
 
@@ -63,10 +102,7 @@ export class GameManager {
   }
 
   dealBet(): void {
-    this.room.acceptBet(
-      this.room.currentBet.bet.amount,
-      this.room.currentBet.bet.winner
-    );
+    this.room.acceptBet(this.room.draftBet.amount, this.room.draftBet.winner);
   }
 
   start(): void {
@@ -83,5 +119,6 @@ export class GameManager {
 
   destroy(): void {
     this.view.app.destroy(true, true);
+    this.clearReactions.forEach((cb) => cb());
   }
 }

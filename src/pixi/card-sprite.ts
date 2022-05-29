@@ -1,5 +1,4 @@
 import { Application, Sprite, Texture } from 'pixi.js';
-
 import { IPoint } from './models';
 
 const SCALE_COEF = 0.6;

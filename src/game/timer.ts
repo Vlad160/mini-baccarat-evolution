@@ -1,7 +1,15 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
 export class Timer {
-  timeLeft: number;
+  @observable
+  private _timeLeft: number;
+  @computed
+  public get timeLeft(): number {
+    return this._timeLeft;
+  }
+  private set timeLeft(value: number) {
+    this._timeLeft = value;
+  }
 
   private timeoutId: number;
   private lastStartTime: number;
@@ -10,22 +18,11 @@ export class Timer {
   private resolveEndPromise: () => void;
 
   constructor(private time: number, private tick: number = 1000) {
-    this.timeLeft = time;
-
-    makeObservable(this, {
-      timeLeft: observable,
-      setTimeLeft: action,
-      pause: action,
-      scheduleTick: action,
-      start: action,
-      stop: action,
-    });
-  }
-
-  setTimeLeft(time: number): void {
+    makeObservable(this);
     this.timeLeft = time;
   }
 
+  @action
   start(): Promise<void> {
     if (this.started) {
       return this.endPromise;
@@ -38,31 +35,34 @@ export class Timer {
     return this.endPromise;
   }
 
+  @action
   pause() {
     clearTimeout(this.timeoutId);
-    this.setTimeLeft(Math.max(
+    this.timeLeft = Math.max(
       this.timeLeft - Date.now() - this.lastStartTime,
       0
-    ));
+    );
     this.timeoutId = null;
   }
 
+  @action
   stop() {
     clearTimeout(this.timeoutId);
-    this.setTimeLeft(this.time);
+    this.timeLeft = this.time;
     this.endPromise = null;
     this.resolveEndPromise = null;
     this.started = false;
   }
 
+  @action
   scheduleTick() {
     this.lastStartTime = Date.now();
     this.timeoutId = window.setTimeout(
       () => {
-        this.setTimeLeft(Math.max(
+        this.timeLeft = Math.max(
           this.timeLeft - (Date.now() - this.lastStartTime),
           0
-        ));
+        );
         if (this.timeLeft !== 0) {
           this.scheduleTick();
         } else {
