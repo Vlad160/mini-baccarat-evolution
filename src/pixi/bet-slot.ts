@@ -1,7 +1,5 @@
-import { Graphics, GraphicsGeometry, Text, utils } from 'pixi.js';
-
-import { BaccaratGameRoom } from 'game/baccarat-game-room';
-import { BetWinner } from 'game/model';
+import { BetWinner } from '@game';
+import { Graphics, GraphicsGeometry, Text } from 'pixi.js';
 import { GameManager } from './game-manager';
 
 export interface IReactangleConfig {
@@ -21,11 +19,6 @@ export class BetSlot extends Graphics {
   ) {
     super(geometry);
     this.drawSlot(0xffffff);
-    // const text = new Text(config.text, { fill: 0xffffff });
-    // text.anchor.set(0.5);
-    // text.x = config.x + config.width / 2;
-    // text.y = config.y + config.height / 2;
-    // this.addChild(text);
     this.interactive = true;
     this.buttonMode = true;
     this.on('pointerdown', this.onClick);
@@ -36,7 +29,6 @@ export class BetSlot extends Graphics {
   }
 
   private onClick = () => {
-    console.log('Click');
     this.manager.adjustBet(this.config.text);
   };
 
@@ -47,11 +39,7 @@ export class BetSlot extends Graphics {
     this.endFill();
   }
 
-  setActive(amount: number): void {
+  setAmount(amount: number): void {
     this.betAmount.text = amount > 0 ? String(amount) : '';
-  }
-
-  setInactive(): void {
-    // this.clear();
   }
 }

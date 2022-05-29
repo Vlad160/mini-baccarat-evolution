@@ -1,31 +1,9 @@
-import { Card, CardSuit, Face } from './card';
-
+import { Card, CardSuit } from './card';
+import { generateSuit } from './generate-suit';
 import { generateRandom } from './random';
 
 export const DECKS_AMOUNT = 6;
-
-function generateSuit(suit: CardSuit): Card[] {
-  const numbers: Card[] = Array.from(
-    { length: 9 },
-    (_, i) =>
-      new Card({
-        face: null,
-        suit,
-        value: i + 2,
-      })
-  );
-  const faces: Card[] = Object.values(Face).map(
-    (face) =>
-      new Card({
-        face,
-        suit,
-        value: null,
-      })
-  );
-  return numbers.concat(faces);
-}
-
-const CARDS: Card[] = Object.keys(CardSuit).map(generateSuit).flat();
+export const CARDS: Card[] = Object.keys(CardSuit).map(generateSuit).flat();
 
 export class Deck {
   cards: Card[];

@@ -1,5 +1,4 @@
 import { Application, Container, Sprite, Texture } from 'pixi.js';
-
 import { GameManager } from './game-manager';
 import { IPoint } from './models';
 

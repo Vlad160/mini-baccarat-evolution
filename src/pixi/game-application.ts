@@ -1,9 +1,7 @@
+import { BetWinner, GameStatus } from '@game';
 import { Application, Sprite, Text } from 'pixi.js';
-import { BaccaratGameRoom, GameStatus } from 'game/baccarat-game-room';
-
 import { ASSETS } from './assets';
 import { BetSlot } from './bet-slot';
-import { BetWinner } from 'game/model';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
@@ -27,11 +25,7 @@ export class GameApplication {
 
   manager: GameManager;
 
-  constructor(
-    private container: HTMLElement,
-    private room: BaccaratGameRoom,
-    private onLoad: () => void
-  ) {
+  constructor(private container: HTMLElement, private onLoad: () => void) {
     this.app = new Application({
       width: 1280,
       height: 720,
@@ -87,7 +81,7 @@ export class GameApplication {
   }
 
   private createStatusText(): Text {
-    const text = new Text(this.room.status, { fill: 0xffffff });
+    const text = new Text('', { fill: 0xffffff });
     text.anchor.set(0.5, 0.5);
     text.x = this.app.view.width / 5;
     text.y = 30;
