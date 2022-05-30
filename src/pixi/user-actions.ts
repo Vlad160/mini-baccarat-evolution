@@ -3,18 +3,44 @@ import { ActionButton } from './action-button';
 import { GameManager } from './game-manager';
 
 export class UserActions extends Container {
+  disable() {
+    this.dealAction.disable();
+    this.clearAction.disable();
+  }
+  enable() {
+    this.dealAction.enable();
+    this.clearAction.enable();
+  }
   private dealAction: ActionButton;
   private clearAction: ActionButton;
 
   constructor(private app: Application, private manager: GameManager) {
     super();
 
-    this.dealAction = new ActionButton('Deal', this.onDeal);
-    this.clearAction = new ActionButton('Clear', this.onClear);
-    this.clearAction.x = this.dealAction.width + 5;
+    const dealX = this.app.view.width - 200;
+    const dealY = this.app.view.height - 120;
 
-    this.y = this.app.view.height - 120;
-    this.x = this.app.view.width - 200;
+    this.dealAction = new ActionButton(
+      'DEAL',
+      this.app.loader.resources['deal-bet.png'].texture,
+      0x99ff99,
+      this.onDeal,
+      { x: dealX, y: dealY }
+    );
+
+    const clearX = dealX + this.dealAction.width + 5;
+    const clearY = this.app.view.height - 150;
+
+    this.clearAction = new ActionButton(
+      'CLEAR',
+      this.app.loader.resources['clear-bet.png'].texture,
+      0xff9999,
+      this.onClear,
+      {
+        x: clearX,
+        y: clearY,
+      }
+    );
 
     this.addChild(this.dealAction, this.clearAction);
   }

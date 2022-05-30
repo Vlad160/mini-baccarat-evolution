@@ -1,6 +1,6 @@
 import { BetWinner } from '@game';
 import { GameApplication } from './game-application';
-import { GameRoom } from 'game/game-room';
+import { GameRoom, GameStatus } from 'game/game-room';
 import { reaction } from 'mobx';
 
 export class GameManager {
@@ -80,6 +80,19 @@ export class GameManager {
         { fireImmediately: true }
       )
     );
+    this.clearReactions.push(
+      reaction(
+        () => {
+          return this.room.isBettingOpened;
+        },
+        (isOpened) => {
+          isOpened
+            ? this.view.userActions.enable()
+            : this.view.userActions.disable();
+        },
+        { fireImmediately: true }
+      )
+    );
   };
 
   constructor(private room: GameRoom, private container: HTMLElement) {
@@ -87,6 +100,10 @@ export class GameManager {
   }
 
   adjustBet(winner: BetWinner): void {
+    if (this.room.status !== GameStatus.BETTING_OPENED) {
+      return;
+    }
+
     if (this.room.user.bet.winner !== winner) {
       this.room.user.bet.alterWinner(winner);
     }

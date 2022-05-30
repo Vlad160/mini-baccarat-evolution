@@ -9,6 +9,7 @@ import { UserActions } from './user-actions';
 import { UserStatus } from './user-status';
 
 export class GameApplication {
+  userActions: UserActions;
   setStop(stop: boolean): void {
     this.stopText.visible = stop;
   }
@@ -62,7 +63,8 @@ export class GameApplication {
     this.app.stage.addChild(this.bankerCards);
     this.app.stage.addChild(this.playerCards);
     this.app.stage.addChild(this.userStatus);
-    this.app.stage.addChild(new UserActions(this.app, this.manager));
+    this.userActions = new UserActions(this.app, this.manager);
+    this.app.stage.addChild(this.userActions);
     this.statusText = this.createStatusText();
     this.app.stage.addChild(this.statusText);
     this.app.stage.addChild(new GameControls(this.app, this.manager));

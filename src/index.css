@@ -1,8 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital@1&display=swap');
 @import './_reset.scss';
 
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/IBMPlexSerif-Regular.ttf') format('ttf');
+}
+
 html {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'IBM Plex Serif', serif;
   font-size: 1rem;
 }
 
