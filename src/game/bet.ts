@@ -3,7 +3,7 @@ import { BetWinner } from './model';
 
 export class Bet {
   @observable
-  private _amount: number = 0;
+  private _amount = 0;
   @computed
   get amount(): number {
     return this._amount;
