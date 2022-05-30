@@ -1,5 +1,7 @@
 export const ASSETS = [
   'background.jpeg',
+  'clear-bet.png',
+  'deal-bet.png',
   'bg_game.jpg',
   'play.png',
   'stop.png',

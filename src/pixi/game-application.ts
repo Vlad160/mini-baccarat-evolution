@@ -1,18 +1,20 @@
-import { BetWinner, GameStatus } from '@game';
-import { Application, Sprite, Text } from 'pixi.js';
+import { BetWinner } from '@game';
+import { Application, Container, Graphics, Sprite, Text, utils } from 'pixi.js';
 import { ASSETS } from './assets';
-import { BetSlot } from './bet-slot';
+import { BetArea } from './bet-area';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
+import { StatusPanel } from './status-panel';
 import { UserActions } from './user-actions';
 import { UserStatus } from './user-status';
 
 export class GameApplication {
-  setStop(stop: boolean): void {
-    this.stopText.visible = stop;
-  }
-  slots: BetSlot[] = [];
+  userActions: UserActions;
+  gameControls: GameControls;
+  statusPanel: StatusPanel;
+
+  betAreas: BetArea[] = [];
   readonly app: Application;
   statusText: Text;
   stopText: Text;
@@ -42,7 +44,7 @@ export class GameApplication {
 
   init(): void {
     this.container.appendChild(this.app.view);
-    this.slots = this.getRects();
+    this.betAreas = this.getBetAreas();
     this.bankerCards = new Cards(this.app, {
       x: this.app.view.width / 2 + 10,
       y: this.app.view.height / 5 + 10,
@@ -57,17 +59,26 @@ export class GameApplication {
     );
     background.width = 1280;
     background.height = 720;
-    this.app.stage.addChild(background);
-    this.app.stage.addChild(...this.slots);
-    this.app.stage.addChild(this.bankerCards);
-    this.app.stage.addChild(this.playerCards);
-    this.app.stage.addChild(this.userStatus);
-    this.app.stage.addChild(new UserActions(this.app, this.manager));
-    this.statusText = this.createStatusText();
-    this.app.stage.addChild(this.statusText);
-    this.app.stage.addChild(new GameControls(this.app, this.manager));
+
+    this.userActions = new UserActions(this.app, this.manager);
+    this.statusPanel = new StatusPanel();
+    this.gameControls = new GameControls(this.app, this.manager);
     this.stopText = this.createStopText();
-    this.app.stage.addChild(this.stopText);
+    this.app.stage.addChild(
+      background,
+      ...this.betAreas,
+      this.bankerCards,
+      this.playerCards,
+      this.userStatus,
+      this.userActions,
+      this.statusPanel,
+      this.gameControls,
+      this.stopText
+    );
+  }
+
+  setStop(stop: boolean): void {
+    this.stopText.visible = stop;
   }
 
   private onLoaded = () => {
@@ -80,14 +91,6 @@ export class GameApplication {
     ASSETS.forEach((file) => this.app.loader.add(file, file));
   }
 
-  private createStatusText(): Text {
-    const text = new Text('', { fill: 0xffffff });
-    text.anchor.set(0.5, 0.5);
-    text.x = this.app.view.width / 5;
-    text.y = 30;
-    return text;
-  }
-
   private createStopText(): Text {
     const text = new Text('Game is now being stopped...', { fill: 0xffffff });
     text.anchor.set(0.5, 0.5);
@@ -97,42 +100,38 @@ export class GameApplication {
     return text;
   }
 
-  getRects(): BetSlot[] {
+  private getBetAreas(): BetArea[] {
     return [
-      new BetSlot(
+      new BetArea(
         {
           x: 1280 / 2 - 350 / 2,
           y: 545,
           width: 350,
           height: 110,
-          text: BetWinner.Player,
+          type: BetWinner.Player,
         },
         this.manager
       ),
-      new BetSlot(
+      new BetArea(
         {
           x: 1280 / 2 - 280 / 2,
           y: 440,
           width: 280,
           height: 85,
-          text: BetWinner.Banker,
+          type: BetWinner.Banker,
         },
         this.manager
       ),
-      new BetSlot(
+      new BetArea(
         {
           x: 1280 / 2 - 230 / 2,
           y: 350,
           width: 230,
           height: 75,
-          text: BetWinner.Tie,
+          type: BetWinner.Tie,
         },
         this.manager
       ),
     ];
-  }
-
-  setStatus(status: GameStatus): void {
-    this.statusText.text = status;
   }
 }

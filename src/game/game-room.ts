@@ -112,6 +112,8 @@ export class GameRoom {
     const result = await this.playRound();
     this.winner = result;
     this.draftMoney(result);
+    this.status = GameStatus.GAME_ENDED;
+
     this.appendHistory(result);
     await wait(5000);
     if (!this.stop) {
@@ -155,7 +157,6 @@ export class GameRoom {
     this.status = GameStatus.FINALIZING_RESULTS;
     await wait(2000);
     const result = this.getRoundResult();
-    this.status = GameStatus.GAME_ENDED;
     return result;
   }
 

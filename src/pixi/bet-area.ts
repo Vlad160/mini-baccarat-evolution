@@ -7,10 +7,10 @@ export interface IReactangleConfig {
   y: number;
   width: number;
   height: number;
-  text: BetWinner;
+  type: BetWinner;
 }
 
-export class BetSlot extends Graphics {
+export class BetArea extends Graphics {
   private betAmount: Text;
   constructor(
     public readonly config: IReactangleConfig,
@@ -29,7 +29,7 @@ export class BetSlot extends Graphics {
   }
 
   private onClick = () => {
-    this.manager.adjustBet(this.config.text);
+    this.manager.adjustBet(this.config.type);
   };
 
   private drawSlot(color: number, opacity = 0.00001): void {
