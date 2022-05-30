@@ -14,7 +14,7 @@ export class GameManager {
     this.clearReactions.push(
       reaction(
         () => this.room.status,
-        (status) => this.view.setStatus(status),
+        (status) => this.setStatus(status),
         { fireImmediately: true }
       )
     );
@@ -61,8 +61,8 @@ export class GameManager {
         ([amount, winner, draftAmount]: [number, BetWinner, number]) => {
           const total = amount + draftAmount;
           this.view.userStatus.setBet(amount);
-          this.view.slots.forEach((slot) =>
-            winner === slot.config.text && total > 0
+          this.view.betAreas.forEach((slot) =>
+            winner === slot.config.type && total > 0
               ? slot.setAmount(total)
               : slot.setAmount(0)
           );
@@ -91,6 +91,19 @@ export class GameManager {
             : this.view.userActions.disable();
         },
         { fireImmediately: true }
+      )
+    );
+
+    this.clearReactions.push(
+      reaction(
+        () => this.room.bettingTimer.timeLeft,
+        (timeLeft) => {
+          if (this.room.isBettingOpened) {
+            this.view.statusPanel.setText(
+              `Betting is opened ${Math.round(timeLeft / 1000)} sec`
+            );
+          }
+        }
       )
     );
   };
@@ -138,4 +151,20 @@ export class GameManager {
     this.view.app.destroy(true, true);
     this.clearReactions.forEach((cb) => cb());
   }
+
+  setStatus(status: GameStatus): void {
+    if (STATUS_TO_MESSAGE[status]) {
+      this.view.statusPanel.setText(STATUS_TO_MESSAGE[status](this.room));
+    }
+  }
 }
+
+const STATUS_TO_MESSAGE = {
+  [GameStatus.GAME_NOT_STARTED]: () => 'Game not started',
+  [GameStatus.GAME_STARTED]: () => 'Game started',
+  [GameStatus.BETTING_CLOSED]: () => 'All bets are made',
+  [GameStatus.DEALING_CARDS]: () => 'Dealing cards',
+  [GameStatus.FINALIZING_RESULTS]: () => 'Drafting money',
+  [GameStatus.GAME_ENDED]: (room: GameRoom) =>
+    `Game ended. Winner is ${room.winner}\nWaiting for the next round`,
+};
