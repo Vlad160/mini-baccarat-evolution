@@ -12,7 +12,7 @@
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.{js,jsx,json,scss,css,md}": [
+    "*.{ts,tsx,json,scss,css,md}": [
       "prettier --write src"
     ],
     "**/*.{ts,tsx}": "eslint --cache --fix"
