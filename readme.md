@@ -46,12 +46,13 @@ Features to implement (not ordered):
 - [ ] Game controls look and feel.
 - [ ] Overal UI improvments.
 - [ ] Canvas breakpoints.
-- [ ] View were you can enter your name.
+- [x] View were you can enter your name.
 - [ ] Deck shuffle animation.
-- [ ] Game status formatting.
-- [ ] Disable controls when betting is closed.
+- [x] Game status formatting.
+- [x] Disable controls when betting is closed.
 - [ ] History.
 - [ ] Mobile version.
 - [x] Improve readme.
 - [x] Eslint.
 - [ ] Tests.
+- [ ] Display controls and username in header.

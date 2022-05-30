@@ -1,0 +1,40 @@
+.login {
+  width: 50rem;
+  height: 20rem;
+  background-color: #161b22;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+
+  &__item {
+    margin-bottom: 1rem;
+  }
+
+  &__label {
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  &__input {
+    width: 100%;
+    height: 3rem;
+    border: none;
+    border-bottom: 1px solid #808080;
+    background-color: transparent;
+    color: #fff;
+    font-size: 1.5rem;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+
+    &:focus {
+      border-bottom: 1px solid #fff;
+    }
+  }
+
+  &__btn {
+    width: 25%;
+  }
+}
