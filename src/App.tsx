@@ -1,23 +1,29 @@
 import './app.scss';
 
-import { GameRoom } from './game/game-room';
+import { Header, Login } from '@components';
+import { GameRoom, User } from '@game';
+import { useCallback, useState } from 'react';
 import { GameRoomPixi } from 'views/game-room-pixi/GameRoomPixi';
-// import { GameRoom } from './views/game-room/GameRoom';
-import { Header } from '@components';
-import { User } from './game/user';
-import { useState } from 'react';
+
+const MONEY = 1000;
 
 function App() {
-  const me = new User(crypto.randomUUID(), 'Vlad', 1000);
-  const [baccaratGame] = useState(new GameRoom(me));
+  const [baccaratGame, setGameRoom] = useState<GameRoom>(null);
+
+  const handleLogin = useCallback((username: string) => {
+    const user = new User(crypto.randomUUID(), username, MONEY);
+    setGameRoom(new GameRoom(user));
+  }, []);
 
   return (
     <div className="app">
       <Header></Header>
       <main className="app__wrapper">
-        {/* <GameRoom room={baccaratGame} /> */}
-        {/* <Login /> */}
-        <GameRoomPixi room={baccaratGame} />
+        {baccaratGame ? (
+          <GameRoomPixi room={baccaratGame} />
+        ) : (
+          <Login onLogin={handleLogin} />
+        )}
       </main>
     </div>
   );
