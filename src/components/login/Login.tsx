@@ -1,6 +1,6 @@
 import { FormEvent, useCallback, useRef } from 'react';
-import { Button } from '..';
-import './login.scss';
+import { Button } from '../button/Button';
+import './styles.scss';
 
 export interface ILoginProps {
   onLogin: (username: string) => void;
