@@ -8,13 +8,14 @@
     "preview": "vite preview",
     "configure-husky": "npx husky install && npx husky add .husky/pre-commit \"npx --no-install lint-staged\"",
     "format": "prettier --write .",
-    "lint": "eslint --fix src"
+    "lint": "eslint --fix src",
+    "prepare": "husky install"
   },
   "lint-staged": {
-    "**/*.{js,jsx,json,scss,css}": [
-      "prettier --write src",
-      "eslint --fix"
-    ]
+    "*.{js,jsx,json,scss,css,md}": [
+      "prettier --write src"
+    ],
+    "*.{ts,tsx}": "eslint --cache --fix"
   },
   "dependencies": {
     "mobx": "^6.5.0",
