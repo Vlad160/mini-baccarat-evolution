@@ -18,7 +18,11 @@ export class StatusPanel extends Container {
     this.panel.beginFill(utils.string2hex(PANEL_COLOR), 0.6);
     this.panel.drawRoundedRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT, 5);
     this.panel.endFill();
-    this.text = new Text('', { fill: 0xffffff });
+    this.text = new Text('', {
+      fontFamily: 'IBM Plex Serif',
+      fontSize: 24,
+      fill: 0xffffff,
+    });
 
     this.addChild(this.panel, this.text);
   }
