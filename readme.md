@@ -53,5 +53,5 @@ Features to implement (not ordered):
 - [ ] History.
 - [ ] Mobile version.
 - [x] Improve readme.
-- [ ] Eslint.
+- [x] Eslint.
 - [ ] Tests.

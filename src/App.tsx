@@ -9,7 +9,7 @@ import { useState } from 'react';
 
 function App() {
   const me = new User(crypto.randomUUID(), 'Vlad', 1000);
-  const [baccaratGame, setBaccaratGame] = useState(new GameRoom(me));
+  const [baccaratGame] = useState(new GameRoom(me));
 
   return (
     <div className="app">
