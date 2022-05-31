@@ -1,5 +1,5 @@
 import { BetWinner } from '@game';
-import { Application, Container, Graphics, Sprite, Text, utils } from 'pixi.js';
+import { Application, Sprite, Text } from 'pixi.js';
 import { ASSETS } from './assets';
 import { BetArea } from './bet-area';
 import { Cards } from './cards';
@@ -32,7 +32,7 @@ export class GameApplication {
       width: 1280,
       height: 720,
       backgroundColor: 0x1099bb,
-      resolution: window.devicePixelRatio || 1,
+      resolution: 1,
       antialias: true,
     });
 
