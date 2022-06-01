@@ -1,32 +1,51 @@
 import './app.scss';
 
 import { Header, Login } from '@components';
-import { GameRoom, User } from '@game';
-import { useCallback, useState } from 'react';
+import { DEFAULT_MONEY_AMOUNT, User } from '@game';
+import { ApplicationStoreContext } from 'app.store';
+import { observer } from 'mobx-react-lite';
+import { useCallback, useContext, useEffect } from 'react';
 import { GameRoomPixi } from 'views/game-room-pixi/GameRoomPixi';
 
-const MONEY = 1000;
+const App = observer(() => {
+  const store = useContext(ApplicationStoreContext);
+  useEffect(() => {
+    if (store.user) {
+      return;
+    }
+    const user = User.restoreUser();
+    if (!user) {
+      return;
+    }
+    store.user = user;
+    store.createGameRoom();
+  }, [store]);
 
-function App() {
-  const [baccaratGame, setGameRoom] = useState<GameRoom>(null);
-
-  const handleLogin = useCallback((username: string) => {
-    const user = new User(crypto.randomUUID(), username, MONEY);
-    setGameRoom(new GameRoom(user));
-  }, []);
+  const handleLogin = useCallback(
+    (username: string) => {
+      store.user = new User(
+        crypto.randomUUID(),
+        username,
+        DEFAULT_MONEY_AMOUNT
+      );
+      User.storeUser(store.user);
+      store.createGameRoom();
+    },
+    [store]
+  );
 
   return (
     <div className="app">
       <Header></Header>
       <main className="app__wrapper">
-        {baccaratGame ? (
-          <GameRoomPixi room={baccaratGame} />
+        {store.room ? (
+          <GameRoomPixi room={store.room} />
         ) : (
           <Login onLogin={handleLogin} />
         )}
       </main>
     </div>
   );
-}
+});
 
 export default App;
