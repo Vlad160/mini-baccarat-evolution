@@ -9,6 +9,9 @@ import { StatusPanel } from './status-panel';
 import { UserActions } from './user-actions';
 import { UserStatus } from './user-status';
 
+const PLAYER_CARDS_OFFSET_X = 25;
+const BANKER_CARDS_OFFSET_X = 10;
+
 export class GameApplication {
   userActions: UserActions;
   gameControls: GameControls;
@@ -37,7 +40,7 @@ export class GameApplication {
     });
 
     this.loadAssets();
-    this.app.loader.onLoad.add(this.onLoaded);
+    this.app.loader.onComplete.add(this.onLoaded);
     this.app.loader.onError.add(() => console.log('Error!'));
     this.app.loader.load();
   }
@@ -45,14 +48,33 @@ export class GameApplication {
   init(): void {
     this.container.appendChild(this.app.view);
     this.betAreas = this.getBetAreas();
-    this.bankerCards = new Cards(this.app, {
-      x: this.app.view.width / 2 + 10,
-      y: this.app.view.height / 5 + 10,
-    });
-    this.playerCards = new Cards(this.app, {
-      x: this.app.view.width / 2 - 140,
-      y: this.app.view.height / 5 + 10,
-    });
+
+    const playerX = (3 / 8) * this.app.view.width + PLAYER_CARDS_OFFSET_X;
+    const bankerX = this.app.view.width / 2 + BANKER_CARDS_OFFSET_X;
+
+    const playerY = this.app.view.height / 5 + 10;
+    const bankerY = playerY;
+
+    const playerSwipe = -this.app.view.width / 8 - 20;
+    const bankerSwipe = playerSwipe + (playerX - bankerX);
+
+    this.playerCards = new Cards(
+      this.app,
+      {
+        x: playerX,
+        y: playerY,
+      },
+      { x: playerSwipe, y: 10 }
+    );
+
+    this.bankerCards = new Cards(
+      this.app,
+      {
+        x: bankerX,
+        y: bankerY,
+      },
+      { x: bankerSwipe, y: 10 }
+    );
     this.userStatus = new UserStatus(this.app);
     const background = new Sprite(
       this.app.loader.resources['bg_game.jpg'].texture

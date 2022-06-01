@@ -22,7 +22,9 @@ export class GameManager {
     this.clearReactions.push(
       reaction(
         () => this.room.banker.cards,
-        (cards) => this.view.bankerCards.setCards(cards),
+        (cards) => {
+          return this.view.bankerCards.setCards(cards);
+        },
         { fireImmediately: true }
       )
     );

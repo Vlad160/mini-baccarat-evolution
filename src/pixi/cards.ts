@@ -1,6 +1,7 @@
-import { Application, Container, Text } from 'pixi.js';
 import { Card } from '@game';
+import { Application, Container, Text } from 'pixi.js';
 import { CardSprite } from './card-sprite';
+import { CardsSwipeAnimation } from './cards-swipe.animation';
 import { IPoint } from './models';
 
 export class Cards extends Container {
@@ -10,7 +11,8 @@ export class Cards extends Container {
 
   constructor(
     private app: Application,
-    private offset: IPoint = { x: 0, y: 0 }
+    private offset: IPoint = { x: 0, y: 0 },
+    private swipeOffset: IPoint = { x: 0, y: 0 }
   ) {
     super();
     this.x = this.offset.x;
@@ -22,8 +24,10 @@ export class Cards extends Container {
 
   setCards(cards: Card[]): void {
     if (cards.length === 0) {
-      this.cardsContainer.removeChildren();
       this.scoreText.text = '';
+      this.swipeCards();
+      this.cards = [];
+      return;
     }
     const toRender = cards.filter((c) =>
       this.cards.every((x) => x.id !== c.id)
@@ -38,6 +42,18 @@ export class Cards extends Container {
     const total = cards.reduce((acc, card) => acc + card.score, 0) % 10;
     if (this.cards.length > 0) {
       this.scoreText.text = String(total);
+    }
+  }
+
+  async swipeCards(): Promise<void> {
+    if (this.cardsContainer.children.length > 0) {
+      const animation = new CardsSwipeAnimation(
+        this.app.ticker,
+        this.cardsContainer.children,
+        this.swipeOffset
+      );
+      await animation.play();
+      this.cardsContainer.removeChildren();
     }
   }
 
