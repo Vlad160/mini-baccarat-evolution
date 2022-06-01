@@ -33,7 +33,7 @@ export class BetArea extends Graphics {
     circle.drawCircle(this.width / 2, this.height / 2, 25);
     // circle.pivot.set(circle.width / 2, circle.height / 2);
 
-    this.addChild(circle);
+    // this.addChild(circle);
   }
 
   private onClick = () => {
