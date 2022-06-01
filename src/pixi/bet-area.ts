@@ -26,14 +26,6 @@ export class BetArea extends Graphics {
     this.addChild(this.betAmount);
     this.x = this.config.x;
     this.y = this.config.y;
-    const circle = new Graphics();
-    circle.lineStyle(2, 0xffbd01, 1);
-    // circle.skew.x = 0.1;
-    // circle.skew.y =0.1;
-    circle.drawCircle(this.width / 2, this.height / 2, 25);
-    // circle.pivot.set(circle.width / 2, circle.height / 2);
-
-    // this.addChild(circle);
   }
 
   private onClick = () => {
