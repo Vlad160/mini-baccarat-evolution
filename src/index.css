@@ -3,11 +3,11 @@
 
 @font-face {
   font-family: 'Open Sans';
-  src: url('/fonts/IBMPlexSerif-Regular.ttf') format('ttf');
+  src: url('/fonts/OpenSans-Regular.ttf') format('truetype');
 }
 
 html {
-  font-family: 'IBM Plex Serif', serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 1rem;
 }
 

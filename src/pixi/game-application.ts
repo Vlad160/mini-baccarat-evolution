@@ -72,7 +72,7 @@ export class GameApplication {
       this.userStatus,
       this.userActions,
       this.statusPanel,
-      this.gameControls,
+      // this.gameControls,
       this.stopText
     );
   }

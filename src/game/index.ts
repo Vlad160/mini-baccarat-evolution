@@ -10,3 +10,4 @@ export * from './random';
 export * from './user';
 export * from './timer';
 export * from './wait';
+export * from './constants';

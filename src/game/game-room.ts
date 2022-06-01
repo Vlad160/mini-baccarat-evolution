@@ -103,7 +103,7 @@ export class GameRoom {
   }
 
   @action
-  async startGame(): Promise<BetWinner> {
+  async startGame(): Promise<void> {
     if (this.isGameInProgress) {
       return;
     }

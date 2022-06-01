@@ -106,6 +106,7 @@ export class GameManager {
         }
       )
     );
+    this.room.startGame();
   };
 
   constructor(private room: GameRoom, private container: HTMLElement) {

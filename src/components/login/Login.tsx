@@ -30,7 +30,7 @@ export const Login: React.FC<ILoginProps> = ({ onLogin }) => {
         />
       </label>
       <Button className="login__btn" type="submit">
-        Login
+        Start game!
       </Button>
     </form>
   );
