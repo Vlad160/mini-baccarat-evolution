@@ -36,13 +36,13 @@ export class Deck {
   }
 
   randomCards(amount: number): Card[] {
-    const exclude = [];
     const cards = [];
     while (amount > 0 && this.cards.length > 0) {
-      const num = generateRandom(0, this.cards.length);
+      const num = generateRandom(0, this.cards.length - 1);
+
       cards.push(this.cards[num]);
       this.cards = [...this.cards.slice(0, num), ...this.cards.slice(num + 1)];
-      exclude.push(num);
+
       amount--;
     }
     return cards;

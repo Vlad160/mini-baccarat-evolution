@@ -115,7 +115,7 @@ export class GameRoom {
     this.status = GameStatus.GAME_ENDED;
 
     this.appendHistory(result);
-    await wait(5000);
+    await wait(2000);
     if (!this.stop) {
       this.startGame();
     }
@@ -144,18 +144,18 @@ export class GameRoom {
   @action
   private async playRound(): Promise<BetWinner> {
     this.status = GameStatus.GAME_STARTED;
-    await wait(2000);
+    await wait(1000);
     this.status = GameStatus.BETTING_OPENED;
     await this.bettingTimer.start();
     this.status = GameStatus.BETTING_CLOSED;
     this.draftBet.reset();
-    await wait(2000);
+    await wait(1000);
     this.status = GameStatus.DEALING_CARDS;
     this.draftCards();
-    await wait(2000);
+    await wait(1000);
     this.draftThirdCard();
     this.status = GameStatus.FINALIZING_RESULTS;
-    await wait(2000);
+    await wait(1000);
     const result = this.getRoundResult();
     return result;
   }
