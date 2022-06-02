@@ -1,6 +1,5 @@
 import { Card, CardSuit } from './card';
 import { generateSuit } from './generate-suit';
-import { generateRandom } from './random';
 
 export const DECKS_AMOUNT = 6;
 export const CARDS: Card[] = Object.keys(CardSuit).map(generateSuit).flat();
@@ -35,16 +34,12 @@ export class Deck {
     return cards;
   }
 
-  randomCards(amount: number): Card[] {
-    const cards = [];
-    while (amount > 0 && this.cards.length > 0) {
-      const num = generateRandom(0, this.cards.length - 1);
-
-      cards.push(this.cards[num]);
-      this.cards = [...this.cards.slice(0, num), ...this.cards.slice(num + 1)];
-
-      amount--;
-    }
-    return cards;
+  take(amount: number): Card[] {
+    const [take, leave] = [
+      this.cards.slice(0, amount),
+      this.cards.slice(amount + 1),
+    ];
+    this.cards = leave;
+    return take;
   }
 }

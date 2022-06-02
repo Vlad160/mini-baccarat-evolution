@@ -176,8 +176,8 @@ export class GameRoom {
 
   @action
   private draftCards(): void {
-    this.banker.acceptCards(this.deck.randomCards(2));
-    this.player.acceptCards(this.deck.randomCards(2));
+    this.banker.acceptCards(this.deck.take(2));
+    this.player.acceptCards(this.deck.take(2));
   }
 
   @action
@@ -189,14 +189,14 @@ export class GameRoom {
     const playerRequiresThirdCard = this.player.score <= 5;
     let card: Card = null;
     if (playerRequiresThirdCard) {
-      card = this.deck.randomCards(1)[0];
+      card = this.deck.take(1)[0];
       this.player.acceptCards([card]);
     }
     const bankerScore = this.banker.score;
 
     if (!card) {
       if (bankerScore <= 5) {
-        this.banker.acceptCards(this.deck.randomCards(1));
+        this.banker.acceptCards(this.deck.take(1));
       }
       return;
     }
@@ -205,21 +205,21 @@ export class GameRoom {
       return;
     }
     if (bankerScore === 6 && [6, 7].includes(playerCardValue)) {
-      return this.banker.acceptCards(this.deck.randomCards(1));
+      return this.banker.acceptCards(this.deck.take(1));
     }
     if (bankerScore === 5 && [4, 5, 6, 7].includes(playerCardValue)) {
-      return this.banker.acceptCards(this.deck.randomCards(1));
+      return this.banker.acceptCards(this.deck.take(1));
     }
     if (bankerScore === 4 && [2, 3, 4, 5, 6, 7].includes(playerCardValue)) {
-      return this.banker.acceptCards(this.deck.randomCards(1));
+      return this.banker.acceptCards(this.deck.take(1));
     }
     if (
       bankerScore === 3 &&
       [0, 1, 2, 3, 4, 5, 6, 7, 9].includes(playerCardValue)
     ) {
-      return this.banker.acceptCards(this.deck.randomCards(1));
+      return this.banker.acceptCards(this.deck.take(1));
     }
-    return this.banker.acceptCards(this.deck.randomCards(1));
+    return this.banker.acceptCards(this.deck.take(1));
   }
 
   private getRoundResult(): BetWinner {
