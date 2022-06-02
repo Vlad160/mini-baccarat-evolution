@@ -9,6 +9,7 @@ import { FaMoneyBillWave, FaSignOutAlt } from 'react-icons/fa';
 export const UserActions = observer(() => {
   const store = useContext(ApplicationStoreContext);
   const handleLogOut = useCallback(() => {
+    store.room.setStop(true);
     store.logout();
   }, [store]);
 
