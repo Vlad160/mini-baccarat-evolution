@@ -16,22 +16,19 @@ export class Deck {
     this.shuffle();
   }
 
-  shuffle(): Card[] {
-    const cards = [...this.cards];
-    let currentIndex = cards.length,
+  shuffle(): void {
+    let currentIndex = this.cards.length,
       randomIndex;
 
     while (currentIndex != 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
 
-      [cards[currentIndex], cards[randomIndex]] = [
-        cards[randomIndex],
-        cards[currentIndex],
+      [this.cards[currentIndex], this.cards[randomIndex]] = [
+        this.cards[randomIndex],
+        this.cards[currentIndex],
       ];
     }
-
-    return cards;
   }
 
   take(amount: number): Card[] {
