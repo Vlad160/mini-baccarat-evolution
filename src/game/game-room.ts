@@ -1,9 +1,11 @@
 import { action, computed, makeObservable, observable } from 'mobx';
+import { Bet } from './bet';
 import { Card } from './card';
 import { CasinoActor, CasinoPlayerType } from './casino-actor';
 import { Deck } from './deck';
 import { DraftBet } from './draft-bet';
 import { BetWinner } from './model';
+import type { IRoundResult } from './model';
 import { Timer } from './timer';
 import { User } from './user';
 import { wait } from './wait';
@@ -45,6 +47,9 @@ export class GameRoom {
   readonly bettingTimer = new Timer(10000);
   @observable
   private _winner: BetWinner = null;
+
+  @observable.ref
+  roundResult: IRoundResult = null;
 
   @computed
   public get winner(): BetWinner {
@@ -110,12 +115,12 @@ export class GameRoom {
     this.setStop(false);
     this.resetRound();
     const result = await this.playRound();
-    this.winner = result;
-    this.draftMoney(result);
+    this.roundResult = result;
+    this.winner = result.winner;
+    this.user.money += result.earnings;
     this.status = GameStatus.GAME_ENDED;
-
-    this.appendHistory(result);
-    await wait(2000);
+    this.appendHistory(result.winner);
+    await wait(4000);
     if (!this.stop) {
       this.startGame();
     }
@@ -142,7 +147,7 @@ export class GameRoom {
   }
 
   @action
-  private async playRound(): Promise<BetWinner> {
+  private async playRound(): Promise<IRoundResult> {
     this.status = GameStatus.GAME_STARTED;
     await wait(1000);
     this.status = GameStatus.BETTING_OPENED;
@@ -152,10 +157,9 @@ export class GameRoom {
     await wait(1000);
     this.status = GameStatus.DEALING_CARDS;
     this.draftCards();
-    await wait(1000);
+    await wait(3000);
     this.draftThirdCard();
     this.status = GameStatus.FINALIZING_RESULTS;
-    await wait(1000);
     const result = this.getRoundResult();
     return result;
   }
@@ -222,28 +226,37 @@ export class GameRoom {
     return this.banker.acceptCards(this.deck.take(1));
   }
 
-  private getRoundResult(): BetWinner {
+  private getRoundResult(): IRoundResult {
+    let winner: BetWinner;
     if (this.banker.score === this.player.score) {
-      return BetWinner.Tie;
+      winner = BetWinner.Tie;
+    } else {
+      winner =
+        this.banker.score < this.player.score
+          ? BetWinner.Player
+          : BetWinner.Banker;
     }
-    return this.banker.score < this.player.score
-      ? BetWinner.Player
-      : BetWinner.Banker;
+
+    const prize = this.user.bet.amount
+      ? this.calculatePrize(this.user.bet, winner)
+      : null;
+
+    return {
+      earnings: prize,
+      winner,
+    };
   }
 
-  @action
-  private draftMoney(result: BetWinner): void {
-    const bet = this.user.bet;
+  private calculatePrize(bet: Bet, result: BetWinner) {
     if (bet.winner !== result) {
-      return;
+      return 0;
     }
-
     if (result === BetWinner.Player) {
-      this.user.money += bet.amount * 2;
+      return bet.amount * 2;
     } else if (result == BetWinner.Banker) {
-      this.user.money += bet.amount * 1.95;
+      return bet.amount * 1.95;
     } else if (result === BetWinner.Tie) {
-      this.user.money += bet.amount * 8;
+      return bet.amount * 8;
     } else {
       throw new Error(`Unknown winner result ${bet.winner}`);
     }

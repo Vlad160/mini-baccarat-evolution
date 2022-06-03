@@ -5,6 +5,7 @@ import { BetArea } from './bet-area';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
+import { RoundStatus } from './round-status';
 import { StatusPanel } from './status-panel';
 import { UserActions } from './user-actions';
 import { UserStatus } from './user-status';
@@ -29,6 +30,7 @@ export class GameApplication {
   loaded = false;
 
   manager: GameManager;
+  roundStatus: RoundStatus;
 
   constructor(private container: HTMLElement, private onLoad: () => void) {
     this.app = new Application({
@@ -57,6 +59,10 @@ export class GameApplication {
 
     const playerSwipe = -this.app.view.width / 8 - 20;
     const bankerSwipe = playerSwipe + (playerX - bankerX);
+    this.roundStatus = new RoundStatus(this.app.ticker, {
+      x: this.app.view.width / 2,
+      y: this.app.view.height / 2,
+    });
 
     this.playerCards = new Cards(
       this.app,
@@ -94,7 +100,7 @@ export class GameApplication {
       this.userStatus,
       this.userActions,
       this.statusPanel,
-      // this.gameControls,
+      this.roundStatus,
       this.stopText
     );
   }
