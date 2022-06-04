@@ -1,4 +1,3 @@
-import { wait } from '@game';
 import { DisplayObject, Ticker } from 'pixi.js';
 import { Animation } from './animation';
 import { IPoint } from './models';

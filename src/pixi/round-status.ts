@@ -48,7 +48,6 @@ export class RoundStatus extends Container {
     }
     this.text.updateText(false);
     this.text.y = this.panel.height / 2;
-
     const animation = new ScaleAnimation(
       this,
       { x: 0.5, y: 0.5 },

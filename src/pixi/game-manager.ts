@@ -108,6 +108,15 @@ export class GameManager {
         }
       )
     );
+
+    this.clearReactions.push(
+      reaction(
+        () => this.room.roundResult,
+        (result) => {
+          this.view.roundStatus.show(result);
+        }
+      )
+    );
     this.room.startGame();
   };
 
@@ -167,7 +176,6 @@ const STATUS_TO_MESSAGE = {
   [GameStatus.GAME_STARTED]: () => 'Game started',
   [GameStatus.BETTING_CLOSED]: () => 'All bets are made',
   [GameStatus.DEALING_CARDS]: () => 'Dealing cards',
-  [GameStatus.FINALIZING_RESULTS]: () => 'Drafting money',
   [GameStatus.GAME_ENDED]: (room: GameRoom) =>
     `Game ended. Winner is ${room.winner}\nWaiting for the next round`,
 };

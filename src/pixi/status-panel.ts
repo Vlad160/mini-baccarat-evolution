@@ -22,6 +22,7 @@ export class StatusPanel extends Container {
       fontFamily: 'IBM Plex Serif',
       fontSize: 24,
       fill: 0xffffff,
+      align: 'center',
     });
 
     this.addChild(this.panel, this.text);
