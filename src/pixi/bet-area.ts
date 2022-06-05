@@ -1,6 +1,10 @@
-import { BetWinner } from '@game';
-import { Graphics, GraphicsGeometry, Text } from 'pixi.js';
+import { BetWinner, IRoundResult, UserResultStatus, wait } from '@game';
+import { Application, Container, Graphics, Text, utils } from 'pixi.js';
+import { Chip, CHIP_WIDTH } from './chip';
+import { ChipsSwipeAnimation } from './chips-swipe.animation';
 import { GameManager } from './game-manager';
+
+const CHIP_OFFSET_Y = 5;
 
 export interface IReactangleConfig {
   x: number;
@@ -10,36 +14,110 @@ export interface IReactangleConfig {
   type: BetWinner;
 }
 
-export class BetArea extends Graphics {
+export class BetArea extends Container {
   private betAmount: Text;
+  private area: Graphics;
+  private chipsContainer = new Container();
+
   constructor(
     public readonly config: IReactangleConfig,
     private manager: GameManager,
-    geometry?: GraphicsGeometry
+    private app: Application
   ) {
-    super(geometry);
-    this.drawSlot(0xffffff);
+    super();
+    this.area = this.drawArea(0xffffff);
     this.interactive = true;
     this.buttonMode = true;
     this.on('pointerdown', this.onClick);
-    this.betAmount = new Text('', { fill: 0xffffff });
+    this.betAmount = new Text('', {
+      fill: 0xffffff,
+      fontFamily: 'IBM Plex Serif',
+    });
+    this.betAmount.x = this.config.width / 2 - CHIP_WIDTH * 1.5;
     this.addChild(this.betAmount);
     this.x = this.config.x;
     this.y = this.config.y;
+    this.addChild(this.area, this.chipsContainer);
+  }
+
+  get renderedChipsAmount(): number {
+    return this.chipsContainer.children.length;
+  }
+
+  get renderedChips(): Chip[] {
+    return this.chipsContainer.children as Chip[];
   }
 
   private onClick = () => {
     this.manager.adjustBet(this.config.type);
   };
 
-  private drawSlot(color: number, opacity = 0.00001): void {
-    this.beginFill(color, opacity);
-    // this.lineStyle({ color: utils.string2hex('#b8bcc4'), width: 2 });
-    this.drawRoundedRect(0, 0, this.config.width, this.config.height, 2);
-    this.endFill();
+  private drawArea(color: number, opacity = 0.00001): Graphics {
+    const area = new Graphics();
+    area.beginFill(color, opacity);
+    // area.lineStyle({ color: utils.string2hex('#b8bcc4'), width: 2 });
+    area.drawRoundedRect(0, 0, this.config.width, this.config.height, 2);
+    area.endFill();
+    return area;
   }
 
   setAmount(amount: number): void {
-    this.betAmount.text = amount > 0 ? String(amount) : '';
+    if (amount <= 0) {
+      this.betAmount.text = '';
+      if (this.chipsContainer.children.length !== 0) {
+        this.chipsContainer.removeChildren();
+      }
+    } else {
+      this.betAmount.text = String(amount);
+      const chipsAmount = Math.floor(amount / 10);
+      const length = chipsAmount - this.renderedChipsAmount;
+      const chipsToRender = Array.from({ length }, (_, i) =>
+        this.getChip(i + this.renderedChipsAmount)
+      );
+      if (chipsToRender.length > 0) {
+        this.chipsContainer.addChild(...chipsToRender);
+      }
+      this.betAmount.y = this.renderedChips[this.renderedChips.length - 1].y;
+    }
+  }
+
+  clearArea(result: IRoundResult): void {
+    if (this.chipsContainer.children.length === 0) {
+      this.betAmount.text = '';
+      return;
+    }
+
+    let delta: number;
+
+    if (result.userStatus === UserResultStatus.Won) {
+      delta = this.app.view.height - this.config.y;
+    } else {
+      delta = -this.app.view.height;
+    }
+
+    const swipeAnimation = new ChipsSwipeAnimation(
+      this.chipsContainer,
+      this.app.ticker,
+      delta
+    );
+    const { x, y } = this.chipsContainer;
+
+    wait(2000)
+      .then(() => {
+        this.betAmount.text = '';
+        return swipeAnimation.play();
+      })
+      .then(() => {
+        this.chipsContainer.removeChildren();
+        this.chipsContainer.x = x;
+        this.chipsContainer.y = y;
+      });
+  }
+
+  private getChip(index: number): Chip {
+    return new Chip(this.app, {
+      x: this.config.width / 2,
+      y: this.config.height / 2 - CHIP_OFFSET_Y * index,
+    });
   }
 }

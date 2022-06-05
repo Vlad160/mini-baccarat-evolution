@@ -1,7 +1,6 @@
-import { BetWinner } from '@game';
 import { Application, Sprite, Text } from 'pixi.js';
 import { ASSETS } from './assets';
-import { BetArea } from './bet-area';
+import { BetsArea } from './bets-area';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
@@ -18,7 +17,7 @@ export class GameApplication {
   gameControls: GameControls;
   statusPanel: StatusPanel;
 
-  betAreas: BetArea[] = [];
+  betAreas: BetsArea;
   readonly app: Application;
   statusText: Text;
   stopText: Text;
@@ -49,7 +48,7 @@ export class GameApplication {
 
   init(): void {
     this.container.appendChild(this.app.view);
-    this.betAreas = this.getBetAreas();
+    this.betAreas = new BetsArea(this.app, this.manager);
 
     const playerX = (3 / 8) * this.app.view.width + PLAYER_CARDS_OFFSET_X;
     const bankerX = this.app.view.width / 2 + BANKER_CARDS_OFFSET_X;
@@ -92,9 +91,10 @@ export class GameApplication {
     this.statusPanel = new StatusPanel();
     this.gameControls = new GameControls(this.app, this.manager);
     this.stopText = this.createStopText();
+
     this.app.stage.addChild(
       background,
-      ...this.betAreas,
+      this.betAreas,
       this.bankerCards,
       this.playerCards,
       this.userStatus,
@@ -126,40 +126,5 @@ export class GameApplication {
     text.y = 60;
     text.visible = false;
     return text;
-  }
-
-  private getBetAreas(): BetArea[] {
-    return [
-      new BetArea(
-        {
-          x: 1280 / 2 - 350 / 2,
-          y: 545,
-          width: 350,
-          height: 110,
-          type: BetWinner.Player,
-        },
-        this.manager
-      ),
-      new BetArea(
-        {
-          x: 1280 / 2 - 280 / 2,
-          y: 440,
-          width: 280,
-          height: 85,
-          type: BetWinner.Banker,
-        },
-        this.manager
-      ),
-      new BetArea(
-        {
-          x: 1280 / 2 - 230 / 2,
-          y: 350,
-          width: 230,
-          height: 75,
-          type: BetWinner.Tie,
-        },
-        this.manager
-      ),
-    ];
   }
 }

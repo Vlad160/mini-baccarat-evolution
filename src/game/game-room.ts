@@ -4,7 +4,7 @@ import { Card } from './card';
 import { CasinoActor, CasinoPlayerType } from './casino-actor';
 import { Deck } from './deck';
 import { DraftBet } from './draft-bet';
-import { BetWinner } from './model';
+import { BetWinner, UserResultStatus } from './model';
 import type { IRoundResult } from './model';
 import { Timer } from './timer';
 import { User } from './user';
@@ -49,7 +49,14 @@ export class GameRoom {
   private _winner: BetWinner = null;
 
   @observable.ref
-  roundResult: IRoundResult = null;
+  private _roundResult: IRoundResult = null;
+  @computed
+  public get roundResult(): IRoundResult {
+    return this._roundResult;
+  }
+  public set roundResult(value: IRoundResult) {
+    this._roundResult = value;
+  }
 
   @computed
   public get winner(): BetWinner {
@@ -244,6 +251,11 @@ export class GameRoom {
     return {
       earnings: prize,
       winner,
+      userStatus: this.user.bet.amount
+        ? winner === this.user.bet.winner
+          ? UserResultStatus.Won
+          : UserResultStatus.Lose
+        : UserResultStatus.NotPlayed,
     };
   }
 
