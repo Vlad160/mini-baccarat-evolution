@@ -100,8 +100,6 @@ export class BetArea extends Container {
       this.app.ticker,
       delta
     );
-    const { x, y } = this.chipsContainer;
-
     wait(2000)
       .then(() => {
         this.betAmount.text = '';
@@ -109,8 +107,8 @@ export class BetArea extends Container {
       })
       .then(() => {
         this.chipsContainer.removeChildren();
-        this.chipsContainer.x = x;
-        this.chipsContainer.y = y;
+        this.chipsContainer.x = 0;
+        this.chipsContainer.y = 0;
       });
   }
 

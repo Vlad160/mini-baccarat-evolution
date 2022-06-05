@@ -1,7 +1,7 @@
 import { Container, Ticker } from 'pixi.js';
 import { Animation } from './animation';
 
-const ANIMATION_TIME = 10000;
+const ANIMATION_TIME = 2000;
 
 export class ChipsSwipeAnimation extends Animation {
   private promise: Promise<void>;

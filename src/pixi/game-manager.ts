@@ -122,10 +122,15 @@ export class GameManager {
         }
       )
     );
+    this.onRendered(this.view.app.view);
     this.room.startGame();
   };
 
-  constructor(private room: GameRoom, private container: HTMLElement) {
+  constructor(
+    private room: GameRoom,
+    private container: HTMLElement,
+    private onRendered: (canvas: HTMLCanvasElement) => void
+  ) {
     this.view = new GameApplication(this.container, this.onViewLoad);
   }
 

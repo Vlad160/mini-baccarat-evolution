@@ -8,7 +8,7 @@ export class DraftBet extends Bet {
 
   increseBet(): void {
     const newAmount = this.amount + this.betSize;
-    this.amount = this.user.money > newAmount ? newAmount : this.amount;
+    this.amount = this.user.money >= newAmount ? newAmount : this.amount;
   }
 
   decreaseBet(): void {

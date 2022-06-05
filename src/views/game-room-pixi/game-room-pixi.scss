@@ -1,7 +1,9 @@
 .grp {
-  max-height: calc(100vh - 1rem);
-  width: auto;
   display: flex;
+  padding: 1rem;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
 
   canvas {
     max-width: 100%;
