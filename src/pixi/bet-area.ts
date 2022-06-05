@@ -1,8 +1,9 @@
 import { BetWinner, IRoundResult, UserResultStatus, wait } from '@game';
-import { Application, Container, Graphics, Text, utils } from 'pixi.js';
+import { Application, Container, Graphics, Text } from 'pixi.js';
 import { Chip, CHIP_WIDTH } from './chip';
 import { ChipsSwipeAnimation } from './chips-swipe.animation';
 import { GameManager } from './game-manager';
+import { SoundManager } from './sound-manager';
 
 const CHIP_OFFSET_Y = 5;
 
@@ -22,7 +23,8 @@ export class BetArea extends Container {
   constructor(
     public readonly config: IReactangleConfig,
     private manager: GameManager,
-    private app: Application
+    private app: Application,
+    private soundManager: SoundManager
   ) {
     super();
     this.area = this.drawArea(0xffffff);
@@ -69,6 +71,7 @@ export class BetArea extends Container {
       }
     } else {
       this.betAmount.text = String(amount);
+
       const chipsAmount = Math.floor(amount / 10);
       const length = chipsAmount - this.renderedChipsAmount;
       const chipsToRender = Array.from({ length }, (_, i) =>
@@ -76,6 +79,7 @@ export class BetArea extends Container {
       );
       if (chipsToRender.length > 0) {
         this.chipsContainer.addChild(...chipsToRender);
+        this.soundManager.chipsCollide();
       }
       this.betAmount.y = this.renderedChips[this.renderedChips.length - 1].y;
     }

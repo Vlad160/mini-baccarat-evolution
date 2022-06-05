@@ -122,6 +122,16 @@ export class GameManager {
         }
       )
     );
+
+    this.clearReactions.push(
+      reaction(
+        () => this.room.user.soundDisabled,
+        (disabled) => {
+          this.view.soundControl.setMuted(disabled);
+        }
+      )
+    );
+
     this.onRendered(this.view.app.view);
     this.room.startGame();
   };
@@ -131,7 +141,11 @@ export class GameManager {
     private container: HTMLElement,
     private onRendered: (canvas: HTMLCanvasElement) => void
   ) {
-    this.view = new GameApplication(this.container, this.onViewLoad);
+    this.view = new GameApplication(
+      this.container,
+      this.room.user.soundDisabled,
+      this.onViewLoad
+    );
   }
 
   adjustBet(winner: BetWinner): void {
@@ -178,6 +192,10 @@ export class GameManager {
     if (STATUS_TO_MESSAGE[status]) {
       this.view.statusPanel.setText(STATUS_TO_MESSAGE[status](this.room));
     }
+  }
+
+  toggleSound(): void {
+    this.room.user.soundDisabled = !this.room.user.soundDisabled;
   }
 }
 

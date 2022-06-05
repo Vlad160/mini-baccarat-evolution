@@ -3,6 +3,7 @@ import { Application, Container, Text } from 'pixi.js';
 import { CardSprite } from './card-sprite';
 import { CardsSwipeAnimation } from './cards-swipe.animation';
 import { IPoint } from './models';
+import { SoundManager } from './sound-manager';
 
 export class Cards extends Container {
   cards: Card[] = [];
@@ -12,7 +13,8 @@ export class Cards extends Container {
   constructor(
     private app: Application,
     private offset: IPoint = { x: 0, y: 0 },
-    private swipeOffset: IPoint = { x: 0, y: 0 }
+    private swipeOffset: IPoint = { x: 0, y: 0 },
+    private soundManager: SoundManager
   ) {
     super();
     this.x = this.offset.x;
@@ -37,6 +39,7 @@ export class Cards extends Container {
     );
     if (sprites.length) {
       this.cardsContainer.addChild(...sprites);
+      this.soundManager.cardPlace();
     }
     this.cards = cards;
     const total = cards.reduce((acc, card) => acc + card.score, 0) % 10;
@@ -52,6 +55,7 @@ export class Cards extends Container {
         this.cardsContainer.children,
         this.swipeOffset
       );
+      this.soundManager.cardSlide();
       await animation.play();
       this.cardsContainer.removeChildren();
     }

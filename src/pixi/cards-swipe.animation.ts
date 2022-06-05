@@ -17,6 +17,7 @@ export class CardsSwipeAnimation extends Animation {
   }
 
   startTicker = () => {
+    const angle = Math.PI / 6;
     const start = Date.now();
     const startX = this.cards[0].x;
     const startY = this.cards[0].y;
@@ -36,7 +37,11 @@ export class CardsSwipeAnimation extends Animation {
           this.offset.y,
           ANIMATION_TIME
         );
-        this.cards.forEach((card) => card.position.set(x, y));
+        const rotate = this.easeLinear(passed, 0, angle, ANIMATION_TIME);
+        this.cards.forEach((card) => {
+          card.rotation = rotate;
+          card.position.set(x, y);
+        });
       } else {
         this.resolve();
         this.ticker.remove(tick);
