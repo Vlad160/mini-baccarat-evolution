@@ -1,4 +1,5 @@
-import { Container, Graphics, Text, utils } from 'pixi.js';
+import { Container, Graphics, utils } from 'pixi.js';
+import { Text } from './text';
 
 const PANEL_WIDTH = 400;
 const PANEL_HEIGHT = 100;
@@ -19,9 +20,7 @@ export class StatusPanel extends Container {
     this.panel.drawRoundedRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT, 5);
     this.panel.endFill();
     this.text = new Text('', {
-      fontFamily: 'IBM Plex Serif',
       fontSize: 24,
-      fill: 0xffffff,
       align: 'center',
     });
 

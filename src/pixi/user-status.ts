@@ -1,4 +1,5 @@
-import { Application, Container, Text } from 'pixi.js';
+import { Application, Container } from 'pixi.js';
+import { Text } from './text';
 
 export class UserStatus extends Container {
   private money: Text;
@@ -6,8 +7,8 @@ export class UserStatus extends Container {
 
   constructor(private app: Application) {
     super();
-    this.money = new Text('CASH $ 0.00', { fill: 0xffffff });
-    this.bet = new Text('BET $ 0.00', { fill: 0xffffff });
+    this.money = new Text('CASH $ 0.00');
+    this.bet = new Text('BET $ 0.00');
     this.height = 50;
     this.money.y = this.app.view.height - 50 + this.money.height / 2;
     this.bet.y = this.app.view.height - 50 + this.bet.height / 2;

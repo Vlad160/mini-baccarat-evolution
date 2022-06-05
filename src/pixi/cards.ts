@@ -1,9 +1,10 @@
 import { Card } from '@game';
-import { Application, Container, Text } from 'pixi.js';
+import { Application, Container } from 'pixi.js';
 import { CardSprite } from './card-sprite';
 import { CardsSwipeAnimation } from './cards-swipe.animation';
 import { IPoint } from './models';
 import { SoundManager } from './sound-manager';
+import { Text } from './text';
 
 export class Cards extends Container {
   cards: Card[] = [];
@@ -19,7 +20,7 @@ export class Cards extends Container {
     super();
     this.x = this.offset.x;
     this.y = this.offset.y;
-    this.scoreText = new Text('', { fill: 0xffffff });
+    this.scoreText = new Text('');
     this.scoreText.x = -30;
     this.addChild(this.cardsContainer, this.scoreText);
   }

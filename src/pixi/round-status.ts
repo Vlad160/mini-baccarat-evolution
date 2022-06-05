@@ -1,7 +1,8 @@
 import { IRoundResult, wait } from '@game';
-import { Container, Graphics, Ticker, Text, utils } from 'pixi.js';
+import { Container, Graphics, Ticker, utils } from 'pixi.js';
 import { IPoint } from './models';
 import { ScaleAnimation } from './scale-animation.animation';
+import { Text } from './text';
 
 const PANEL_COLOR = '#282826';
 const WIDTH = 300;
@@ -25,9 +26,7 @@ export class RoundStatus extends Container {
     this.panel.drawRoundedRect(0, 0, WIDTH, HEIGHT, 5);
     this.panel.endFill();
     this.text = new Text('', {
-      fontFamily: 'IBM Plex Serif',
       fontSize: 24,
-      fill: 0xffffff,
       align: 'center',
     });
     this.text.anchor.set(0.5);

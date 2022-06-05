@@ -47,14 +47,6 @@ export class GameManager {
 
     this.clearReactions.push(
       reaction(
-        () => this.room.stop,
-        (stop) => this.view.setStop(stop),
-        { fireImmediately: true }
-      )
-    );
-
-    this.clearReactions.push(
-      reaction(
         () => [
           this.room.user.bet.amount,
           this.room.user.bet.winner,
@@ -186,6 +178,7 @@ export class GameManager {
   destroy(): void {
     this.view.app.destroy(true, true);
     this.clearReactions.forEach((cb) => cb());
+    this.view.soundManager.destroy();
   }
 
   setStatus(status: GameStatus): void {
