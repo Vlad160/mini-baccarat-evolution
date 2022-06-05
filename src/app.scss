@@ -2,18 +2,20 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
+  overflow: hidden;
 
   &__wrapper {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 1rem;
     flex-grow: 1;
     flex-shrink: 0;
     background-image: url(../assets/background.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
+    max-height: calc(100vh - 5rem);
   }
 }
 
