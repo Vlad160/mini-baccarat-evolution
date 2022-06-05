@@ -18,7 +18,7 @@ export const GameRoomPixi: React.FC<IGameRoomPixi> = observer(({ room }) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement>();
 
   const handleResize = useCallback(() => {
-    if (!canvas) {
+    if (!canvas || !containerRef.current) {
       return;
     }
     const width = containerRef.current.offsetWidth;

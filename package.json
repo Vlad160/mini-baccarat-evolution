@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@pixi/filter-glow": "^4.1.5",
+    "@pixi/sound": "^4.2.0",
     "mobx": "^6.5.0",
     "mobx-react-lite": "^3.4.0",
     "pixi.js": "^6.3.2",

@@ -2,6 +2,7 @@ import { BetWinner, IRoundResult } from '@game';
 import { Application, Container } from 'pixi.js';
 import { BetArea } from './bet-area';
 import { GameManager } from './game-manager';
+import { SoundManager } from './sound-manager';
 
 const PLAYER_AREA_WIDTH = 350;
 const PLAYER_AREA_HEIGHT = 110;
@@ -13,7 +14,11 @@ const TIE_AREA_HEIGHT = 75;
 export class BetsArea extends Container {
   private areas: BetArea[];
 
-  constructor(private app: Application, private manager: GameManager) {
+  constructor(
+    private app: Application,
+    private manager: GameManager,
+    private soundManager: SoundManager
+  ) {
     super();
     this.areas = this.getBetAreas();
     this.addChild(...this.areas);
@@ -30,7 +35,8 @@ export class BetsArea extends Container {
           type: BetWinner.Player,
         },
         this.manager,
-        this.app
+        this.app,
+        this.soundManager
       ),
       new BetArea(
         {
@@ -41,7 +47,8 @@ export class BetsArea extends Container {
           type: BetWinner.Banker,
         },
         this.manager,
-        this.app
+        this.app,
+        this.soundManager
       ),
       new BetArea(
         {
@@ -52,7 +59,8 @@ export class BetsArea extends Container {
           type: BetWinner.Tie,
         },
         this.manager,
-        this.app
+        this.app,
+        this.soundManager
       ),
     ];
   }

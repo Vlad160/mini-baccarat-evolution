@@ -15,7 +15,12 @@ export class User {
     if (!userObject) {
       return null;
     }
-    return new User(userObject.id, userObject.name, userObject.money);
+    return new User(
+      userObject.id,
+      userObject.name,
+      userObject.money,
+      userObject.soundDisabled
+    );
   }
 
   static storeUser(user: User): void {
@@ -39,13 +44,26 @@ export class User {
     User.storeUser(this);
   }
 
+  @observable
+  private _soundDisabled = false;
+  @computed
+  public get soundDisabled() {
+    return this._soundDisabled;
+  }
+  public set soundDisabled(value) {
+    this._soundDisabled = value;
+    User.storeUser(this);
+  }
+
   constructor(
     public readonly id: string,
     private _name: string,
-    money: number
+    money: number,
+    soundDisabled = false
   ) {
     makeObservable(this);
     this._money = money;
+    this.soundDisabled = soundDisabled;
   }
 
   get name(): string {
@@ -53,6 +71,11 @@ export class User {
   }
 
   toJSON(): string {
-    return JSON.stringify({ money: this.money, name: this.name, id: this.id });
+    return JSON.stringify({
+      money: this.money,
+      name: this.name,
+      id: this.id,
+      soundDisabled: this.soundDisabled,
+    });
   }
 }

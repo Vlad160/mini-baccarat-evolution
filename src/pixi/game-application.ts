@@ -5,9 +5,11 @@ import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
 import { RoundStatus } from './round-status';
+import { SoundManager } from './sound-manager';
 import { StatusPanel } from './status-panel';
 import { UserActions } from './user-actions';
 import { UserStatus } from './user-status';
+import { SoundControl } from './sound-control';
 
 const PLAYER_CARDS_OFFSET_X = 25;
 const BANKER_CARDS_OFFSET_X = 10;
@@ -30,8 +32,14 @@ export class GameApplication {
 
   manager: GameManager;
   roundStatus: RoundStatus;
+  soundManager: SoundManager;
+  soundControl: SoundControl;
 
-  constructor(private container: HTMLElement, private onLoad: () => void) {
+  constructor(
+    private container: HTMLElement,
+    soundMuted: boolean,
+    private onLoad: () => void
+  ) {
     this.app = new Application({
       width: 1280,
       height: 720,
@@ -40,6 +48,9 @@ export class GameApplication {
       antialias: true,
     });
 
+    this.app.loader.baseUrl = 'assets';
+    this.soundManager = new SoundManager(this.app.loader, soundMuted);
+    this.soundManager.loadAssets();
     this.loadAssets();
     this.app.loader.onComplete.add(this.onLoaded);
     this.app.loader.onError.add(() => console.log('Error!'));
@@ -48,7 +59,7 @@ export class GameApplication {
 
   init(): void {
     this.container.appendChild(this.app.view);
-    this.betAreas = new BetsArea(this.app, this.manager);
+    this.betAreas = new BetsArea(this.app, this.manager, this.soundManager);
 
     const playerX = (3 / 8) * this.app.view.width + PLAYER_CARDS_OFFSET_X;
     const bankerX = this.app.view.width / 2 + BANKER_CARDS_OFFSET_X;
@@ -69,7 +80,8 @@ export class GameApplication {
         x: playerX,
         y: playerY,
       },
-      { x: playerSwipe, y: 10 }
+      { x: playerSwipe, y: 10 },
+      this.soundManager
     );
 
     this.bankerCards = new Cards(
@@ -78,7 +90,8 @@ export class GameApplication {
         x: bankerX,
         y: bankerY,
       },
-      { x: bankerSwipe, y: 10 }
+      { x: bankerSwipe, y: 10 },
+      this.soundManager
     );
     this.userStatus = new UserStatus(this.app);
     const background = new Sprite(
@@ -91,6 +104,11 @@ export class GameApplication {
     this.statusPanel = new StatusPanel();
     this.gameControls = new GameControls(this.app, this.manager);
     this.stopText = this.createStopText();
+    this.soundControl = new SoundControl(
+      this.app,
+      this.soundManager,
+      this.manager
+    );
 
     this.app.stage.addChild(
       background,
@@ -101,7 +119,8 @@ export class GameApplication {
       this.userActions,
       this.statusPanel,
       this.roundStatus,
-      this.stopText
+      this.stopText,
+      this.soundControl
     );
   }
 
@@ -115,7 +134,6 @@ export class GameApplication {
   };
 
   private loadAssets(): void {
-    this.app.loader.baseUrl = 'assets';
     ASSETS.forEach((file) => this.app.loader.add(file, file));
   }
 

@@ -59,4 +59,6 @@ export const ASSETS = [
   'cardSpadesJ.png',
   'cardSpadesK.png',
   'cardSpadesQ.png',
+  'volume-on.png',
+  'volume-off.png',
 ];
