@@ -1,9 +1,10 @@
 import { BetWinner, IRoundResult, UserResultStatus, wait } from '@game';
-import { Application, Container, Graphics, Text } from 'pixi.js';
+import { Application, Container, Graphics } from 'pixi.js';
 import { Chip, CHIP_WIDTH } from './chip';
 import { ChipsSwipeAnimation } from './chips-swipe.animation';
 import { GameManager } from './game-manager';
 import { SoundManager } from './sound-manager';
+import { Text } from './text';
 
 const CHIP_OFFSET_Y = 5;
 
@@ -31,10 +32,7 @@ export class BetArea extends Container {
     this.interactive = true;
     this.buttonMode = true;
     this.on('pointerdown', this.onClick);
-    this.betAmount = new Text('', {
-      fill: 0xffffff,
-      fontFamily: 'IBM Plex Serif',
-    });
+    this.betAmount = new Text('');
     this.betAmount.x = this.config.width / 2 - CHIP_WIDTH * 1.5;
     this.addChild(this.betAmount);
     this.x = this.config.x;

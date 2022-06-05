@@ -1,6 +1,7 @@
 import { GlowFilter } from '@pixi/filter-glow';
-import { Container, Graphics, Sprite, Text, Texture, utils } from 'pixi.js';
+import { Container, Graphics, Sprite, Texture, utils } from 'pixi.js';
 import { IPoint } from './models';
+import { Text } from './text';
 
 const TEXT_RECT_COLOR = '#282826';
 
@@ -45,9 +46,7 @@ export class ActionButton extends Container {
 
   private createText(content: string): Text {
     const text = new Text(content, {
-      fontFamily: 'IBM Plex Serif',
       fontSize: 18,
-      fill: 0xffffff,
     });
     text.anchor.set(0.5, 0.5);
     text.updateText(false);

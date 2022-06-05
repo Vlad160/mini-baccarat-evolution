@@ -17,7 +17,7 @@ export class SoundManager {
   }
 
   backgroundMusic(): void {
-    this.play('bgSound', { loop: true, volume: 0.2 });
+    this.play('bgSound', { loop: true, volume: 0.1 });
   }
 
   cardPlace(): void {
@@ -45,5 +45,9 @@ export class SoundManager {
     if (!this.muted) {
       this.loader.resources[name].sound.play(options);
     }
+  }
+
+  destroy(): void {
+    sound.stopAll();
   }
 }

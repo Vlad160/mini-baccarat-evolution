@@ -1,15 +1,16 @@
-import { Application, Sprite, Text } from 'pixi.js';
+import { Application, Sprite } from 'pixi.js';
 import { ASSETS } from './assets';
 import { BetsArea } from './bets-area';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
+import { LoadingScreen } from './loading-screen';
 import { RoundStatus } from './round-status';
+import { SoundControl } from './sound-control';
 import { SoundManager } from './sound-manager';
 import { StatusPanel } from './status-panel';
 import { UserActions } from './user-actions';
 import { UserStatus } from './user-status';
-import { SoundControl } from './sound-control';
 
 const PLAYER_CARDS_OFFSET_X = 25;
 const BANKER_CARDS_OFFSET_X = 10;
@@ -21,9 +22,6 @@ export class GameApplication {
 
   betAreas: BetsArea;
   readonly app: Application;
-  statusText: Text;
-  stopText: Text;
-
   bankerCards: Cards;
   playerCards: Cards;
 
@@ -34,6 +32,7 @@ export class GameApplication {
   roundStatus: RoundStatus;
   soundManager: SoundManager;
   soundControl: SoundControl;
+  loadingScreen: LoadingScreen;
 
   constructor(
     private container: HTMLElement,
@@ -54,11 +53,17 @@ export class GameApplication {
     this.loadAssets();
     this.app.loader.onComplete.add(this.onLoaded);
     this.app.loader.onError.add(() => console.log('Error!'));
+    this.loadingScreen = new LoadingScreen({
+      width: this.app.view.width,
+      height: this.app.view.height,
+    });
+    this.app.stage.addChild(this.loadingScreen);
+    this.app.loader.onLoad.add(this.onProgress);
     this.app.loader.load();
+    this.container.appendChild(this.app.view);
   }
 
   init(): void {
-    this.container.appendChild(this.app.view);
     this.betAreas = new BetsArea(this.app, this.manager, this.soundManager);
 
     const playerX = (3 / 8) * this.app.view.width + PLAYER_CARDS_OFFSET_X;
@@ -97,19 +102,19 @@ export class GameApplication {
     const background = new Sprite(
       this.app.loader.resources['bg_game.jpg'].texture
     );
-    background.width = 1280;
-    background.height = 720;
+    background.width = this.app.view.width;
+    background.height = this.app.view.height;
 
     this.userActions = new UserActions(this.app, this.manager);
     this.statusPanel = new StatusPanel();
     this.gameControls = new GameControls(this.app, this.manager);
-    this.stopText = this.createStopText();
     this.soundControl = new SoundControl(
       this.app,
       this.soundManager,
       this.manager
     );
 
+    this.app.stage.removeChildren();
     this.app.stage.addChild(
       background,
       this.betAreas,
@@ -119,14 +124,15 @@ export class GameApplication {
       this.userActions,
       this.statusPanel,
       this.roundStatus,
-      this.stopText,
       this.soundControl
     );
   }
 
-  setStop(stop: boolean): void {
-    this.stopText.visible = stop;
-  }
+  private onProgress = () => {
+    if (this.app.loader) {
+      this.loadingScreen.setProgress(this.app.loader.progress);
+    }
+  };
 
   private onLoaded = () => {
     this.loaded = true;
@@ -135,14 +141,5 @@ export class GameApplication {
 
   private loadAssets(): void {
     ASSETS.forEach((file) => this.app.loader.add(file, file));
-  }
-
-  private createStopText(): Text {
-    const text = new Text('Game is now being stopped...', { fill: 0xffffff });
-    text.anchor.set(0.5, 0.5);
-    text.x = this.app.view.width / 5;
-    text.y = 60;
-    text.visible = false;
-    return text;
   }
 }
