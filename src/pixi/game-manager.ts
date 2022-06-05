@@ -63,13 +63,18 @@ export class GameManager {
         ([amount, winner, draftAmount]: [number, BetWinner, number]) => {
           const total = amount + draftAmount;
           this.view.userStatus.setBet(amount);
-          this.view.betAreas.forEach((slot) =>
-            winner === slot.config.type && total > 0
-              ? slot.setAmount(total)
-              : slot.setAmount(0)
-          );
+          this.view.betAreas.setAmount(total, winner);
         },
         { fireImmediately: true }
+      )
+    );
+
+    this.clearReactions.push(
+      reaction(
+        () => this.room.roundResult,
+        (result) => {
+          this.view.betAreas.setRoundResult(result);
+        }
       )
     );
 
