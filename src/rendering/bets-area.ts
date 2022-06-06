@@ -2,7 +2,7 @@ import { BetWinner, IRoundResult } from '@game';
 import { Application, Container } from 'pixi.js';
 import { BetArea } from './bet-area';
 import { GameManager } from './game-manager';
-import { Dimensions } from './models';
+import { IDimensions } from './models';
 import { SoundManager } from './sound-manager';
 import { TextureManager } from './texture-manager';
 
@@ -17,7 +17,7 @@ export class BetsArea extends Container {
   private areas: BetArea[];
 
   constructor(
-    dimensions: Dimensions,
+    dimensions: IDimensions,
     private app: Application,
     private manager: GameManager,
     private soundManager: SoundManager,
@@ -28,7 +28,7 @@ export class BetsArea extends Container {
     this.addChild(...this.areas);
   }
 
-  private getBetAreas(dimensions: Dimensions): BetArea[] {
+  private getBetAreas(dimensions: IDimensions): BetArea[] {
     return [
       new BetArea(
         {

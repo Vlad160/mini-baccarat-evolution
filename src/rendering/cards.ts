@@ -8,6 +8,9 @@ import { SoundManager } from './sound-manager';
 import { Text } from './text';
 import { TextureManager } from './texture-manager';
 
+const SCORE_OFFSET_X = -30;
+const CARD_ANIMATION_DURATION = 500;
+const CARD_OFFSET_MULTI = 18;
 export class Cards extends Container {
   cards: Card[] = [];
 
@@ -26,7 +29,7 @@ export class Cards extends Container {
     this.x = this.offset.x;
     this.y = this.offset.y;
     this.scoreText = new Text('');
-    this.scoreText.x = -30;
+    this.scoreText.x = SCORE_OFFSET_X;
     this.addChild(this.cardsContainer, this.scoreText);
   }
 
@@ -37,29 +40,27 @@ export class Cards extends Container {
       this.cards = [];
       return;
     }
-    const toRender = cards.filter((c) =>
+    const cardsToRender = cards.filter((c) =>
       this.cards.every((x) => x.id !== c.id)
     );
-    const sprites = toRender.map((card, i) =>
+    const spritesToRender = cardsToRender.map((card, i) =>
       this.getSprite(card, i + this.cards.length)
     );
-    if (sprites.length) {
-      this.cardsContainer.addChild(...sprites);
-      sprites.forEach((card) => {
+    if (spritesToRender.length) {
+      this.cardsContainer.addChild(...spritesToRender);
+      spritesToRender.forEach((card) => {
         new ScaleAnimation(
           card,
           { x: 0.2, y: 0.2 },
           { x: 0.7, y: 0.7 },
           this.ticker,
-          500
+          CARD_ANIMATION_DURATION
         ).play();
       });
       this.soundManager.cardPlace();
     }
     this.cards = cards;
-    if (this.cards.length > 0) {
-      this.scoreText.text = String(score);
-    }
+    this.scoreText.text = String(score);
   }
 
   async swipeCards(): Promise<void> {
@@ -80,8 +81,8 @@ export class Cards extends Container {
       card.value ? card.value : card.face[0]
     }.png`;
     const texture = this.textureMananger.get(name);
-    const x = index * 18;
-    const y = index * 18;
+    const x = index * CARD_OFFSET_MULTI;
+    const y = index * CARD_OFFSET_MULTI;
     return new CardSprite(texture, { x, y });
   }
 }

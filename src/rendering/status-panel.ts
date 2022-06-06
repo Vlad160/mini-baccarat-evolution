@@ -32,7 +32,7 @@ export class StatusPanel extends Container {
   setText(content: string): void {
     this.text.text = content;
     this.text.updateText(true);
-    this.text.x = PANEL_WIDTH / 2 - this.text.width / 2;
-    this.text.y = PANEL_HEIGHT / 2 - this.text.height / 2;
+    this.text.x = (PANEL_WIDTH - this.text.width) / 2;
+    this.text.y = (PANEL_HEIGHT - this.text.height) / 2;
   }
 }

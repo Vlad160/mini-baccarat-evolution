@@ -1,5 +1,5 @@
 import { Container, Graphics } from 'pixi.js';
-import { Dimensions } from './models';
+import { IDimensions } from './models';
 import { ProgressBar } from './progress-bar';
 
 const BACKGROUND_COLOR = 0x000000;
@@ -9,7 +9,7 @@ export class LoadingScreen extends Container {
 
   progressBar: ProgressBar;
 
-  constructor(private dimensions: Dimensions) {
+  constructor(private dimensions: IDimensions) {
     super();
     this.backgound = this.createBackground();
     this.progressBar = new ProgressBar({

@@ -4,7 +4,7 @@ import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
 import { LoadingScreen } from './loading-screen';
-import { Dimensions as IDimensions } from './models';
+import { IDimensions } from './models';
 import { RoundStatus } from './round-status';
 import { SoundControl } from './sound-control';
 import { SoundManager } from './sound-manager';
@@ -110,7 +110,7 @@ export class GameApplicationView extends Application {
         x: playerX,
         y: playerY,
       },
-      { x: playerSwipe, y: 12.5 }
+      { x: playerSwipe, y: 13 }
     );
 
     this.bankerCards = new Cards(
@@ -122,7 +122,7 @@ export class GameApplicationView extends Application {
         x: bankerX,
         y: bankerY,
       },
-      { x: bankerSwipe, y: 12.5 }
+      { x: bankerSwipe, y: 13 }
     );
     this.userStatus = new UserStatus(this.dimensions);
     const background = new Sprite(this.loader.resources['bg_game.jpg'].texture);
