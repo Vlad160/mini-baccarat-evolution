@@ -1,7 +1,8 @@
-import { Application, Sprite, Texture } from 'pixi.js';
+import { Sprite, Texture } from 'pixi.js';
 import { GameManager } from './game-manager';
 import { Dimensions } from './models';
 import { SoundManager } from './sound-manager';
+import { TextureManager } from './texture-manager';
 
 const WIDTH = 48;
 const HEIGHT = 48;
@@ -14,12 +15,12 @@ export class SoundControl extends Sprite {
 
   constructor(
     dimensions: Dimensions,
-    private app: Application,
+    private textureManager: TextureManager,
     private soundManager: SoundManager,
     private manager: GameManager
   ) {
-    const volumeOnTexture = app.loader.resources['volume-on.png'].texture;
-    const volumeOffTexture = app.loader.resources['volume-off.png'].texture;
+    const volumeOnTexture = textureManager.get('volume-on.png');
+    const volumeOffTexture = textureManager.get('volume-off.png');
     super(soundManager.muted ? volumeOnTexture : volumeOffTexture);
     this.volumeOnTexture = volumeOnTexture;
     this.volumeOffTexture = volumeOffTexture;

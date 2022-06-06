@@ -1,11 +1,12 @@
 import { Card } from '@game';
-import { Application, Container } from 'pixi.js';
-import { CardSprite } from './card-sprite';
+import { Container, Ticker } from 'pixi.js';
+import { ScaleAnimation } from './animations';
 import { CardsSwipeAnimation } from './animations/cards-swipe.animation';
+import { CardSprite } from './card-sprite';
 import { IPoint } from './models';
 import { SoundManager } from './sound-manager';
 import { Text } from './text';
-import { ScaleAnimation } from './animations';
+import { TextureManager } from './texture-manager';
 
 export class Cards extends Container {
   cards: Card[] = [];
@@ -15,7 +16,8 @@ export class Cards extends Container {
   private cardsContainer = new Container();
 
   constructor(
-    private app: Application,
+    private ticker: Ticker,
+    private textureMananger: TextureManager,
     private soundManager: SoundManager,
     private offset: IPoint = { x: 0, y: 0 },
     private swipeOffset: IPoint = { x: 0, y: 0 }
@@ -48,7 +50,7 @@ export class Cards extends Container {
           card,
           { x: 0.2, y: 0.2 },
           { x: 0.7, y: 0.7 },
-          this.app.ticker,
+          this.ticker,
           500
         ).play();
       });
@@ -63,7 +65,7 @@ export class Cards extends Container {
   async swipeCards(): Promise<void> {
     if (this.cardsContainer.children.length > 0) {
       const animation = new CardsSwipeAnimation(
-        this.app.ticker,
+        this.ticker,
         this.cardsContainer.children,
         this.swipeOffset
       );
@@ -77,7 +79,7 @@ export class Cards extends Container {
     const name = `card${card.suit}s${
       card.value ? card.value : card.face[0]
     }.png`;
-    const texture = this.app.loader.resources[name].texture;
+    const texture = this.textureMananger.get(name);
     const x = index * 18;
     const y = index * 18;
     return new CardSprite(texture, { x, y });

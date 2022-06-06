@@ -44,13 +44,13 @@ export class ActionButton extends Container {
     const circle = new Graphics();
     circle.interactive = true;
     circle.buttonMode = true;
-    circle.drawCircle(0, 0, 40);
+    circle.drawCircle(0, 0, 50);
     return circle;
   }
 
   private createText(content: string): Text {
     const text = new Text(content, {
-      fontSize: 18,
+      fontSize: 22,
     });
     text.anchor.set(0.5, 0.5);
     text.updateText(false);
@@ -75,6 +75,8 @@ export class ActionButton extends Container {
 
   private createSprite(): Sprite {
     const sprite = new Sprite(this.texture);
+    sprite.width = 100;
+    sprite.height = 100;
     sprite.anchor.set(0.5, 0.5);
     return sprite;
   }

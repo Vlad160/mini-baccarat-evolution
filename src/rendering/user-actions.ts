@@ -1,7 +1,8 @@
-import { Application, Container } from 'pixi.js';
+import { Container } from 'pixi.js';
 import { ActionButton } from './action-button';
 import { GameManager } from './game-manager';
 import { Dimensions } from './models';
+import { TextureManager } from './texture-manager';
 
 export class UserActions extends Container {
   disable() {
@@ -20,7 +21,7 @@ export class UserActions extends Container {
 
   constructor(
     dimensions: Dimensions,
-    private app: Application,
+    private textureManager: TextureManager,
     private manager: GameManager
   ) {
     super();
@@ -28,22 +29,22 @@ export class UserActions extends Container {
     const { height, width } = dimensions;
 
     const dealX = width - 200;
-    const dealY = height - 120;
+    const dealY = height - 150;
 
     this.dealAction = new ActionButton(
       'DEAL',
-      this.app.loader.resources['deal-bet.png'].texture,
+      this.textureManager.get('deal-bet.png'),
       0x99ff99,
       this.onDeal,
       { x: dealX, y: dealY }
     );
 
     const clearX = dealX + this.dealAction.width + 5;
-    const clearY = height - 150;
+    const clearY = height - 200;
 
     this.clearAction = new ActionButton(
       'CLEAR',
-      this.app.loader.resources['clear-bet.png'].texture,
+      this.textureManager.get('clear-bet.png'),
       0xff9999,
       this.onClear,
       {

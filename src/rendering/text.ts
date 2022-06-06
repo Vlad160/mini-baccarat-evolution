@@ -8,7 +8,7 @@ export class Text extends PixiText {
   ) {
     super(
       text,
-      { ...style, fill: 0xffffff, fontFamily: 'IBM Plex Serif' },
+      { fill: 0xffffff, fontFamily: 'IBM Plex Serif', fontSize: 32, ...style },
       canvas
     );
     this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;

@@ -1,11 +1,12 @@
 import { BetWinner, IRoundResult, UserResultStatus, wait } from '@game';
-import { Application, Container, Graphics } from 'pixi.js';
-import { Chip, CHIP_WIDTH } from './chip';
+import { Container, Graphics, Ticker } from 'pixi.js';
 import { ChipsSwipeAnimation } from './animations';
+import { Chip, CHIP_WIDTH } from './chip';
 import { GameManager } from './game-manager';
 import { Dimensions } from './models';
 import { SoundManager } from './sound-manager';
 import { Text } from './text';
+import { TextureManager } from './texture-manager';
 
 const CHIP_OFFSET_Y = 5;
 
@@ -28,7 +29,8 @@ export class BetArea extends Container {
     public readonly config: IReactangleConfig,
     private manager: GameManager,
     private dimensions: Dimensions,
-    private app: Application,
+    private ticker: Ticker,
+    private textureManager: TextureManager,
     private soundManager: SoundManager
   ) {
     super();
@@ -103,7 +105,7 @@ export class BetArea extends Container {
 
     const swipeAnimation = new ChipsSwipeAnimation(
       this.chipsContainer,
-      this.app.ticker,
+      this.ticker,
       delta
     );
     wait(2000)
@@ -119,7 +121,7 @@ export class BetArea extends Container {
   }
 
   private getChip(index: number): Chip {
-    return new Chip(this.app, {
+    return new Chip(this.textureManager.get('chip.png'), {
       x: this.config.width / 2,
       y: this.config.height / 2 - CHIP_OFFSET_Y * index,
     });
