@@ -1,8 +1,9 @@
-import { IRoundResult, wait } from '@game';
+import { IRoundResult } from '@game';
 import { Container, Graphics, Ticker, utils } from 'pixi.js';
 import { IPoint } from './models';
 import { ScaleAnimation } from './animations';
 import { Text } from './text';
+import { wait } from '@common';
 
 const PANEL_COLOR = utils.string2hex('#282826');
 const WIDTH = 300;

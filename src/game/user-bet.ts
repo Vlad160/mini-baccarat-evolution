@@ -1,7 +1,7 @@
 import { Bet } from './bet';
 import { User } from './user';
 
-export class DraftBet extends Bet {
+export class UserBet extends Bet {
   constructor(private user: User, public betSize: number) {
     super();
   }
@@ -9,6 +9,7 @@ export class DraftBet extends Bet {
   increseBet(): void {
     const newAmount = this.amount + this.betSize;
     this.amount = this.user.money >= newAmount ? newAmount : this.amount;
+    this.user.money -= this.betSize;
   }
 
   decreaseBet(): void {

@@ -43,7 +43,7 @@ export class GameManager {
 
     this.clearReactions.push(
       autorun(() => {
-        const total = this.room.user.bet.amount + this.room.draftBet.amount;
+        const total = this.room.user.bet.amount;
         this.appView.userStatus.setBet(this.room.user.bet.amount);
         this.appView.betAreas.setAmount(total, this.room.user.bet.winner);
       })
@@ -111,20 +111,13 @@ export class GameManager {
 
     if (this.room.user.bet.winner !== winner) {
       this.room.user.bet.winner = winner;
-    }
-    if (this.room.draftBet.winner === winner) {
-      this.room.draftBet.increseBet();
     } else {
-      this.room.draftBet.winner = winner;
+      this.room.user.bet.increseBet();
     }
   }
 
   clearBet(): void {
     this.room.clearBet();
-  }
-
-  dealBet(): void {
-    this.room.acceptBet(this.room.draftBet.amount, this.room.draftBet.winner);
   }
 
   start(): void {
