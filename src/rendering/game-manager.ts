@@ -1,7 +1,7 @@
 import { BetWinner } from '@game';
-import { GameApplication } from './game-application';
 import { GameRoom, GameStatus } from 'game/game-room';
-import { reaction } from 'mobx';
+import { autorun } from 'mobx';
+import { GameApplication } from './game-application';
 import { STATUS_TO_MESSAGE } from './models';
 
 export class GameManager {
@@ -14,117 +14,77 @@ export class GameManager {
     this.view.init();
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.status,
-        (status) => this.setStatus(status),
-        { fireImmediately: true }
+      autorun(() => {
+        this.setStatus(this.room.status);
+      })
+    );
+
+    this.clearReactions.push(
+      autorun(() =>
+        this.view.bankerCards.setCards(
+          this.room.banker.cards,
+          this.room.banker.score
+        )
       )
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.banker.cards,
-        (cards) => {
-          return this.view.bankerCards.setCards(cards);
-        },
-        { fireImmediately: true }
+      autorun(() =>
+        this.view.playerCards.setCards(
+          this.room.player.cards,
+          this.room.player.score
+        )
       )
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.player.cards,
-        (cards) => this.view.playerCards.setCards(cards),
-        { fireImmediately: true }
-      )
+      autorun(() => this.view.userStatus.setMoney(this.room.user.money))
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.user.money,
-        (money) => this.view.userStatus.setMoney(money),
-        { fireImmediately: true }
-      )
+      autorun(() => {
+        const total = this.room.user.bet.amount + this.room.draftBet.amount;
+        this.view.userStatus.setBet(this.room.user.bet.amount);
+        this.view.betAreas.setAmount(total, this.room.user.bet.winner);
+      })
     );
 
     this.clearReactions.push(
-      reaction(
-        () => [
-          this.room.user.bet.amount,
-          this.room.user.bet.winner,
-          this.room.draftBet.amount,
-        ],
-        ([amount, winner, draftAmount]: [number, BetWinner, number]) => {
-          const total = amount + draftAmount;
-          this.view.userStatus.setBet(amount);
-          this.view.betAreas.setAmount(total, winner);
-        },
-        { fireImmediately: true }
-      )
+      autorun(() => this.view.betAreas.setRoundResult(this.room.roundResult))
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.roundResult,
-        (result) => {
-          this.view.betAreas.setRoundResult(result);
+      autorun(() => this.view.userStatus.setMoney(this.room.user.money))
+    );
+    this.clearReactions.push(
+      autorun(() => {
+        if (this.room.isBettingOpened) {
+          this.view.userActions.enable();
+        } else {
+          this.view.userActions.disable();
         }
-      )
+      })
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.user.money,
-        (money) => {
-          this.view.userStatus.setMoney(money);
-        },
-        { fireImmediately: true }
-      )
-    );
-    this.clearReactions.push(
-      reaction(
-        () => {
-          return this.room.isBettingOpened;
-        },
-        (isOpened) => {
-          if (isOpened) {
-            this.view.userActions.enable();
-          } else {
-            this.view.userActions.disable();
-          }
-        },
-        { fireImmediately: true }
-      )
-    );
-
-    this.clearReactions.push(
-      reaction(
-        () => this.room.bettingTimer.timeLeft,
-        (timeLeft) => {
-          if (this.room.isBettingOpened) {
-            this.view.statusPanel.setText(
-              `Betting is opened ${Math.round(timeLeft / 1000)} sec`
-            );
-          }
+      autorun(() => {
+        if (this.room.isBettingOpened) {
+          this.view.statusPanel.setText(
+            `Betting is opened ${Math.round(
+              this.room.bettingTimer.timeLeft / 1000
+            )} sec`
+          );
         }
-      )
+      })
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.roundResult,
-        (result) => {
-          this.view.roundStatus.show(result);
-        }
-      )
+      autorun(() => this.view.roundStatus.show(this.room.roundResult))
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.user.soundDisabled,
-        (disabled) => {
-          this.view.soundControl.setMuted(disabled);
-        }
+      autorun(() =>
+        this.view.soundControl.setMuted(this.room.user.soundDisabled)
       )
     );
 

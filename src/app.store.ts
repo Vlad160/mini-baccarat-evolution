@@ -30,6 +30,7 @@ export class ApplicationStore {
 
   @action
   logout(): void {
+    this.room.setStop(true);
     this.room = null;
     this.user = null;
     User.clearUser();

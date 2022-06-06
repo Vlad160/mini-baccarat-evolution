@@ -1,4 +1,10 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import {
+  action,
+  computed,
+  makeObservable,
+  observable,
+  runInAction,
+} from 'mobx';
 import { Bet } from './bet';
 import { Card } from './card';
 import { CasinoActor, CasinoPlayerType } from './casino-actor';
@@ -9,6 +15,7 @@ import type { IRoundResult } from './model';
 import { Timer } from './timer';
 import { User } from './user';
 import { wait } from '../common/wait';
+import { CONFIG, GameConfig } from './config';
 
 export enum GameStatus {
   GAME_NOT_STARTED = 'GAME_NOT_STARTED',
@@ -31,6 +38,8 @@ export class GameRoom {
   @observable
   private _status: GameStatus = GameStatus.GAME_NOT_STARTED;
 
+  readonly config: GameConfig;
+
   @computed
   get status(): GameStatus {
     return this._status;
@@ -48,7 +57,7 @@ export class GameRoom {
 
   draftBet: DraftBet;
 
-  readonly bettingTimer = new Timer(10000);
+  readonly bettingTimer: Timer;
 
   @observable
   private _winner: BetWinner = null;
@@ -74,11 +83,13 @@ export class GameRoom {
     this._winner = value;
   }
 
-  constructor(public readonly user: User) {
-    this.deck = new Deck();
+  constructor(public readonly user: User, config: GameConfig = CONFIG) {
+    this.config = { ...CONFIG, ...config };
+    this.deck = new Deck(this.config.deckSize);
     this.banker = new CasinoActor(CasinoPlayerType.Banker);
     this.player = new CasinoActor(CasinoPlayerType.Player);
-    this.draftBet = new DraftBet(this.user, 10);
+    this.draftBet = new DraftBet(this.user, this.config.betSize);
+    this.bettingTimer = new Timer(this.config.betTimer);
     makeObservable(this);
   }
 
@@ -130,12 +141,14 @@ export class GameRoom {
     this.setStop(false);
     this.resetRound();
     const result = await this.playRound();
-    this.roundResult = result;
-    this.winner = result.winner;
-    this.user.money += result.earnings;
-    this.status = GameStatus.GAME_ENDED;
-    this.appendHistory(result.winner);
-    await wait(4000);
+    runInAction(() => {
+      this.roundResult = result;
+      this.winner = result.winner;
+      this.user.money += result.earnings;
+      this.status = GameStatus.GAME_ENDED;
+      this.appendHistory(result.winner);
+    });
+    await wait(this.config.gameTimeout);
     if (!this.stop) {
       this.startGame();
     }
@@ -152,7 +165,7 @@ export class GameRoom {
   }
 
   @action
-  appendHistory(item: BetWinner) {
+  private appendHistory(item: BetWinner) {
     this.history = [item, ...this.history];
   }
 
@@ -164,15 +177,15 @@ export class GameRoom {
   @action
   private async playRound(): Promise<IRoundResult> {
     this.status = GameStatus.GAME_STARTED;
-    await wait(1000);
+    await wait(this.config.beforeGameTimeout);
     this.status = GameStatus.BETTING_OPENED;
     await this.bettingTimer.start();
     this.status = GameStatus.BETTING_CLOSED;
     this.draftBet.reset();
-    await wait(1000);
+    await wait(this.config.beforeDraftTimeout);
     this.status = GameStatus.DEALING_CARDS;
     this.draftCards();
-    await wait(3000);
+    await wait(this.config.beforeThirdCardDraftTimeout);
     this.draftThirdCard();
     this.status = GameStatus.FINALIZING_RESULTS;
     const result = this.getRoundResult();
@@ -188,7 +201,7 @@ export class GameRoom {
     this.user.bet.reset();
     this.draftBet.reset();
 
-    if (this.deck.cards.length < 250) {
+    if (this.deck.cards.length < this.config.minDeckSize) {
       this.deck.resetCards();
     }
   }
@@ -272,11 +285,11 @@ export class GameRoom {
       return 0;
     }
     if (result === BetWinner.Player) {
-      return bet.amount * 2;
+      return bet.amount * this.config.playerPayMulti;
     } else if (result == BetWinner.Banker) {
-      return bet.amount * 1.95;
+      return bet.amount * this.config.bankerPayMulti;
     } else if (result === BetWinner.Tie) {
-      return bet.amount * 8;
+      return bet.amount * this.config.tiePayMulti;
     } else {
       throw new Error(`Unknown winner result ${bet.winner}`);
     }

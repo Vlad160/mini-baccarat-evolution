@@ -38,6 +38,10 @@ export class RoundStatus extends Container {
   }
 
   show(result: IRoundResult): void {
+    if (!result) {
+      return;
+    }
+
     if (result.earnings === null) {
       return;
     }

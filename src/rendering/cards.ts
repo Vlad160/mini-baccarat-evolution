@@ -27,7 +27,7 @@ export class Cards extends Container {
     this.addChild(this.cardsContainer, this.scoreText);
   }
 
-  setCards(cards: Card[]): void {
+  setCards(cards: Card[], score: number): void {
     if (cards.length === 0) {
       this.scoreText.text = '';
       this.swipeCards();
@@ -45,9 +45,8 @@ export class Cards extends Container {
       this.soundManager.cardPlace();
     }
     this.cards = cards;
-    const total = cards.reduce((acc, card) => acc + card.score, 0) % 10;
     if (this.cards.length > 0) {
-      this.scoreText.text = String(total);
+      this.scoreText.text = String(score);
     }
   }
 
