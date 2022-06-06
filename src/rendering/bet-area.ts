@@ -1,7 +1,7 @@
 import { BetWinner, IRoundResult, UserResultStatus, wait } from '@game';
 import { Application, Container, Graphics } from 'pixi.js';
 import { Chip, CHIP_WIDTH } from './chip';
-import { ChipsSwipeAnimation } from './chips-swipe.animation';
+import { ChipsSwipeAnimation } from './animations';
 import { GameManager } from './game-manager';
 import { Dimensions } from './models';
 import { SoundManager } from './sound-manager';

@@ -1,10 +1,11 @@
 import { Card } from '@game';
 import { Application, Container } from 'pixi.js';
 import { CardSprite } from './card-sprite';
-import { CardsSwipeAnimation } from './cards-swipe.animation';
+import { CardsSwipeAnimation } from './animations/cards-swipe.animation';
 import { IPoint } from './models';
 import { SoundManager } from './sound-manager';
 import { Text } from './text';
+import { ScaleAnimation } from './animations';
 
 export class Cards extends Container {
   cards: Card[] = [];
@@ -42,6 +43,15 @@ export class Cards extends Container {
     );
     if (sprites.length) {
       this.cardsContainer.addChild(...sprites);
+      sprites.forEach((card) => {
+        new ScaleAnimation(
+          card,
+          { x: 0.2, y: 0.2 },
+          { x: 0.7, y: 0.7 },
+          this.app.ticker,
+          500
+        ).play();
+      });
       this.soundManager.cardPlace();
     }
     this.cards = cards;
@@ -70,6 +80,6 @@ export class Cards extends Container {
     const texture = this.app.loader.resources[name].texture;
     const x = index * 18;
     const y = index * 18;
-    return new CardSprite(name, texture, { x, y }, this.app);
+    return new CardSprite(texture, { x, y });
   }
 }

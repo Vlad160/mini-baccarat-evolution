@@ -1,17 +1,17 @@
 import { BetWinner } from '@game';
 import { GameRoom, GameStatus } from 'game/game-room';
 import { autorun } from 'mobx';
-import { GameApplication } from './game-application';
+import { GameApplicationView } from './game-application-view';
 import { STATUS_TO_MESSAGE } from './models';
 
 export class GameManager {
-  private view: GameApplication;
+  private appView: GameApplicationView;
 
   private clearReactions = [];
 
   private onViewLoad = () => {
-    this.view.manager = this;
-    this.view.init();
+    this.appView.manager = this;
+    this.appView.init();
 
     this.clearReactions.push(
       autorun(() => {
@@ -21,7 +21,7 @@ export class GameManager {
 
     this.clearReactions.push(
       autorun(() =>
-        this.view.bankerCards.setCards(
+        this.appView.bankerCards.setCards(
           this.room.banker.cards,
           this.room.banker.score
         )
@@ -30,7 +30,7 @@ export class GameManager {
 
     this.clearReactions.push(
       autorun(() =>
-        this.view.playerCards.setCards(
+        this.appView.playerCards.setCards(
           this.room.player.cards,
           this.room.player.score
         )
@@ -38,30 +38,30 @@ export class GameManager {
     );
 
     this.clearReactions.push(
-      autorun(() => this.view.userStatus.setMoney(this.room.user.money))
+      autorun(() => this.appView.userStatus.setMoney(this.room.user.money))
     );
 
     this.clearReactions.push(
       autorun(() => {
         const total = this.room.user.bet.amount + this.room.draftBet.amount;
-        this.view.userStatus.setBet(this.room.user.bet.amount);
-        this.view.betAreas.setAmount(total, this.room.user.bet.winner);
+        this.appView.userStatus.setBet(this.room.user.bet.amount);
+        this.appView.betAreas.setAmount(total, this.room.user.bet.winner);
       })
     );
 
     this.clearReactions.push(
-      autorun(() => this.view.betAreas.setRoundResult(this.room.roundResult))
+      autorun(() => this.appView.betAreas.setRoundResult(this.room.roundResult))
     );
 
     this.clearReactions.push(
-      autorun(() => this.view.userStatus.setMoney(this.room.user.money))
+      autorun(() => this.appView.userStatus.setMoney(this.room.user.money))
     );
     this.clearReactions.push(
       autorun(() => {
         if (this.room.isBettingOpened) {
-          this.view.userActions.enable();
+          this.appView.userActions.enable();
         } else {
-          this.view.userActions.disable();
+          this.appView.userActions.disable();
         }
       })
     );
@@ -69,7 +69,7 @@ export class GameManager {
     this.clearReactions.push(
       autorun(() => {
         if (this.room.isBettingOpened) {
-          this.view.statusPanel.setText(
+          this.appView.statusPanel.setText(
             `Betting is opened ${Math.round(
               this.room.bettingTimer.timeLeft / 1000
             )} sec`
@@ -79,16 +79,16 @@ export class GameManager {
     );
 
     this.clearReactions.push(
-      autorun(() => this.view.roundStatus.show(this.room.roundResult))
+      autorun(() => this.appView.roundStatus.show(this.room.roundResult))
     );
 
     this.clearReactions.push(
       autorun(() =>
-        this.view.soundControl.setMuted(this.room.user.soundDisabled)
+        this.appView.soundControl.setMuted(this.room.user.soundDisabled)
       )
     );
 
-    this.onRendered(this.view.app.view);
+    this.onRendered(this.appView.view);
     this.room.startGame();
   };
 
@@ -97,7 +97,7 @@ export class GameManager {
     private container: HTMLElement,
     private onRendered: (canvas: HTMLCanvasElement) => void
   ) {
-    this.view = new GameApplication(
+    this.appView = new GameApplicationView(
       this.container,
       this.room.user.soundDisabled,
       this.onViewLoad
@@ -140,14 +140,14 @@ export class GameManager {
   }
 
   destroy(): void {
-    this.view.app.destroy(true, true);
+    this.appView.destroy(true, true);
     this.clearReactions.forEach((cb) => cb());
-    this.view.soundManager.destroy();
+    this.appView.soundManager.destroy();
   }
 
   setStatus(status: GameStatus): void {
     if (STATUS_TO_MESSAGE[status]) {
-      this.view.statusPanel.setText(STATUS_TO_MESSAGE[status](this.room));
+      this.appView.statusPanel.setText(STATUS_TO_MESSAGE[status](this.room));
     }
   }
 
