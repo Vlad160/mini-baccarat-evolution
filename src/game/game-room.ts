@@ -9,7 +9,7 @@ import { Bet } from './bet';
 import { Card } from './card';
 import { CasinoActor, CasinoPlayerType } from './casino-actor';
 import { Deck } from './deck';
-import { DraftBet } from './draft-bet';
+import { UserBet } from './user-bet';
 import { BetWinner, UserResultStatus } from './model';
 import type { IRoundResult } from './model';
 import { Timer } from './timer';
@@ -55,8 +55,6 @@ export class GameRoom {
   @observable
   stop = false;
 
-  draftBet: DraftBet;
-
   readonly bettingTimer: Timer;
 
   @observable
@@ -88,8 +86,8 @@ export class GameRoom {
     this.deck = new Deck(this.config.deckSize);
     this.banker = new CasinoActor(CasinoPlayerType.Banker);
     this.player = new CasinoActor(CasinoPlayerType.Player);
-    this.draftBet = new DraftBet(this.user, this.config.betSize);
     this.bettingTimer = new Timer(this.config.betTimer);
+    this.user.bet = new UserBet(this.user, this.config.betSize);
     makeObservable(this);
   }
 
@@ -113,7 +111,6 @@ export class GameRoom {
     }
     this.user.money += this.user.bet.amount;
     this.user.bet.reset();
-    this.draftBet.reset();
   }
 
   @action
@@ -130,7 +127,6 @@ export class GameRoom {
 
     this.user.bet.adjustBet(amount, winner);
     this.user.money -= amount;
-    this.draftBet.reset();
   }
 
   @action
@@ -181,7 +177,6 @@ export class GameRoom {
     this.status = GameStatus.BETTING_OPENED;
     await this.bettingTimer.start();
     this.status = GameStatus.BETTING_CLOSED;
-    this.draftBet.reset();
     await wait(this.config.beforeDraftTimeout);
     this.status = GameStatus.DEALING_CARDS;
     this.draftCards();
@@ -199,7 +194,6 @@ export class GameRoom {
     this.banker.resetCards();
     this.player.resetCards();
     this.user.bet.reset();
-    this.draftBet.reset();
 
     if (this.deck.cards.length < this.config.minDeckSize) {
       this.deck.resetCards();

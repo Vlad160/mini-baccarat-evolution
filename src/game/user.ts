@@ -1,9 +1,9 @@
 import { computed, makeObservable, observable } from 'mobx';
-import { Bet } from './bet';
+import { UserBet } from './user-bet';
 
 const USER_KEY = 'user';
 export class User {
-  bet: Bet;
+  bet: UserBet;
 
   static restoreUser(): User {
     const value = localStorage.getItem(USER_KEY);
@@ -70,7 +70,6 @@ export class User {
     makeObservable(this);
     this._money = money;
     this.soundDisabled = soundDisabled;
-    this.bet = new Bet();
   }
 
   get name(): string {

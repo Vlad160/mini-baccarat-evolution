@@ -1,4 +1,5 @@
-import { BetWinner, IRoundResult, UserResultStatus, wait } from '@game';
+import { wait } from '@common';
+import { BetWinner, IRoundResult, UserResultStatus } from '@game';
 import { Container, Graphics, Ticker } from 'pixi.js';
 import { ChipsSwipeAnimation } from './animations';
 import { Chip, CHIP_WIDTH } from './chip';
