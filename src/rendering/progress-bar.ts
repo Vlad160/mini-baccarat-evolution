@@ -67,7 +67,7 @@ export class ProgressBar extends Container {
   }
 
   setPercent(value: number): void {
-    this.innerBar.scale.x = Math.round(value / 100);
+    this.innerBar.scale.x = value / 100;
     this.loadingText.text = `Loaded ${value.toFixed(0)}%`;
   }
 }
