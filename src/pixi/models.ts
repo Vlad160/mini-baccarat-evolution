@@ -6,4 +6,5 @@ export interface IPoint {
 export interface Dimensions {
   width: number;
   height: number;
+  scale: number;
 }

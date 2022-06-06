@@ -3,6 +3,7 @@ import { Application, Container, Graphics } from 'pixi.js';
 import { Chip, CHIP_WIDTH } from './chip';
 import { ChipsSwipeAnimation } from './chips-swipe.animation';
 import { GameManager } from './game-manager';
+import { Dimensions } from './models';
 import { SoundManager } from './sound-manager';
 import { Text } from './text';
 
@@ -24,6 +25,7 @@ export class BetArea extends Container {
   constructor(
     public readonly config: IReactangleConfig,
     private manager: GameManager,
+    private dimensions: Dimensions,
     private app: Application,
     private soundManager: SoundManager
   ) {
@@ -92,9 +94,9 @@ export class BetArea extends Container {
     let delta: number;
 
     if (result.userStatus === UserResultStatus.Won) {
-      delta = this.app.view.height - this.config.y;
+      delta = this.dimensions.height - this.config.y;
     } else {
-      delta = -this.app.view.height;
+      delta = -this.dimensions.height;
     }
 
     const swipeAnimation = new ChipsSwipeAnimation(

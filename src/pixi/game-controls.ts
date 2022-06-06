@@ -1,6 +1,6 @@
 import { Application, Container, Sprite, Texture } from 'pixi.js';
 import { GameManager } from './game-manager';
-import { IPoint } from './models';
+import { Dimensions, IPoint } from './models';
 
 const WIDTH = 64;
 const HEIGHT = 64;
@@ -11,7 +11,11 @@ export class GameControls extends Container {
   private stop: Sprite;
   private renew: Sprite;
 
-  constructor(private app: Application, private manager: GameManager) {
+  constructor(
+    dimensions: Dimensions,
+    private app: Application,
+    private manager: GameManager
+  ) {
     super();
     this.play = this.createSprite(
       this.app.loader.resources['play.png'].texture,
@@ -30,7 +34,7 @@ export class GameControls extends Container {
     );
 
     this.addChild(this.play, this.stop, this.renew);
-    this.x = this.app.view.width - this.width - MARGIN;
+    this.x = dimensions.width - this.width - MARGIN;
     this.y = MARGIN;
   }
 

@@ -1,6 +1,7 @@
 import { Application, Container } from 'pixi.js';
 import { ActionButton } from './action-button';
 import { GameManager } from './game-manager';
+import { Dimensions } from './models';
 
 export class UserActions extends Container {
   disable() {
@@ -14,11 +15,17 @@ export class UserActions extends Container {
   private dealAction: ActionButton;
   private clearAction: ActionButton;
 
-  constructor(private app: Application, private manager: GameManager) {
+  constructor(
+    dimensions: Dimensions,
+    private app: Application,
+    private manager: GameManager
+  ) {
     super();
 
-    const dealX = this.app.view.width - 200;
-    const dealY = this.app.view.height - 120;
+    const { height, width } = dimensions;
+
+    const dealX = width - 200;
+    const dealY = height - 120;
 
     this.dealAction = new ActionButton(
       'DEAL',
@@ -29,7 +36,7 @@ export class UserActions extends Container {
     );
 
     const clearX = dealX + this.dealAction.width + 5;
-    const clearY = this.app.view.height - 150;
+    const clearY = height - 150;
 
     this.clearAction = new ActionButton(
       'CLEAR',

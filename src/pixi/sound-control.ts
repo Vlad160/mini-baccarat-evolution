@@ -1,5 +1,6 @@
 import { Application, Sprite, Texture } from 'pixi.js';
 import { GameManager } from './game-manager';
+import { Dimensions } from './models';
 import { SoundManager } from './sound-manager';
 
 const WIDTH = 48;
@@ -11,6 +12,7 @@ export class SoundControl extends Sprite {
   volumeOffTexture: Texture;
 
   constructor(
+    dimensions: Dimensions,
     private app: Application,
     private soundManager: SoundManager,
     private manager: GameManager
@@ -24,7 +26,7 @@ export class SoundControl extends Sprite {
     this.height = HEIGHT;
     this.buttonMode = true;
     this.interactive = true;
-    this.x = this.app.view.width - this.width - PADDING;
+    this.x = dimensions.width - this.width - PADDING;
     this.y = PADDING;
     this.on('pointerdown', this.onClick);
   }

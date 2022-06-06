@@ -14,7 +14,6 @@ import { UserStatus } from './user-status';
 
 const PLAYER_CARDS_OFFSET_X = 25;
 const BANKER_CARDS_OFFSET_X = 10;
-
 export class GameApplication {
   userActions: UserActions;
   gameControls: GameControls;
@@ -33,6 +32,7 @@ export class GameApplication {
   soundManager: SoundManager;
   soundControl: SoundControl;
   loadingScreen: LoadingScreen;
+  dimensions: { width: number; height: number; scale: number };
 
   constructor(
     private container: HTMLElement,
@@ -40,12 +40,18 @@ export class GameApplication {
     private onLoad: () => void
   ) {
     this.app = new Application({
-      width: 1280,
-      height: 720,
+      width: 1600,
+      height: 900,
       backgroundColor: 0x1099bb,
-      resolution: 1,
+      resolution: window.devicePixelRatio || 1,
       antialias: true,
     });
+
+    this.dimensions = {
+      width: this.app.screen.width,
+      height: this.app.screen.height,
+      scale: 1,
+    };
 
     this.app.loader.baseUrl = 'assets';
     this.soundManager = new SoundManager(this.app.loader, soundMuted);
@@ -53,10 +59,7 @@ export class GameApplication {
     this.loadAssets();
     this.app.loader.onComplete.add(this.onLoaded);
     this.app.loader.onError.add(() => console.log('Error!'));
-    this.loadingScreen = new LoadingScreen({
-      width: this.app.view.width,
-      height: this.app.view.height,
-    });
+    this.loadingScreen = new LoadingScreen(this.dimensions);
     this.app.stage.addChild(this.loadingScreen);
     this.app.loader.onLoad.add(this.onProgress);
     this.app.loader.load();
@@ -64,19 +67,24 @@ export class GameApplication {
   }
 
   init(): void {
-    this.betAreas = new BetsArea(this.app, this.manager, this.soundManager);
+    this.betAreas = new BetsArea(
+      this.dimensions,
+      this.app,
+      this.manager,
+      this.soundManager
+    );
 
-    const playerX = (3 / 8) * this.app.view.width + PLAYER_CARDS_OFFSET_X;
-    const bankerX = this.app.view.width / 2 + BANKER_CARDS_OFFSET_X;
+    const playerX = (3 / 8) * this.dimensions.width + PLAYER_CARDS_OFFSET_X;
+    const bankerX = this.dimensions.width / 2 + BANKER_CARDS_OFFSET_X;
 
-    const playerY = this.app.view.height / 5 + 10;
+    const playerY = this.dimensions.height / 5 + 12.5;
     const bankerY = playerY;
 
-    const playerSwipe = -this.app.view.width / 8 - 20;
+    const playerSwipe = -this.dimensions.width / 8 - 20;
     const bankerSwipe = playerSwipe + (playerX - bankerX);
     this.roundStatus = new RoundStatus(this.app.ticker, {
-      x: this.app.view.width / 2,
-      y: this.app.view.height / 2,
+      x: this.dimensions.width / 2,
+      y: this.dimensions.height / 2,
     });
 
     this.playerCards = new Cards(
@@ -85,7 +93,7 @@ export class GameApplication {
         x: playerX,
         y: playerY,
       },
-      { x: playerSwipe, y: 10 },
+      { x: playerSwipe, y: 12.5 },
       this.soundManager
     );
 
@@ -95,20 +103,25 @@ export class GameApplication {
         x: bankerX,
         y: bankerY,
       },
-      { x: bankerSwipe, y: 10 },
+      { x: bankerSwipe, y: 12.5 },
       this.soundManager
     );
-    this.userStatus = new UserStatus(this.app);
+    this.userStatus = new UserStatus(this.dimensions);
     const background = new Sprite(
       this.app.loader.resources['bg_game.jpg'].texture
     );
-    background.width = this.app.view.width;
-    background.height = this.app.view.height;
+    background.width = this.dimensions.width;
+    background.height = this.dimensions.height;
 
-    this.userActions = new UserActions(this.app, this.manager);
+    this.userActions = new UserActions(this.dimensions, this.app, this.manager);
     this.statusPanel = new StatusPanel();
-    this.gameControls = new GameControls(this.app, this.manager);
+    this.gameControls = new GameControls(
+      this.dimensions,
+      this.app,
+      this.manager
+    );
     this.soundControl = new SoundControl(
+      this.dimensions,
       this.app,
       this.soundManager,
       this.manager

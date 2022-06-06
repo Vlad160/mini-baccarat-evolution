@@ -1,22 +1,24 @@
-import { Application, Container } from 'pixi.js';
+import { Container } from 'pixi.js';
+import { Dimensions } from './models';
 import { Text } from './text';
 
 export class UserStatus extends Container {
   private money: Text;
   private bet: Text;
 
-  constructor(private app: Application) {
+  constructor(dimensions: Dimensions) {
     super();
+    const { height, width } = dimensions;
     this.money = new Text('CASH $ 0.00');
     this.bet = new Text('BET $ 0.00');
     this.height = 50;
-    this.money.y = this.app.view.height - 50 + this.money.height / 2;
-    this.bet.y = this.app.view.height - 50 + this.bet.height / 2;
+    this.money.y = height - 50 + this.money.height / 2;
+    this.bet.y = height - 50 + this.bet.height / 2;
     this.money.x = 0;
-    this.bet.x = this.app.view.width - this.bet.width;
+    this.bet.x = width - this.bet.width;
     this.addChild(this.money, this.bet);
     this.x = 50;
-    this.width = this.app.view.width - 50;
+    this.width = width - 50;
   }
 
   setMoney(amount: number): void {

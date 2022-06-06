@@ -1,4 +1,4 @@
-import { ITextStyle, Text as PixiText, TextStyle } from 'pixi.js';
+import { ITextStyle, SCALE_MODES, Text as PixiText, TextStyle } from 'pixi.js';
 
 export class Text extends PixiText {
   constructor(
@@ -11,5 +11,6 @@ export class Text extends PixiText {
       { ...style, fill: 0xffffff, fontFamily: 'IBM Plex Serif' },
       canvas
     );
+    this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
   }
 }
