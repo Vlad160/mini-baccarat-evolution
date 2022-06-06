@@ -36,8 +36,8 @@ export class BetArea extends Container {
     this.interactive = true;
     this.buttonMode = true;
     this.on('pointerdown', this.onClick);
-    this.betAmount = new Text('');
-    this.betAmount.x = this.config.width / 2 - CHIP_WIDTH * 1.5;
+    this.betAmount = new Text('', { fontSize: 32 });
+    this.betAmount.x = this.config.width / 2 - CHIP_WIDTH * 1.3;
     this.addChild(this.betAmount);
     this.x = this.config.x;
     this.y = this.config.y;
