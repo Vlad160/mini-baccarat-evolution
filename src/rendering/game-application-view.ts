@@ -1,14 +1,15 @@
 import { Application, Sprite } from 'pixi.js';
-import { ASSETS } from './assets';
 import { BetsArea } from './bets-area';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
 import { LoadingScreen } from './loading-screen';
+import { Dimensions as IDimensions } from './models';
 import { RoundStatus } from './round-status';
 import { SoundControl } from './sound-control';
 import { SoundManager } from './sound-manager';
 import { StatusPanel } from './status-panel';
+import { TextureManager } from './texture-manager';
 import { UserActions } from './user-actions';
 import { UserStatus } from './user-status';
 
@@ -41,7 +42,9 @@ export class GameApplicationView extends Application {
 
   loadingScreen: LoadingScreen;
 
-  dimensions: { width: number; height: number; scale: number };
+  dimensions: IDimensions;
+
+  textureManager: TextureManager;
 
   constructor(
     private container: HTMLElement,
@@ -64,8 +67,9 @@ export class GameApplicationView extends Application {
 
     this.loader.baseUrl = 'assets';
     this.soundManager = new SoundManager(this.loader, soundMuted);
+    this.textureManager = new TextureManager(this.loader);
     this.soundManager.loadAssets();
-    this.loadAssets();
+    this.textureManager.loadAssets();
     this.loader.onComplete.add(this.onLoaded);
     this.loader.onError.add(() => console.log('Error!'));
     this.loadingScreen = new LoadingScreen(this.dimensions);
@@ -80,7 +84,8 @@ export class GameApplicationView extends Application {
       this.dimensions,
       this,
       this.manager,
-      this.soundManager
+      this.soundManager,
+      this.textureManager
     );
 
     const playerX = (3 / 8) * this.dimensions.width + PLAYER_CARDS_OFFSET_X;
@@ -97,7 +102,8 @@ export class GameApplicationView extends Application {
     });
 
     this.playerCards = new Cards(
-      this,
+      this.ticker,
+      this.textureManager,
       this.soundManager,
 
       {
@@ -108,7 +114,8 @@ export class GameApplicationView extends Application {
     );
 
     this.bankerCards = new Cards(
-      this,
+      this.ticker,
+      this.textureManager,
       this.soundManager,
 
       {
@@ -122,12 +129,20 @@ export class GameApplicationView extends Application {
     background.width = this.dimensions.width;
     background.height = this.dimensions.height;
 
-    this.userActions = new UserActions(this.dimensions, this, this.manager);
+    this.userActions = new UserActions(
+      this.dimensions,
+      this.textureManager,
+      this.manager
+    );
     this.statusPanel = new StatusPanel();
-    this.gameControls = new GameControls(this.dimensions, this, this.manager);
+    this.gameControls = new GameControls(
+      this.dimensions,
+      this.textureManager,
+      this.manager
+    );
     this.soundControl = new SoundControl(
       this.dimensions,
-      this,
+      this.textureManager,
       this.soundManager,
       this.manager
     );
@@ -156,8 +171,4 @@ export class GameApplicationView extends Application {
     this.loaded = true;
     this.onLoad();
   };
-
-  private loadAssets(): void {
-    ASSETS.forEach((file) => this.loader.add(file, file));
-  }
 }

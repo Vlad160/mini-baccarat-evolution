@@ -13,8 +13,8 @@ export class UserStatus extends Container {
     this.money = new Text('CASH $ 0.00');
     this.bet = new Text('BET $ 0.00');
     this.height = 50;
-    this.money.y = height - 50 + this.money.height / 2;
-    this.bet.y = height - 50 + this.bet.height / 2;
+    this.money.y = height - 50;
+    this.bet.y = height - 50;
     this.money.x = 0;
     this.bet.x = width - this.bet.width;
     this.addChild(this.money, this.bet);

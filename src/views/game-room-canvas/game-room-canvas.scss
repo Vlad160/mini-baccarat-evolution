@@ -1,9 +1,17 @@
+@import '../../mixins';
+
 .game-room {
   display: flex;
   padding: 1rem;
   overflow: hidden;
   height: 100%;
   width: 100%;
+
+  @include mobile {
+    & {
+      padding: 0;
+    }
+  }
 
   canvas {
     max-width: 100%;
