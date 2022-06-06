@@ -4,6 +4,7 @@ import { BetArea } from './bet-area';
 import { GameManager } from './game-manager';
 import { Dimensions } from './models';
 import { SoundManager } from './sound-manager';
+import { TextureManager } from './texture-manager';
 
 const PLAYER_AREA_WIDTH = 350;
 const PLAYER_AREA_HEIGHT = 110;
@@ -19,7 +20,8 @@ export class BetsArea extends Container {
     dimensions: Dimensions,
     private app: Application,
     private manager: GameManager,
-    private soundManager: SoundManager
+    private soundManager: SoundManager,
+    private textureManager: TextureManager
   ) {
     super();
     this.areas = this.getBetAreas(dimensions);
@@ -38,7 +40,8 @@ export class BetsArea extends Container {
         },
         this.manager,
         dimensions,
-        this.app,
+        this.app.ticker,
+        this.textureManager,
         this.soundManager
       ),
       new BetArea(
@@ -51,7 +54,8 @@ export class BetsArea extends Container {
         },
         this.manager,
         dimensions,
-        this.app,
+        this.app.ticker,
+        this.textureManager,
         this.soundManager
       ),
       new BetArea(
@@ -64,7 +68,8 @@ export class BetsArea extends Container {
         },
         this.manager,
         dimensions,
-        this.app,
+        this.app.ticker,
+        this.textureManager,
         this.soundManager
       ),
     ];

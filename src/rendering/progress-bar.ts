@@ -17,7 +17,7 @@ export class ProgressBar extends Container {
 
   private loadingText: Text;
 
-  constructor(private pos: IPoint) {
+  constructor(position: IPoint) {
     super();
     this.loadingText = this.drawLoadingText();
     this.innerBar = this.createInnerBar();
@@ -25,8 +25,8 @@ export class ProgressBar extends Container {
     this.addChild(this.outerBar, this.innerBar, this.loadingText);
     this.pivot.x = this.width / 2;
     this.pivot.y = this.height / 2;
-    this.x = pos.x;
-    this.y = pos.y + OFFSET_Y;
+    this.x = position.x;
+    this.y = position.y + OFFSET_Y;
   }
 
   private drawLoadingText(): Text {

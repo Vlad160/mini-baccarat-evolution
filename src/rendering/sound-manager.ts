@@ -1,15 +1,23 @@
-import { Loader } from 'pixi.js';
 import { sound } from '@pixi/sound';
+import { Loader } from 'pixi.js';
+
+export const ASSET_MAP = {
+  cardPlace: 'cardPlace.ogg',
+  cardSlide: 'cardSlide.ogg',
+  bgSound: 'bg-sound.mp3',
+  chipsCollide: 'chipsCollide.ogg',
+};
 
 export class SoundManager {
   constructor(private readonly loader: Loader, public muted = false) {}
 
   loadAssets(): void {
-    this.loader
-      .add('cardPlace', 'cardPlace.ogg')
-      .add('cardSlide', 'cardSlide.ogg')
-      .add('bgSound', 'bg-sound.mp3')
-      .add('chipsCollide', 'chipsCollide.ogg');
+    Object.entries(ASSET_MAP).forEach(([key, value]) => {
+      if (this.loader.resources[key]) {
+        return;
+      }
+      this.loader.add(key, value);
+    });
 
     this.loader.onComplete.once(() => {
       this.backgroundMusic();

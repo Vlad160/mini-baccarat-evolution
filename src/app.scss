@@ -1,9 +1,10 @@
+@import '_mixins.scss';
+
 .app {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
   user-select: none;
 
   &__wrapper {
@@ -17,6 +18,13 @@
     background-repeat: no-repeat;
     background-size: cover;
     max-height: calc(100vh - 5rem);
+
+    @include mobile {
+      & {
+        height: 100vh;
+        max-height: unset;
+      }
+    }
   }
 }
 

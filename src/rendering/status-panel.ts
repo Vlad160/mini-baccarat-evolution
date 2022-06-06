@@ -22,7 +22,7 @@ export class StatusPanel extends Container {
     this.panel.drawRoundedRect(0, 0, PANEL_WIDTH, PANEL_HEIGHT, 5);
     this.panel.endFill();
     this.text = new Text('', {
-      fontSize: 24,
+      fontSize: 28,
       align: 'center',
     });
 
