@@ -1,6 +1,6 @@
 import { Sprite, Texture } from 'pixi.js';
 import { GameManager } from './game-manager';
-import { Dimensions } from './models';
+import { IDimensions } from './models';
 import { SoundManager } from './sound-manager';
 import { TextureManager } from './texture-manager';
 
@@ -14,7 +14,7 @@ export class SoundControl extends Sprite {
   volumeOffTexture: Texture;
 
   constructor(
-    dimensions: Dimensions,
+    dimensions: IDimensions,
     private textureManager: TextureManager,
     private soundManager: SoundManager,
     private manager: GameManager

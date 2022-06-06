@@ -1,6 +1,6 @@
 import { Container, Sprite, Texture } from 'pixi.js';
 import { GameManager } from './game-manager';
-import { Dimensions, IPoint } from './models';
+import { IDimensions, IPoint } from './models';
 import { TextureManager } from './texture-manager';
 
 const WIDTH = 64;
@@ -15,7 +15,7 @@ export class GameControls extends Container {
   private renew: Sprite;
 
   constructor(
-    dimensions: Dimensions,
+    dimensions: IDimensions,
     private textureManager: TextureManager,
     private manager: GameManager
   ) {

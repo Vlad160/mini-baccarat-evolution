@@ -3,7 +3,7 @@ import { Container, Graphics, Ticker } from 'pixi.js';
 import { ChipsSwipeAnimation } from './animations';
 import { Chip, CHIP_WIDTH } from './chip';
 import { GameManager } from './game-manager';
-import { Dimensions } from './models';
+import { IDimensions } from './models';
 import { SoundManager } from './sound-manager';
 import { Text } from './text';
 import { TextureManager } from './texture-manager';
@@ -28,7 +28,7 @@ export class BetArea extends Container {
   constructor(
     public readonly config: IReactangleConfig,
     private manager: GameManager,
-    private dimensions: Dimensions,
+    private dimensions: IDimensions,
     private ticker: Ticker,
     private textureManager: TextureManager,
     private soundManager: SoundManager

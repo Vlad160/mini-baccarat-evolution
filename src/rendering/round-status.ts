@@ -4,9 +4,12 @@ import { IPoint } from './models';
 import { ScaleAnimation } from './animations';
 import { Text } from './text';
 
-const PANEL_COLOR = '#282826';
+const PANEL_COLOR = utils.string2hex('#282826');
 const WIDTH = 300;
 const HEIGHT = 100;
+const ANIMATION_DURATION = 300;
+const ANIMATION_DELAY_BEFORE = 1000;
+const ANIMATION_DELAY_AFTER = 3000;
 
 export class RoundStatus extends Container {
   panel: Graphics;
@@ -23,7 +26,7 @@ export class RoundStatus extends Container {
 
   private drawPanel(): void {
     this.panel = new Graphics();
-    this.panel.beginFill(utils.string2hex(PANEL_COLOR), 0.9);
+    this.panel.beginFill(PANEL_COLOR, 0.9);
     this.panel.drawRoundedRect(0, 0, WIDTH, HEIGHT, 5);
     this.panel.endFill();
     this.text = new Text('', {
@@ -57,12 +60,12 @@ export class RoundStatus extends Container {
       { x: 0.5, y: 0.5 },
       { x: 1, y: 1 },
       this.ticker,
-      300
+      ANIMATION_DURATION
     );
-    wait(1000)
+    wait(ANIMATION_DELAY_BEFORE)
       .then(() => (this.visible = true))
       .then(() => animation.play())
-      .then(() => wait(2000))
+      .then(() => wait(ANIMATION_DELAY_AFTER))
       .then(() => (this.visible = false));
   }
 }

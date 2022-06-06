@@ -5,7 +5,7 @@ export interface IPoint {
   y: number;
 }
 
-export interface Dimensions {
+export interface IDimensions {
   width: number;
   height: number;
   scale: number;
