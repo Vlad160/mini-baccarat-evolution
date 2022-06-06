@@ -1,6 +1,6 @@
 import { DisplayObject, Ticker } from 'pixi.js';
 import { Animation } from './animation';
-import { IPoint } from './models';
+import { IPoint } from '../models';
 
 export class ScaleAnimation extends Animation {
   private promise: Promise<void>;

@@ -1,18 +1,15 @@
-import { Card, CardSuit } from './card';
-import { generateSuit } from './generate-suit';
-
-export const DECKS_AMOUNT = 6;
-export const CARDS: Card[] = Object.keys(CardSuit).map(generateSuit).flat();
+import { Card } from './card';
+import { CARDS } from './constants';
 
 export class Deck {
   cards: Card[];
 
-  constructor() {
+  constructor(private deckSize: number) {
     this.resetCards();
   }
 
   resetCards(): void {
-    this.cards = Array.from({ length: DECKS_AMOUNT }, () => [...CARDS]).flat();
+    this.cards = Array.from({ length: this.deckSize }, () => [...CARDS]).flat();
     this.shuffle();
   }
 

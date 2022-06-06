@@ -1,6 +1,6 @@
 import { DisplayObject, Ticker } from 'pixi.js';
 import { Animation } from './animation';
-import { IPoint } from './models';
+import { IPoint } from '../models';
 
 const ANIMATION_TIME = 500;
 
@@ -18,7 +18,7 @@ export class CardsSwipeAnimation extends Animation {
   }
 
   startTicker = () => {
-    const angle = Math.PI / 6;
+    const angle = Math.PI / 5;
     const start = Date.now();
     const startX = this.cards[0].x;
     const startY = this.cards[0].y;

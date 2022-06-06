@@ -14,7 +14,7 @@ import { UserStatus } from './user-status';
 
 const PLAYER_CARDS_OFFSET_X = 25;
 const BANKER_CARDS_OFFSET_X = 10;
-export class GameApplication {
+export class GameApplicationView extends Application {
   userActions: UserActions;
 
   gameControls: GameControls;
@@ -22,8 +22,6 @@ export class GameApplication {
   statusPanel: StatusPanel;
 
   betAreas: BetsArea;
-
-  readonly app: Application;
 
   bankerCards: Cards;
 
@@ -50,7 +48,7 @@ export class GameApplication {
     soundMuted: boolean,
     private onLoad: () => void
   ) {
-    this.app = new Application({
+    super({
       width: 1600,
       height: 900,
       backgroundColor: 0x1099bb,
@@ -59,28 +57,28 @@ export class GameApplication {
     });
 
     this.dimensions = {
-      width: this.app.screen.width,
-      height: this.app.screen.height,
+      width: this.screen.width,
+      height: this.screen.height,
       scale: 1,
     };
 
-    this.app.loader.baseUrl = 'assets';
-    this.soundManager = new SoundManager(this.app.loader, soundMuted);
+    this.loader.baseUrl = 'assets';
+    this.soundManager = new SoundManager(this.loader, soundMuted);
     this.soundManager.loadAssets();
     this.loadAssets();
-    this.app.loader.onComplete.add(this.onLoaded);
-    this.app.loader.onError.add(() => console.log('Error!'));
+    this.loader.onComplete.add(this.onLoaded);
+    this.loader.onError.add(() => console.log('Error!'));
     this.loadingScreen = new LoadingScreen(this.dimensions);
-    this.app.stage.addChild(this.loadingScreen);
-    this.app.loader.onLoad.add(this.onProgress);
-    this.app.loader.load();
-    this.container.appendChild(this.app.view);
+    this.stage.addChild(this.loadingScreen);
+    this.loader.onLoad.add(this.onProgress);
+    this.loader.load();
+    this.container.appendChild(this.view);
   }
 
   init(): void {
     this.betAreas = new BetsArea(
       this.dimensions,
-      this.app,
+      this,
       this.manager,
       this.soundManager
     );
@@ -93,13 +91,13 @@ export class GameApplication {
 
     const playerSwipe = -this.dimensions.width / 8 - 20;
     const bankerSwipe = playerSwipe + (playerX - bankerX);
-    this.roundStatus = new RoundStatus(this.app.ticker, {
+    this.roundStatus = new RoundStatus(this.ticker, {
       x: this.dimensions.width / 2,
       y: this.dimensions.height / 2,
     });
 
     this.playerCards = new Cards(
-      this.app,
+      this,
       this.soundManager,
 
       {
@@ -110,7 +108,7 @@ export class GameApplication {
     );
 
     this.bankerCards = new Cards(
-      this.app,
+      this,
       this.soundManager,
 
       {
@@ -120,28 +118,22 @@ export class GameApplication {
       { x: bankerSwipe, y: 12.5 }
     );
     this.userStatus = new UserStatus(this.dimensions);
-    const background = new Sprite(
-      this.app.loader.resources['bg_game.jpg'].texture
-    );
+    const background = new Sprite(this.loader.resources['bg_game.jpg'].texture);
     background.width = this.dimensions.width;
     background.height = this.dimensions.height;
 
-    this.userActions = new UserActions(this.dimensions, this.app, this.manager);
+    this.userActions = new UserActions(this.dimensions, this, this.manager);
     this.statusPanel = new StatusPanel();
-    this.gameControls = new GameControls(
-      this.dimensions,
-      this.app,
-      this.manager
-    );
+    this.gameControls = new GameControls(this.dimensions, this, this.manager);
     this.soundControl = new SoundControl(
       this.dimensions,
-      this.app,
+      this,
       this.soundManager,
       this.manager
     );
 
-    this.app.stage.removeChildren();
-    this.app.stage.addChild(
+    this.stage.removeChildren();
+    this.stage.addChild(
       background,
       this.betAreas,
       this.bankerCards,
@@ -155,8 +147,8 @@ export class GameApplication {
   }
 
   private onProgress = () => {
-    if (this.app.loader) {
-      this.loadingScreen.setProgress(this.app.loader.progress);
+    if (this.loader) {
+      this.loadingScreen.setProgress(this.loader.progress);
     }
   };
 
@@ -166,6 +158,6 @@ export class GameApplication {
   };
 
   private loadAssets(): void {
-    ASSETS.forEach((file) => this.app.loader.add(file, file));
+    ASSETS.forEach((file) => this.loader.add(file, file));
   }
 }

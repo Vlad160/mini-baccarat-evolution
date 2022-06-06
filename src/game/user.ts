@@ -1,10 +1,12 @@
 import { computed, makeObservable, observable } from 'mobx';
 import { Bet } from './bet';
+
+const USER_KEY = 'user';
 export class User {
   bet: Bet;
 
   static restoreUser(): User {
-    const value = localStorage.getItem('user');
+    const value = localStorage.getItem(USER_KEY);
     if (!value) {
       return null;
     }
@@ -26,11 +28,11 @@ export class User {
   }
 
   static storeUser(user: User): void {
-    localStorage.setItem('user', user.toJSON());
+    localStorage.setItem(USER_KEY, user.toJSON());
   }
 
   static clearUser(): void {
-    localStorage.removeItem('user');
+    localStorage.removeItem(USER_KEY);
   }
 
   @observable

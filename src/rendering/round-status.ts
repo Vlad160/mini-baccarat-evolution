@@ -1,7 +1,7 @@
 import { IRoundResult, wait } from '@game';
 import { Container, Graphics, Ticker, utils } from 'pixi.js';
 import { IPoint } from './models';
-import { ScaleAnimation } from './scale-animation.animation';
+import { ScaleAnimation } from './animations';
 import { Text } from './text';
 
 const PANEL_COLOR = '#282826';
@@ -38,6 +38,10 @@ export class RoundStatus extends Container {
   }
 
   show(result: IRoundResult): void {
+    if (!result) {
+      return;
+    }
+
     if (result.earnings === null) {
       return;
     }

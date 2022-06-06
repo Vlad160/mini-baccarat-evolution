@@ -11,3 +11,4 @@ export * from './user';
 export * from './timer';
 export * from '../common/wait';
 export * from './constants';
+export * from './config';

@@ -47,7 +47,6 @@ Features to implement (not ordered):
 - [ ] Overal UI improvments.
 - [x] Canvas breakpoints.
 - [x] View were you can enter your name.
-- [ ] Deck shuffle animation.
 - [x] Game status formatting.
 - [x] Disable controls when betting is closed.
 - [ ] History.
@@ -56,3 +55,4 @@ Features to implement (not ordered):
 - [x] Eslint.
 - [ ] Tests.
 - [x] Display controls and username in header.
+- [x] Texture managment

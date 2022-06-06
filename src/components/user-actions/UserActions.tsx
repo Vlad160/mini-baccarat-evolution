@@ -1,16 +1,15 @@
 import './styles.scss';
 
 import { Button } from '@components/button/Button';
+import { DEFAULT_MONEY_AMOUNT } from '@game';
 import { ApplicationStoreContext } from 'app.store';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useContext } from 'react';
 import { FaMoneyBillWave, FaSignOutAlt } from 'react-icons/fa';
-import { DEFAULT_MONEY_AMOUNT } from '@game';
 
 export const UserActions = observer(() => {
   const store = useContext(ApplicationStoreContext);
   const handleLogOut = useCallback(() => {
-    store.room.setStop(true);
     store.logout();
   }, [store]);
 

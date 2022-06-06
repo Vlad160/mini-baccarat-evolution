@@ -1,134 +1,94 @@
 import { BetWinner } from '@game';
-import { GameApplication } from './game-application';
 import { GameRoom, GameStatus } from 'game/game-room';
-import { reaction } from 'mobx';
+import { autorun } from 'mobx';
+import { GameApplicationView } from './game-application-view';
 import { STATUS_TO_MESSAGE } from './models';
 
 export class GameManager {
-  private view: GameApplication;
+  private appView: GameApplicationView;
 
   private clearReactions = [];
 
   private onViewLoad = () => {
-    this.view.manager = this;
-    this.view.init();
+    this.appView.manager = this;
+    this.appView.init();
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.status,
-        (status) => this.setStatus(status),
-        { fireImmediately: true }
+      autorun(() => {
+        this.setStatus(this.room.status);
+      })
+    );
+
+    this.clearReactions.push(
+      autorun(() =>
+        this.appView.bankerCards.setCards(
+          this.room.banker.cards,
+          this.room.banker.score
+        )
       )
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.banker.cards,
-        (cards) => {
-          return this.view.bankerCards.setCards(cards);
-        },
-        { fireImmediately: true }
+      autorun(() =>
+        this.appView.playerCards.setCards(
+          this.room.player.cards,
+          this.room.player.score
+        )
       )
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.player.cards,
-        (cards) => this.view.playerCards.setCards(cards),
-        { fireImmediately: true }
-      )
+      autorun(() => this.appView.userStatus.setMoney(this.room.user.money))
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.user.money,
-        (money) => this.view.userStatus.setMoney(money),
-        { fireImmediately: true }
-      )
+      autorun(() => {
+        const total = this.room.user.bet.amount + this.room.draftBet.amount;
+        this.appView.userStatus.setBet(this.room.user.bet.amount);
+        this.appView.betAreas.setAmount(total, this.room.user.bet.winner);
+      })
     );
 
     this.clearReactions.push(
-      reaction(
-        () => [
-          this.room.user.bet.amount,
-          this.room.user.bet.winner,
-          this.room.draftBet.amount,
-        ],
-        ([amount, winner, draftAmount]: [number, BetWinner, number]) => {
-          const total = amount + draftAmount;
-          this.view.userStatus.setBet(amount);
-          this.view.betAreas.setAmount(total, winner);
-        },
-        { fireImmediately: true }
-      )
+      autorun(() => this.appView.betAreas.setRoundResult(this.room.roundResult))
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.roundResult,
-        (result) => {
-          this.view.betAreas.setRoundResult(result);
+      autorun(() => this.appView.userStatus.setMoney(this.room.user.money))
+    );
+    this.clearReactions.push(
+      autorun(() => {
+        if (this.room.isBettingOpened) {
+          this.appView.userActions.enable();
+        } else {
+          this.appView.userActions.disable();
         }
-      )
+      })
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.user.money,
-        (money) => {
-          this.view.userStatus.setMoney(money);
-        },
-        { fireImmediately: true }
-      )
-    );
-    this.clearReactions.push(
-      reaction(
-        () => {
-          return this.room.isBettingOpened;
-        },
-        (isOpened) => {
-          if (isOpened) {
-            this.view.userActions.enable();
-          } else {
-            this.view.userActions.disable();
-          }
-        },
-        { fireImmediately: true }
-      )
-    );
-
-    this.clearReactions.push(
-      reaction(
-        () => this.room.bettingTimer.timeLeft,
-        (timeLeft) => {
-          if (this.room.isBettingOpened) {
-            this.view.statusPanel.setText(
-              `Betting is opened ${Math.round(timeLeft / 1000)} sec`
-            );
-          }
+      autorun(() => {
+        if (this.room.isBettingOpened) {
+          this.appView.statusPanel.setText(
+            `Betting is opened ${Math.round(
+              this.room.bettingTimer.timeLeft / 1000
+            )} sec`
+          );
         }
-      )
+      })
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.roundResult,
-        (result) => {
-          this.view.roundStatus.show(result);
-        }
-      )
+      autorun(() => this.appView.roundStatus.show(this.room.roundResult))
     );
 
     this.clearReactions.push(
-      reaction(
-        () => this.room.user.soundDisabled,
-        (disabled) => {
-          this.view.soundControl.setMuted(disabled);
-        }
+      autorun(() =>
+        this.appView.soundControl.setMuted(this.room.user.soundDisabled)
       )
     );
 
-    this.onRendered(this.view.app.view);
+    this.onRendered(this.appView.view);
     this.room.startGame();
   };
 
@@ -137,7 +97,7 @@ export class GameManager {
     private container: HTMLElement,
     private onRendered: (canvas: HTMLCanvasElement) => void
   ) {
-    this.view = new GameApplication(
+    this.appView = new GameApplicationView(
       this.container,
       this.room.user.soundDisabled,
       this.onViewLoad
@@ -180,14 +140,14 @@ export class GameManager {
   }
 
   destroy(): void {
-    this.view.app.destroy(true, true);
+    this.appView.destroy(true, true);
     this.clearReactions.forEach((cb) => cb());
-    this.view.soundManager.destroy();
+    this.appView.soundManager.destroy();
   }
 
   setStatus(status: GameStatus): void {
     if (STATUS_TO_MESSAGE[status]) {
-      this.view.statusPanel.setText(STATUS_TO_MESSAGE[status](this.room));
+      this.appView.statusPanel.setText(STATUS_TO_MESSAGE[status](this.room));
     }
   }
 

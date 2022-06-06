@@ -70,7 +70,10 @@ export class BetsArea extends Container {
     ];
   }
 
-  setRoundResult(result: IRoundResult): void {
+  setRoundResult(result: IRoundResult | null): void {
+    if (!result) {
+      return;
+    }
     this.areas.forEach((area) => area.clearArea(result));
   }
 
