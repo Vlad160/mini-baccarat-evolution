@@ -4,6 +4,7 @@ import { IPoint } from './models';
 
 export class ScaleAnimation extends Animation {
   private promise: Promise<void>;
+
   private resolve: () => void;
 
   constructor(

@@ -2,9 +2,11 @@ import { BetWinner } from '@game';
 import { GameApplication } from './game-application';
 import { GameRoom, GameStatus } from 'game/game-room';
 import { reaction } from 'mobx';
+import { STATUS_TO_MESSAGE } from './models';
 
 export class GameManager {
   private view: GameApplication;
+
   private clearReactions = [];
 
   private onViewLoad = () => {
@@ -85,9 +87,11 @@ export class GameManager {
           return this.room.isBettingOpened;
         },
         (isOpened) => {
-          isOpened
-            ? this.view.userActions.enable()
-            : this.view.userActions.disable();
+          if (isOpened) {
+            this.view.userActions.enable();
+          } else {
+            this.view.userActions.disable();
+          }
         },
         { fireImmediately: true }
       )
@@ -146,12 +150,12 @@ export class GameManager {
     }
 
     if (this.room.user.bet.winner !== winner) {
-      this.room.user.bet.alterWinner(winner);
+      this.room.user.bet.winner = winner;
     }
     if (this.room.draftBet.winner === winner) {
       this.room.draftBet.increseBet();
     } else {
-      this.room.draftBet.alterWinner(winner);
+      this.room.draftBet.winner = winner;
     }
   }
 
@@ -191,12 +195,3 @@ export class GameManager {
     this.room.user.soundDisabled = !this.room.user.soundDisabled;
   }
 }
-
-const STATUS_TO_MESSAGE = {
-  [GameStatus.GAME_NOT_STARTED]: () => 'Game not started',
-  [GameStatus.GAME_STARTED]: () => 'Game started',
-  [GameStatus.BETTING_CLOSED]: () => 'All bets are made',
-  [GameStatus.DEALING_CARDS]: () => 'Dealing cards',
-  [GameStatus.GAME_ENDED]: (room: GameRoom) =>
-    `Game ended. Winner is ${room.winner}\nWaiting for the next round`,
-};

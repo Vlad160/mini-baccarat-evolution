@@ -1,4 +1,4 @@
-import { Container, Graphics, Text } from 'pixi.js';
+import { Container, Graphics } from 'pixi.js';
 import { Dimensions } from './models';
 import { ProgressBar } from './progress-bar';
 

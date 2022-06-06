@@ -8,11 +8,14 @@ export class UserActions extends Container {
     this.dealAction.disable();
     this.clearAction.disable();
   }
+
   enable() {
     this.dealAction.enable();
     this.clearAction.enable();
   }
+
   private dealAction: ActionButton;
+
   private clearAction: ActionButton;
 
   constructor(

@@ -22,7 +22,9 @@
       "@components/*": ["components/*"],
       "@components": ["components/index.ts"],
       "@game": ["game/index.ts"],
-      "@game/*": ["game/*"]
+      "@game/*": ["game/*"],
+      "@common": ["common/index.ts"],
+      "@common/*": ["common/*"]
     }
   },
   "include": ["src"],

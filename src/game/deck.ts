@@ -17,10 +17,10 @@ export class Deck {
   }
 
   shuffle(): void {
-    let currentIndex = this.cards.length,
-      randomIndex;
+    let currentIndex = this.cards.length;
+    let randomIndex;
 
-    while (currentIndex != 0) {
+    while (currentIndex !== 0) {
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
 

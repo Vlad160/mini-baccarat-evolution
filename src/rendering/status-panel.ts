@@ -9,7 +9,9 @@ const OFFSET_Y = 0;
 
 export class StatusPanel extends Container {
   panel: Graphics;
+
   text: Text;
+
   constructor() {
     super();
 

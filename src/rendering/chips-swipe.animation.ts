@@ -5,6 +5,7 @@ const ANIMATION_TIME = 2000;
 
 export class ChipsSwipeAnimation extends Animation {
   private promise: Promise<void>;
+
   private resolve: () => void;
 
   constructor(

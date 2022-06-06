@@ -10,6 +10,7 @@ const HEIGHT = 100;
 
 export class RoundStatus extends Container {
   panel: Graphics;
+
   text: Text;
 
   constructor(private ticker: Ticker, private pos: IPoint) {

@@ -1,18 +1,17 @@
-import './game-room-pixi.scss';
+import './game-room-canvas.scss';
 
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
-import { GameManager } from 'pixi/game-manager';
+import { GameManager } from 'rendering/game-manager';
 import { GameRoom } from 'game/game-room';
 import { observer } from 'mobx-react-lite';
+import { CANVAS_SCALE } from 'common/constants';
 
 export interface IGameRoomPixi {
   room: GameRoom;
 }
 
-const scale = 720 / 1280;
-
-export const GameRoomPixi: React.FC<IGameRoomPixi> = observer(({ room }) => {
+export const GameRoomCanvas: React.FC<IGameRoomPixi> = observer(({ room }) => {
   const containerRef = useRef<HTMLDivElement>();
   const managerRef = useRef<GameManager>(null);
   const [canvas, setCanvas] = useState<HTMLCanvasElement>();
@@ -22,7 +21,10 @@ export const GameRoomPixi: React.FC<IGameRoomPixi> = observer(({ room }) => {
       return;
     }
     const width = containerRef.current.offsetWidth;
-    const height = Math.min(scale * width, containerRef.current.offsetHeight);
+    const height = Math.min(
+      CANVAS_SCALE * width,
+      containerRef.current.offsetHeight
+    );
     canvas.style.height = `${height}px`;
   }, [canvas]);
 
@@ -48,5 +50,5 @@ export const GameRoomPixi: React.FC<IGameRoomPixi> = observer(({ room }) => {
     handleResize();
   }, [canvas, handleResize]);
 
-  return <div className="grp" ref={containerRef} />;
+  return <div className="game-room" ref={containerRef} />;
 });

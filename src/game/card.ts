@@ -31,9 +31,13 @@ export const SuitToSymbol: Record<CardSuit, string> = {
 
 export class Card implements ICard {
   id = crypto.randomUUID();
+
   value: number;
+
   face: Face;
+
   suit: CardSuit;
+
   constructor({ value, face, suit }: ICard) {
     this.value = value;
     this.face = face;

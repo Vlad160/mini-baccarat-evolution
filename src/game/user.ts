@@ -1,6 +1,8 @@
 import { computed, makeObservable, observable } from 'mobx';
 import { Bet } from './bet';
 export class User {
+  bet: Bet;
+
   static restoreUser(): User {
     const value = localStorage.getItem('user');
     if (!value) {
@@ -31,9 +33,9 @@ export class User {
     localStorage.removeItem('user');
   }
 
-  bet = new Bet();
   @observable
   private _money: number;
+
   @computed
   get money(): number {
     return this._money;
@@ -46,10 +48,12 @@ export class User {
 
   @observable
   private _soundDisabled = false;
+
   @computed
   public get soundDisabled() {
     return this._soundDisabled;
   }
+
   public set soundDisabled(value) {
     this._soundDisabled = value;
     User.storeUser(this);
@@ -64,6 +68,7 @@ export class User {
     makeObservable(this);
     this._money = money;
     this.soundDisabled = soundDisabled;
+    this.bet = new Bet();
   }
 
   get name(): string {

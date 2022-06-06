@@ -16,22 +16,33 @@ const PLAYER_CARDS_OFFSET_X = 25;
 const BANKER_CARDS_OFFSET_X = 10;
 export class GameApplication {
   userActions: UserActions;
+
   gameControls: GameControls;
+
   statusPanel: StatusPanel;
 
   betAreas: BetsArea;
+
   readonly app: Application;
+
   bankerCards: Cards;
+
   playerCards: Cards;
 
   userStatus: UserStatus;
+
   loaded = false;
 
   manager: GameManager;
+
   roundStatus: RoundStatus;
+
   soundManager: SoundManager;
+
   soundControl: SoundControl;
+
   loadingScreen: LoadingScreen;
+
   dimensions: { width: number; height: number; scale: number };
 
   constructor(
@@ -89,22 +100,24 @@ export class GameApplication {
 
     this.playerCards = new Cards(
       this.app,
+      this.soundManager,
+
       {
         x: playerX,
         y: playerY,
       },
-      { x: playerSwipe, y: 12.5 },
-      this.soundManager
+      { x: playerSwipe, y: 12.5 }
     );
 
     this.bankerCards = new Cards(
       this.app,
+      this.soundManager,
+
       {
         x: bankerX,
         y: bankerY,
       },
-      { x: bankerSwipe, y: 12.5 },
-      this.soundManager
+      { x: bankerSwipe, y: 12.5 }
     );
     this.userStatus = new UserStatus(this.dimensions);
     const background = new Sprite(

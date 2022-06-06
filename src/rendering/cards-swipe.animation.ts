@@ -6,6 +6,7 @@ const ANIMATION_TIME = 500;
 
 export class CardsSwipeAnimation extends Animation {
   private promise: Promise<void>;
+
   private resolve: () => void;
 
   constructor(

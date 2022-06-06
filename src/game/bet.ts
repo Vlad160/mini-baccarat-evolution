@@ -4,20 +4,24 @@ import { BetWinner } from './model';
 export class Bet {
   @observable
   private _amount = 0;
+
   @computed
   get amount(): number {
     return this._amount;
   }
+
   set amount(value: number) {
     this._amount = value;
   }
 
   @observable
   private _winner: BetWinner = BetWinner.Player;
+
   @computed
   get winner(): BetWinner {
     return this._winner;
   }
+
   set winner(value: BetWinner) {
     this._winner = value;
   }
@@ -30,15 +34,13 @@ export class Bet {
   alterAmount(delta: number): void {
     this.amount += delta;
   }
-  @action
-  alterWinner(winner: BetWinner): void {
-    this.winner = winner;
-  }
+
   @action
   adjustBet(value: number, winner: BetWinner): void {
     this.amount += value;
     this.winner = winner;
   }
+
   @action
   reset(): void {
     this.amount = 0;

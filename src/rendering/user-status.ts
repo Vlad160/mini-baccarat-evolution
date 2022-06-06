@@ -4,6 +4,7 @@ import { Text } from './text';
 
 export class UserStatus extends Container {
   private money: Text;
+
   private bet: Text;
 
   constructor(dimensions: Dimensions) {

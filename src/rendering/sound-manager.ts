@@ -23,6 +23,7 @@ export class SoundManager {
   cardPlace(): void {
     this.play('cardPlace');
   }
+
   cardSlide(): void {
     this.play('cardSlide');
   }
