@@ -7,9 +7,13 @@ const TEXT_RECT_COLOR = '#282826';
 
 export class ActionButton extends Container {
   text: Text;
+
   circle: Graphics;
+
   textReactangle: Graphics;
+
   sprite: Sprite;
+
   disabled = false;
 
   constructor(
@@ -98,6 +102,7 @@ export class ActionButton extends Container {
       }),
     ];
   };
+
   private onPoinerOut = () => {
     if (this.disabled) {
       return;

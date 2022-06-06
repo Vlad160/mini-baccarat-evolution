@@ -19,7 +19,9 @@ export interface IReactangleConfig {
 
 export class BetArea extends Container {
   private betAmount: Text;
+
   private area: Graphics;
+
   private chipsContainer = new Container();
 
   constructor(

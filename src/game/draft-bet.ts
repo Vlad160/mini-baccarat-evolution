@@ -23,6 +23,6 @@ export class DraftBet extends Bet {
 
   reset(): void {
     this.amount = 0;
-    this.alterWinner(this.user.bet.winner);
+    this.winner = this.user.bet.winner;
   }
 }

@@ -9,6 +9,7 @@ const PADDING = 16;
 
 export class SoundControl extends Sprite {
   volumeOnTexture: Texture;
+
   volumeOffTexture: Texture;
 
   constructor(

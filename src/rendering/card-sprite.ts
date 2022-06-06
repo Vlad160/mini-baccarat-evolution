@@ -1,7 +1,7 @@
 import { Application, Sprite, Texture } from 'pixi.js';
 import { IPoint } from './models';
 
-const SCALE_COEF = 0.6;
+const SCALE_COEF = 0.7;
 
 export class CardSprite extends Sprite {
   constructor(

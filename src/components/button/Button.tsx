@@ -12,14 +12,12 @@ export interface IButtonProps
 
 export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
   ({ className, children, kind, ...rest }, ref) => {
+    const classes = ['btn', kind === 'icon' && 'btn--icon', className]
+      .filter(Boolean)
+      .join(' ');
+
     return (
-      <button
-        ref={ref}
-        className={`btn${kind === 'icon' ? ' btn--icon' : ''} ${
-          className || ''
-        }`}
-        {...rest}
-      >
+      <button ref={ref} className={classes} {...rest}>
         {children}
       </button>
     );

@@ -5,6 +5,7 @@ import { createContext } from 'react';
 export class ApplicationStore {
   @observable
   private _user: User = null;
+
   @computed
   get user(): User {
     return this._user;

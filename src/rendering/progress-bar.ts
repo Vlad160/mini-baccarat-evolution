@@ -12,6 +12,7 @@ const OUTER_BAR_OPACITY = 0.1;
 
 export class ProgressBar extends Container {
   private innerBar: Graphics;
+
   private outerBar: Graphics;
 
   private loadingText: Text;

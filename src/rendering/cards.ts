@@ -8,14 +8,16 @@ import { Text } from './text';
 
 export class Cards extends Container {
   cards: Card[] = [];
+
   scoreText: Text;
+
   private cardsContainer = new Container();
 
   constructor(
     private app: Application,
+    private soundManager: SoundManager,
     private offset: IPoint = { x: 0, y: 0 },
-    private swipeOffset: IPoint = { x: 0, y: 0 },
-    private soundManager: SoundManager
+    private swipeOffset: IPoint = { x: 0, y: 0 }
   ) {
     super();
     this.x = this.offset.x;
@@ -67,8 +69,8 @@ export class Cards extends Container {
       card.value ? card.value : card.face[0]
     }.png`;
     const texture = this.app.loader.resources[name].texture;
-    const x = index * 16;
-    const y = index * 16;
+    const x = index * 18;
+    const y = index * 18;
     return new CardSprite(name, texture, { x, y }, this.app);
   }
 }

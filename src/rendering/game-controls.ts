@@ -8,7 +8,9 @@ const MARGIN = 16;
 
 export class GameControls extends Container {
   private play: Sprite;
+
   private stop: Sprite;
+
   private renew: Sprite;
 
   constructor(

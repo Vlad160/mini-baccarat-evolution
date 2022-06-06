@@ -8,7 +8,7 @@ import { BetWinner, UserResultStatus } from './model';
 import type { IRoundResult } from './model';
 import { Timer } from './timer';
 import { User } from './user';
-import { wait } from './wait';
+import { wait } from '../common/wait';
 
 export enum GameStatus {
   GAME_NOT_STARTED = 'GAME_NOT_STARTED',
@@ -23,6 +23,7 @@ export enum GameStatus {
 
 export class GameRoom {
   banker: CasinoActor;
+
   player: CasinoActor;
 
   deck: Deck;
@@ -31,37 +32,44 @@ export class GameRoom {
   private _status: GameStatus = GameStatus.GAME_NOT_STARTED;
 
   @computed
-  public get status(): GameStatus {
+  get status(): GameStatus {
     return this._status;
   }
+
   private set status(value: GameStatus) {
     this._status = value;
   }
 
   @observable.ref
   history: BetWinner[] = [];
+
   @observable
   stop = false;
+
   draftBet: DraftBet;
 
   readonly bettingTimer = new Timer(10000);
+
   @observable
   private _winner: BetWinner = null;
 
   @observable.ref
   private _roundResult: IRoundResult = null;
+
   @computed
-  public get roundResult(): IRoundResult {
+  get roundResult(): IRoundResult {
     return this._roundResult;
   }
-  public set roundResult(value: IRoundResult) {
+
+  set roundResult(value: IRoundResult) {
     this._roundResult = value;
   }
 
   @computed
-  public get winner(): BetWinner {
+  get winner(): BetWinner {
     return this._winner;
   }
+
   private set winner(value: BetWinner) {
     this._winner = value;
   }

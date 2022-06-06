@@ -5,6 +5,7 @@ import { ApplicationStoreContext } from 'app.store';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useContext } from 'react';
 import { FaMoneyBillWave, FaSignOutAlt } from 'react-icons/fa';
+import { DEFAULT_MONEY_AMOUNT } from '@game';
 
 export const UserActions = observer(() => {
   const store = useContext(ApplicationStoreContext);
@@ -14,7 +15,7 @@ export const UserActions = observer(() => {
   }, [store]);
 
   const handleResore = useCallback(() => {
-    store.user.money = 1000;
+    store.user.money = DEFAULT_MONEY_AMOUNT;
   }, [store]);
 
   if (!store || !store.user) {

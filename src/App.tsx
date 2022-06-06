@@ -5,10 +5,11 @@ import { DEFAULT_MONEY_AMOUNT, User } from '@game';
 import { ApplicationStoreContext } from 'app.store';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useContext, useEffect } from 'react';
-import { GameRoomPixi } from 'views/game-room-pixi/GameRoomPixi';
+import { GameRoomCanvas } from 'views/game-room-canvas/GameRoomCanvas';
 
 const App = observer(() => {
   const store = useContext(ApplicationStoreContext);
+
   useEffect(() => {
     if (store.user) {
       return;
@@ -39,7 +40,7 @@ const App = observer(() => {
       <Header></Header>
       <main className="app__wrapper">
         {store.room ? (
-          <GameRoomPixi room={store.room} />
+          <GameRoomCanvas room={store.room} />
         ) : (
           <Login onLogin={handleLogin} />
         )}

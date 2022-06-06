@@ -3,18 +3,24 @@ import { action, computed, makeObservable, observable } from 'mobx';
 export class Timer {
   @observable
   private _timeLeft: number;
+
   @computed
   public get timeLeft(): number {
     return this._timeLeft;
   }
+
   private set timeLeft(value: number) {
     this._timeLeft = value;
   }
 
   private timeoutId: number;
+
   private lastStartTime: number;
+
   private started = false;
+
   private endPromise: Promise<void>;
+
   private resolveEndPromise: () => void;
 
   constructor(private time: number, private tick: number = 1000) {
