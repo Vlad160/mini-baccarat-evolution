@@ -7,11 +7,10 @@ export class UserBet extends Bet {
   }
 
   increseBet(): void {
-    const newAmount = this.amount + this.betSize;
-    if (newAmount >= this.user.money) {
+    if (this.user.money - this.betSize < 0) {
       return;
     }
-    this.amount = newAmount;
+    this.amount = this.amount + this.betSize;
     this.user.money -= this.betSize;
   }
 
