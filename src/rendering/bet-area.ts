@@ -56,7 +56,7 @@ export class BetArea extends Container {
   }
 
   private onClick = () => {
-    this.manager.adjustBet(this.config.type);
+    this.manager.acceptBet(this.config.type);
   };
 
   private drawArea(color: number, opacity = 0.00001): Graphics {
@@ -76,7 +76,6 @@ export class BetArea extends Container {
       }
     } else {
       this.betAmount.text = String(amount);
-
       const chipsAmount = Math.floor(amount / 10);
       const length = chipsAmount - this.renderedChipsAmount;
       const chipsToRender = Array.from({ length }, (_, i) =>

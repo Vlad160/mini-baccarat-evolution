@@ -114,19 +114,16 @@ export class GameRoom {
   }
 
   @action
-  acceptBet(amount: number, winner: BetWinner): void {
-    if (this.status !== GameStatus.BETTING_OPENED || amount > this.user.money) {
+  acceptBet(winner: BetWinner): void {
+    if (this.status !== GameStatus.BETTING_OPENED) {
       return;
     }
 
-    const totalBet = this.user.bet.amount;
-
-    if (amount < 0 && amount + totalBet < 0) {
-      amount = -totalBet;
+    if (this.user.bet.winner !== winner) {
+      this.user.bet.winner = winner;
+    } else {
+      this.user.bet.increseBet();
     }
-
-    this.user.bet.adjustBet(amount, winner);
-    this.user.money -= amount;
   }
 
   @action

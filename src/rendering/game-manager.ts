@@ -104,16 +104,8 @@ export class GameManager {
     );
   }
 
-  adjustBet(winner: BetWinner): void {
-    if (this.room.status !== GameStatus.BETTING_OPENED) {
-      return;
-    }
-
-    if (this.room.user.bet.winner !== winner) {
-      this.room.user.bet.winner = winner;
-    } else {
-      this.room.user.bet.increseBet();
-    }
+  acceptBet(winner: BetWinner): void {
+    this.room.acceptBet(winner);
   }
 
   clearBet(): void {
