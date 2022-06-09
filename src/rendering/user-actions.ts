@@ -6,7 +6,7 @@ import { TextureManager } from './texture-manager';
 
 const CLEAR_OFFSET_X = 200;
 const CLEAR_OFFSET_Y = 150;
-const CLEAR_BTN_GLOW_COLOR = 0x99ff99;
+const CLEAR_BTN_GLOW_COLOR = 0xff9999;
 
 export class UserActions extends Container {
   disable() {

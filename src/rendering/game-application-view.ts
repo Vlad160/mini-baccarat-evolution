@@ -3,6 +3,7 @@ import { BetsArea } from './bets-area';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
 import { GameManager } from './game-manager';
+import { History } from './history';
 import { LoadingScreen } from './loading-screen';
 import { IDimensions } from './models';
 import { RoundStatus } from './round-status';
@@ -45,6 +46,8 @@ export class GameApplicationView extends Application {
   dimensions: IDimensions;
 
   textureManager: TextureManager;
+
+  history: History;
 
   constructor(
     private container: HTMLElement,
@@ -140,6 +143,7 @@ export class GameApplicationView extends Application {
       this.textureManager,
       this.manager
     );
+    this.history = new History(this.dimensions);
     this.soundControl = new SoundControl(
       this.dimensions,
       this.textureManager,
@@ -157,7 +161,8 @@ export class GameApplicationView extends Application {
       this.userActions,
       this.statusPanel,
       this.roundStatus,
-      this.soundControl
+      this.soundControl,
+      this.history
     );
   }
 
