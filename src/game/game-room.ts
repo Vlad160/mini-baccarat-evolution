@@ -87,7 +87,11 @@ export class GameRoom {
     this.banker = new CasinoActor(CasinoPlayerType.Banker);
     this.player = new CasinoActor(CasinoPlayerType.Player);
     this.bettingTimer = new Timer(this.config.betTimer);
-    this.user.bet = new UserBet(this.user, this.config.betSize);
+    this.user.bet = new UserBet(
+      this.user,
+      this.config.betSize,
+      this.config.maxBet
+    );
     makeObservable(this);
   }
 

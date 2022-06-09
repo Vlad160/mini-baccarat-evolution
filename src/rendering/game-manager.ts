@@ -88,6 +88,8 @@ export class GameManager {
       )
     );
 
+    this.appView.userStatus.setRoomMaxBet(this.room.user.bet.maxBet);
+
     this.onRendered(this.appView.view);
     this.room.startGame();
   };

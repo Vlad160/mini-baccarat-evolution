@@ -2,7 +2,11 @@ import { Bet } from './bet';
 import { User } from './user';
 
 export class UserBet extends Bet {
-  constructor(private user: User, public betSize: number) {
+  constructor(
+    private user: User,
+    public betSize: number,
+    public readonly maxBet: number
+  ) {
     super();
   }
 
@@ -10,7 +14,11 @@ export class UserBet extends Bet {
     if (this.user.money - this.betSize < 0) {
       return;
     }
-    this.amount = this.amount + this.betSize;
+    const newAmount = this.amount + this.betSize;
+    if (newAmount > this.maxBet) {
+      return;
+    }
+    this.amount = newAmount;
     this.user.money -= this.betSize;
   }
 

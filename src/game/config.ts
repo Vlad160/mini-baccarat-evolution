@@ -1,5 +1,6 @@
 export const CONFIG = {
   betSize: 10,
+  maxBet: 300,
   betTimer: 10000,
   beforeGameTimeout: 1000,
   beforeDraftTimeout: 1000,
