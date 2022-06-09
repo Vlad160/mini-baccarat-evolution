@@ -2,6 +2,7 @@ export const CONFIG = {
   betSize: 10,
   maxBet: 300,
   betTimer: 10000,
+  historyMaxSize: 40,
   beforeGameTimeout: 1000,
   beforeDraftTimeout: 1000,
   beforeThirdCardDraftTimeout: 3000,
