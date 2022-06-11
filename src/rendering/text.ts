@@ -1,4 +1,9 @@
-import { ITextStyle, SCALE_MODES, Text as PixiText, TextStyle } from 'pixi.js';
+import { ITextStyle, Text as PixiText, TextStyle } from 'pixi.js';
+
+export const TEXT_SHADOW: Partial<ITextStyle> = {
+  dropShadow: true,
+  dropShadowAlpha: 0.5,
+};
 
 export class Text extends PixiText {
   constructor(
@@ -11,6 +16,5 @@ export class Text extends PixiText {
       { fill: 0xffffff, fontFamily: 'IBM Plex Serif', fontSize: 32, ...style },
       canvas
     );
-    this.texture.baseTexture.scaleMode = SCALE_MODES.NEAREST;
   }
 }
