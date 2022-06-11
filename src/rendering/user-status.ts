@@ -17,7 +17,7 @@ export class UserStatus extends Container {
     const { height, width } = dimensions;
     this.money = new Text('CASH $ 0.00');
     this.bet = new Text('BET $ 0.00');
-    this.roomMaxBet = new Text(`Max bet: $ 0`);
+    this.roomMaxBet = new Text(`Max bet $ 0`);
     this.roomMaxBet.y = height - OFFSET_Y - 32;
     this.roomMaxBet.x = 0;
     this.money.y = height - OFFSET_Y;
@@ -39,6 +39,6 @@ export class UserStatus extends Container {
   }
 
   setRoomMaxBet(amount: number): void {
-    this.roomMaxBet.text = `Max bet: $ ${amount}`;
+    this.roomMaxBet.text = `Max bet $ ${amount}`;
   }
 }
