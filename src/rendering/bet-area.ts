@@ -2,7 +2,7 @@ import { wait } from '@common';
 import { BetWinner, IRoundResult, UserResultStatus } from '@game';
 import { Container, Graphics, Ticker } from 'pixi.js';
 import { ChipsSwipeAnimation } from './animations';
-import { Chip, CHIP_WIDTH } from './chip';
+import { Chip } from './chip';
 import { GameManager } from './game-manager';
 import { IDimensions } from './models';
 import { SoundManager } from './sound-manager';
@@ -39,12 +39,13 @@ export class BetArea extends Container {
     this.interactive = true;
     this.buttonMode = true;
     this.on('pointerdown', this.onClick);
-    this.betAmount = new Text('', { fontSize: 32 });
-    this.betAmount.x = this.config.width / 2 - CHIP_WIDTH * 1.3;
-    this.addChild(this.betAmount);
+    this.betAmount = new Text('', { fontSize: 24, fill: 0x000000 });
+    this.betAmount.pivot.set(0.5);
+    this.betAmount.anchor.set(0.5);
+    this.betAmount.skew.x = Math.PI / 8;
     this.x = this.config.x;
     this.y = this.config.y;
-    this.addChild(this.area, this.chipsContainer);
+    this.addChild(this.area, this.chipsContainer, this.betAmount);
   }
 
   get renderedChipsAmount(): number {
@@ -85,7 +86,9 @@ export class BetArea extends Container {
         this.chipsContainer.addChild(...chipsToRender);
         this.soundManager.chipsCollide();
       }
-      this.betAmount.y = this.renderedChips[this.renderedChips.length - 1].y;
+      const lastChip = this.renderedChips[this.renderedChips.length - 1];
+      this.betAmount.y = lastChip.y;
+      this.betAmount.x = lastChip.x;
     }
   }
 

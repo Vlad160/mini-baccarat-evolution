@@ -5,7 +5,7 @@ import { CardsSwipeAnimation } from './animations/cards-swipe.animation';
 import { CardSprite } from './card-sprite';
 import { IPoint } from './models';
 import { SoundManager } from './sound-manager';
-import { Text } from './text';
+import { Text, TEXT_SHADOW } from './text';
 import { TextureManager } from './texture-manager';
 
 const SCORE_OFFSET_X = -30;
@@ -28,7 +28,7 @@ export class Cards extends Container {
     super();
     this.x = this.offset.x;
     this.y = this.offset.y;
-    this.scoreText = new Text('');
+    this.scoreText = new Text('', TEXT_SHADOW);
     this.scoreText.x = SCORE_OFFSET_X;
     this.addChild(this.cardsContainer, this.scoreText);
   }
