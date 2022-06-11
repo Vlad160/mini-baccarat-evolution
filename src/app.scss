@@ -1,3 +1,4 @@
+@import './components/header/styles.scss';
 @import '_mixins.scss';
 
 .app {
@@ -6,6 +7,12 @@
   flex-direction: column;
   min-height: 100vh;
   user-select: none;
+
+  @include mobile {
+    & {
+      height: 100vh;
+    }
+  }
 
   &__wrapper {
     display: flex;
@@ -17,12 +24,12 @@
     background-image: url(../assets/background.jpeg);
     background-repeat: no-repeat;
     background-size: cover;
-    max-height: calc(100vh - 5rem);
+    max-height: calc(100vh - $header-height);
 
     @include mobile {
       & {
-        height: 100vh;
         max-height: unset;
+        height: calc(100vh - $header-height-mobile);
       }
     }
   }

@@ -1,6 +1,14 @@
+@import '../../mixins';
+
 .user-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   font-size: 1.25rem;
+}
+
+@include mobile {
+  .user-actions {
+    font-size: 1rem;
+  }
 }
