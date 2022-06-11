@@ -3,7 +3,7 @@ import { Container, Graphics, Ticker, utils } from 'pixi.js';
 import { SlideAnimation } from './animations/slide.animation';
 import { HistoryItem } from './history-item';
 import { IDimensions, IPoint } from './models';
-import { Text } from './text';
+import { Text, TEXT_SHADOW } from './text';
 
 const PANEL_COLOR = utils.string2hex('#282826');
 const OFFSET_Y = 150;
@@ -32,7 +32,7 @@ export class History extends Container {
     const panel = this.createPanel();
 
     this.chipsContainer = new Container();
-    const historyText = new Text('History');
+    const historyText = new Text('History', TEXT_SHADOW);
     const toggler = this.createToggler({
       x: panel.x,
       y: panel.height / 2,

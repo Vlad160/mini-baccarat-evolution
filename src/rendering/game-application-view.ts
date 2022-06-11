@@ -1,4 +1,4 @@
-import { Application, Sprite } from 'pixi.js';
+import { Application, PRECISION, settings, Sprite } from 'pixi.js';
 import { BetsArea } from './bets-area';
 import { Cards } from './cards';
 import { GameControls } from './game-controls';
@@ -16,6 +16,11 @@ import { UserStatus } from './user-status';
 
 const PLAYER_CARDS_OFFSET_X = 25;
 const BANKER_CARDS_OFFSET_X = 10;
+
+settings.PRECISION_FRAGMENT = PRECISION.HIGH;
+settings.ROUND_PIXELS = true;
+settings.STRICT_TEXTURE_CACHE = false;
+
 export class GameApplicationView extends Application {
   userActions: UserActions;
 

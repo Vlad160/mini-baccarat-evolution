@@ -1,6 +1,6 @@
 import { Container } from 'pixi.js';
 import { IDimensions } from './models';
-import { Text } from './text';
+import { Text, TEXT_SHADOW } from './text';
 
 const OFFSET_Y = 50;
 const OFFSET_X = 25;
@@ -15,9 +15,9 @@ export class UserStatus extends Container {
   constructor(dimensions: IDimensions) {
     super();
     const { height, width } = dimensions;
-    this.money = new Text('CASH $ 0.00');
-    this.bet = new Text('BET $ 0.00');
-    this.roomMaxBet = new Text(`Max bet $ 0`);
+    this.money = new Text('CASH $ 0.00', TEXT_SHADOW);
+    this.bet = new Text('BET $ 0.00', TEXT_SHADOW);
+    this.roomMaxBet = new Text(`MAX BET $ 0`, TEXT_SHADOW);
     this.roomMaxBet.y = height - OFFSET_Y - 32;
     this.roomMaxBet.x = 0;
     this.money.y = height - OFFSET_Y;
@@ -39,6 +39,6 @@ export class UserStatus extends Container {
   }
 
   setRoomMaxBet(amount: number): void {
-    this.roomMaxBet.text = `Max bet $ ${amount}`;
+    this.roomMaxBet.text = `MAX BET $ ${amount}`;
   }
 }
