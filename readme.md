@@ -43,13 +43,13 @@ yarn build
 
 Features to implement (not ordered):
 
-- [ ] Game controls look and feel.
-- [ ] Overal UI improvments.
+- [x] Game controls look and feel.
+- [x] Overal UI improvments.
 - [x] Canvas breakpoints.
 - [x] View were you can enter your name.
 - [x] Game status formatting.
 - [x] Disable controls when betting is closed.
-- [ ] History.
+- [x] History.
 - [x] Mobile version.
 - [x] Improve readme.
 - [x] Eslint.
