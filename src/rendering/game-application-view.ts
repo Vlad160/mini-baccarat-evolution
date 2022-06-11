@@ -64,6 +64,7 @@ export class GameApplicationView extends Application {
 
     this.dimensions = {
       width: this.screen.width,
+
       height: this.screen.height,
       scale: 1,
     };
@@ -143,7 +144,7 @@ export class GameApplicationView extends Application {
       this.textureManager,
       this.manager
     );
-    this.history = new History(this.dimensions);
+    this.history = new History(this.dimensions, this.ticker);
     this.soundControl = new SoundControl(
       this.dimensions,
       this.textureManager,

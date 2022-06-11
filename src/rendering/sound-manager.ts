@@ -1,4 +1,4 @@
-import { sound } from '@pixi/sound';
+import { sound, PlayOptions } from '@pixi/sound';
 import { Loader } from 'pixi.js';
 
 export const ASSET_MAP = {
@@ -50,7 +50,7 @@ export class SoundManager {
     }
   }
 
-  private play(name: string, options: Record<string, any> = {}): void {
+  private play(name: string, options: PlayOptions = {}): void {
     if (!this.muted) {
       this.loader.resources[name].sound.play(options);
     }

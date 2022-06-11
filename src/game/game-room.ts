@@ -50,7 +50,7 @@ export class GameRoom {
   }
 
   @observable.ref
-  history: BetWinner[] = [];
+  history: IRoundResult[] = [];
 
   @observable
   stop = false;
@@ -144,7 +144,7 @@ export class GameRoom {
       this.user.money += result.earnings;
       this.status = GameStatus.GAME_ENDED;
     });
-    this.appendHistory(result.winner);
+    this.appendHistory(result);
     await wait(this.config.gameTimeout);
     if (!this.stop) {
       this.startGame();
@@ -162,7 +162,7 @@ export class GameRoom {
   }
 
   @action
-  private appendHistory(item: BetWinner) {
+  private appendHistory(item: IRoundResult) {
     this.history = [item, ...this.history];
     if (this.history.length > this.config.historyMaxSize) {
       this.history = this.history.slice(0, this.config.historyMaxSize);

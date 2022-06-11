@@ -59,7 +59,7 @@ export class BetArea extends Container {
     this.manager.acceptBet(this.config.type);
   };
 
-  private drawArea(color: number, opacity = 0.00001): Graphics {
+  private drawArea(color: number, opacity = 0.001): Graphics {
     const area = new Graphics();
     area.beginFill(color, opacity);
     // area.lineStyle({ color: utils.string2hex('#b8bcc4'), width: 2 });
