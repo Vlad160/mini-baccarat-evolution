@@ -31,6 +31,7 @@ export class SlideAnimation extends Animation {
         this.element.y = targetY;
         this.ticker.remove(ticker);
         this.resolve();
+        return;
       }
 
       const x = this.easeLinear(passed, startX, this.slideOffset.x, this.time);
