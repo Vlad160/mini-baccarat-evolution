@@ -54,7 +54,7 @@ export class History extends Container {
 
   private onToggle = () => {
     this.isOpened = !this.isOpened;
-    const delta = PANEL_WIDTH - TOGGLER_WIDTH / 2;
+    const delta = PANEL_WIDTH;
     const slideX = this.isOpened ? -delta : delta;
     const animation = new SlideAnimation(
       this.ticker,
