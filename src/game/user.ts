@@ -1,4 +1,5 @@
 import { computed, makeObservable, observable } from 'mobx';
+import { IUserDto } from './model';
 import { UserBet } from './user-bet';
 
 const USER_KEY = 'user';
@@ -10,7 +11,7 @@ export class User {
     if (!value) {
       return null;
     }
-    let userObject: Record<string, any> = null;
+    let userObject: IUserDto = null;
     try {
       userObject = JSON.parse(value);
     } catch {
@@ -78,9 +79,9 @@ export class User {
 
   toJSON(): string {
     return JSON.stringify({
+      id: this.id,
       money: this.money,
       name: this.name,
-      id: this.id,
       soundDisabled: this.soundDisabled,
     });
   }

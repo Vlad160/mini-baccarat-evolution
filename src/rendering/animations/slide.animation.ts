@@ -1,5 +1,5 @@
 import { DisplayObject, Ticker } from 'pixi.js';
-import { IPoint } from 'rendering/models';
+import { IPoint } from '../../rendering/models';
 import { Animation } from './animation';
 
 export class SlideAnimation extends Animation {

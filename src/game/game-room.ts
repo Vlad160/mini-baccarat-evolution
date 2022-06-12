@@ -215,7 +215,6 @@ export class GameRoom {
     if (this.banker.hasNatural || this.player.hasNatural) {
       return;
     }
-    const playerScoreBefore = this.player.score;
     const playerRequiresThirdCard = this.player.score <= 5;
     let card: Card = null;
     if (playerRequiresThirdCard) {
@@ -230,26 +229,25 @@ export class GameRoom {
       }
       return;
     }
-    const playerCardValue = this.player.score - playerScoreBefore;
+    const playersCardValue = card.value;
     if (bankerScore === 7) {
       return;
     }
-    if (bankerScore === 6 && [6, 7].includes(playerCardValue)) {
+    if (bankerScore === 6 && [6, 7].includes(playersCardValue)) {
       return this.banker.acceptCards(this.deck.take(1));
     }
-    if (bankerScore === 5 && [4, 5, 6, 7].includes(playerCardValue)) {
+    if (bankerScore === 5 && [4, 5, 6, 7].includes(playersCardValue)) {
       return this.banker.acceptCards(this.deck.take(1));
     }
-    if (bankerScore === 4 && [2, 3, 4, 5, 6, 7].includes(playerCardValue)) {
+    if (bankerScore === 4 && [2, 3, 4, 5, 6, 7].includes(playersCardValue)) {
       return this.banker.acceptCards(this.deck.take(1));
     }
-    if (
-      bankerScore === 3 &&
-      [0, 1, 2, 3, 4, 5, 6, 7, 9].includes(playerCardValue)
-    ) {
+    if (bankerScore === 3 && playersCardValue !== 8) {
       return this.banker.acceptCards(this.deck.take(1));
     }
-    return this.banker.acceptCards(this.deck.take(1));
+    if (bankerScore <= 2) {
+      return this.banker.acceptCards(this.deck.take(1));
+    }
   }
 
   private getRoundResult(): IRoundResult {
@@ -278,7 +276,7 @@ export class GameRoom {
     };
   }
 
-  private calculatePrize(bet: Bet, result: BetWinner) {
+  private calculatePrize(bet: Bet, result: BetWinner): number {
     if (bet.winner !== result) {
       return 0;
     }

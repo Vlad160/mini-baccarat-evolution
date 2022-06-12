@@ -31,7 +31,7 @@ export class Deck {
   take(amount: number): Card[] {
     const [take, leave] = [
       this.cards.slice(0, amount),
-      this.cards.slice(amount + 1),
+      this.cards.slice(amount),
     ];
     this.cards = leave;
     return take;

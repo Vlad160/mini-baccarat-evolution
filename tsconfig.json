@@ -27,6 +27,7 @@
       "@common/*": ["common/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "./jest.config.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "src/tools/setupTests.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

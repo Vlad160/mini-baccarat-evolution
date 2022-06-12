@@ -1,6 +1,8 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 import { BetWinner } from './model';
 
+export const DEFAULT_WINNER = BetWinner.Player;
+
 export class Bet {
   @observable
   private _amount = 0;
@@ -15,7 +17,7 @@ export class Bet {
   }
 
   @observable
-  private _winner: BetWinner = BetWinner.Player;
+  private _winner: BetWinner = DEFAULT_WINNER;
 
   @computed
   get winner(): BetWinner {
@@ -28,17 +30,6 @@ export class Bet {
 
   constructor() {
     makeObservable(this);
-  }
-
-  @action
-  alterAmount(delta: number): void {
-    this.amount += delta;
-  }
-
-  @action
-  adjustBet(value: number, winner: BetWinner): void {
-    this.amount += value;
-    this.winner = winner;
   }
 
   @action
