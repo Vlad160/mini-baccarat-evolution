@@ -2,10 +2,10 @@ import './app.scss';
 
 import { Header, Login } from '@components';
 import { DEFAULT_MONEY_AMOUNT, User } from '@game';
-import { ApplicationStoreContext } from 'app.store';
+import { ApplicationStoreContext } from './app.store';
 import { observer } from 'mobx-react-lite';
 import { useCallback, useContext, useEffect } from 'react';
-import { GameRoomCanvas } from 'views/game-room-canvas/GameRoomCanvas';
+import { GameRoomCanvas } from './views/game-room-canvas/GameRoomCanvas';
 
 const App = observer(() => {
   const store = useContext(ApplicationStoreContext);

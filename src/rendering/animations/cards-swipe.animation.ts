@@ -3,6 +3,7 @@ import { Animation } from './animation';
 import { IPoint } from '../models';
 
 const ANIMATION_TIME = 500;
+const CARD_ROTATE_ANGLE = Math.PI / 5;
 
 export class CardsSwipeAnimation extends Animation {
   private promise: Promise<void>;
@@ -18,7 +19,6 @@ export class CardsSwipeAnimation extends Animation {
   }
 
   startTicker = () => {
-    const angle = Math.PI / 5;
     const start = Date.now();
     const startX = this.cards[0].x;
     const startY = this.cards[0].y;
@@ -38,7 +38,12 @@ export class CardsSwipeAnimation extends Animation {
           this.offset.y,
           ANIMATION_TIME
         );
-        const rotate = this.easeLinear(passed, 0, angle, ANIMATION_TIME);
+        const rotate = this.easeLinear(
+          passed,
+          0,
+          CARD_ROTATE_ANGLE,
+          ANIMATION_TIME
+        );
         this.cards.forEach((card) => {
           card.rotation = rotate;
           card.position.set(x, y);

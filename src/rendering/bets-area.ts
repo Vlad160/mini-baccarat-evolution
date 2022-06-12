@@ -12,6 +12,9 @@ const BANKER_AREA_WIDTH = 280;
 const BANKER_AREA_HEIGHT = 85;
 const TIE_AREA_WIDTH = 230;
 const TIE_AREA_HEIGHT = 75;
+const PLAYER_AREA_Y = 681;
+const BANKER_AREAY_Y = 550;
+const TIE_AREA_Y = 438;
 
 export class BetsArea extends Container {
   private areas: BetArea[];
@@ -33,7 +36,7 @@ export class BetsArea extends Container {
       new BetArea(
         {
           x: (dimensions.width - PLAYER_AREA_WIDTH) / 2,
-          y: 545 * 1.25,
+          y: PLAYER_AREA_Y,
           width: PLAYER_AREA_WIDTH,
           height: PLAYER_AREA_HEIGHT,
           type: BetWinner.Player,
@@ -47,7 +50,7 @@ export class BetsArea extends Container {
       new BetArea(
         {
           x: (dimensions.width - BANKER_AREA_WIDTH) / 2,
-          y: 440 * 1.25,
+          y: BANKER_AREAY_Y,
           width: BANKER_AREA_WIDTH,
           height: BANKER_AREA_HEIGHT,
           type: BetWinner.Banker,
@@ -61,7 +64,7 @@ export class BetsArea extends Container {
       new BetArea(
         {
           x: (dimensions.width - TIE_AREA_WIDTH) / 2,
-          y: 350 * 1.25,
+          y: TIE_AREA_Y,
           width: TIE_AREA_WIDTH,
           height: TIE_AREA_HEIGHT,
           type: BetWinner.Tie,

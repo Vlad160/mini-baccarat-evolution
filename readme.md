@@ -53,6 +53,6 @@ Features to implement (not ordered):
 - [x] Mobile version.
 - [x] Improve readme.
 - [x] Eslint.
-- [ ] Tests.
+- [x] Tests.
 - [x] Display controls and username in header.
 - [x] Texture managment

@@ -10,6 +10,7 @@ import { Text } from './text';
 import { TextureManager } from './texture-manager';
 
 const CHIP_OFFSET_Y = 5;
+const SWIPE_ANIMATION_DELAY = 2000;
 
 export interface IReactangleConfig {
   x: number;
@@ -63,7 +64,6 @@ export class BetArea extends Container {
   private drawArea(color: number, opacity = 0.001): Graphics {
     const area = new Graphics();
     area.beginFill(color, opacity);
-    // area.lineStyle({ color: utils.string2hex('#b8bcc4'), width: 2 });
     area.drawRoundedRect(0, 0, this.config.width, this.config.height, 2);
     area.endFill();
     return area;
@@ -111,7 +111,7 @@ export class BetArea extends Container {
       this.ticker,
       delta
     );
-    wait(2000)
+    wait(SWIPE_ANIMATION_DELAY)
       .then(() => {
         this.betAmount.text = '';
         return swipeAnimation.play();

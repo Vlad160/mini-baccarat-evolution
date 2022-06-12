@@ -25,15 +25,9 @@ export class UserBet extends Bet {
   decreaseBet(): void {
     const newAmount = this.amount - this.betSize;
     if (newAmount < 0) {
-      this.amount =
-        this.user.bet.amount < Math.abs(newAmount) ? this.amount : newAmount;
+      this.amount = this.amount < Math.abs(newAmount) ? this.amount : newAmount;
     } else {
       this.amount = newAmount;
     }
-  }
-
-  reset(): void {
-    this.amount = 0;
-    this.winner = this.user.bet.winner;
   }
 }

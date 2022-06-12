@@ -14,3 +14,10 @@ export interface IRoundResult {
   winner: BetWinner;
   userStatus: UserResultStatus;
 }
+
+export interface IUserDto {
+  money: number;
+  name: string;
+  id: string;
+  soundDisabled: boolean;
+}

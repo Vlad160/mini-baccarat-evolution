@@ -2,10 +2,10 @@ import './game-room-canvas.scss';
 
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
-import { GameManager } from 'rendering/game-manager';
-import { GameRoom } from 'game/game-room';
+import { GameManager } from '../../rendering/game-manager';
+import { GameRoom } from '@game/game-room';
 import { observer } from 'mobx-react-lite';
-import { CANVAS_SCALE } from 'common/constants';
+import { CANVAS_SCALE } from '@common/constants';
 
 export interface IGameRoomPixi {
   room: GameRoom;

@@ -1,5 +1,5 @@
 import { BetWinner } from '@game';
-import { GameRoom, GameStatus } from 'game/game-room';
+import { GameRoom, GameStatus } from '@game/game-room';
 import { autorun } from 'mobx';
 import { GameApplicationView } from './game-application-view';
 import { STATUS_TO_MESSAGE } from './models';
