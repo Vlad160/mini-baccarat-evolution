@@ -4,11 +4,11 @@ import { ApplicationStoreContext } from './app.store';
 
 describe('App', () => {
   it('should work as expected', () => {
-    render(
+    const component = render(
       <ApplicationStoreContext.Provider value={jest.fn() as any}>
         <App />
       </ApplicationStoreContext.Provider>
     );
-    expect(1 + 1).toBe(2);
+    expect(component).toBeDefined();
   });
 });
